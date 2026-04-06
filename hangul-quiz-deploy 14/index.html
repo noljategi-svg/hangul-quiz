@@ -1048,13 +1048,40 @@ function getPushCardHTML() {
 }
 
 function requestPushPermission() {
+  if (typeof Notification === 'undefined') return;
+  localStorage.setItem('push_asked', '1');
+  // 홈 배너 숨김
+  var banner = document.getElementById('push-banner');
+  if (banner) banner.style.display = 'none';
+
+  if (Notification.permission === 'granted') {
+    // 이미 허용 — OneSignal 구독 처리
+    subscribeOneSignal();
+  } else if (Notification.permission !== 'denied') {
+    Notification.requestPermission().then(function(perm) {
+      if (perm === 'granted') subscribeOneSignal();
+    });
+  }
+}
+
+function subscribeOneSignal() {
   if (window.OneSignalDeferred) {
     OneSignalDeferred.push(function(OneSignal) {
-      OneSignal.Slidedown.promptPush();
+      OneSignal.User.PushSubscription.optIn();
     });
-    document.getElementById('push-banner').style.display = 'none';
-    localStorage.setItem('push_asked', '1');
   }
+}
+
+// 퀴즈 완료 시 자동으로 알림 팝업
+function autoPromptPush() {
+  if (localStorage.getItem('push_asked')) return;
+  if (typeof Notification === 'undefined') return;
+  if (Notification.permission === 'granted') return;
+  if (Notification.permission === 'denied') return;
+  // 1초 뒤 자동 팝업
+  setTimeout(function() {
+    requestPushPermission();
+  }, 1000);
 }
 function checkPushBanner() {
   // 이미 알림 허용했거나 물어봤으면 배너 숨김
@@ -1298,6 +1325,7 @@ function showResult() {
     '<button class="re-btn" style="margin-top:6px" onclick="showPage(\'home\')">🏠 홈으로</button>' +
     getPushCardHTML();
   rc.classList.add('show');
+  autoPromptPush();
 
   (function tick(){
     var n=new Date(), t=new Date(n.getFullYear(),n.getMonth(),n.getDate()+1);
