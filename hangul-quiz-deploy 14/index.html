@@ -271,6 +271,94 @@ main{max-width:680px;margin:0 auto;padding:24px 16px 60px}
   width:100%;max-width:336px;
 }
 
+/* ── nav tabs (퀴즈/랭킹/미션) ── */
+.nav-tabs{
+  display:flex;
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+}
+.nav-tab{
+  flex:1;padding:13px 8px;
+  background:none;border:none;
+  color:var(--muted);font-size:13px;font-weight:600;
+  cursor:pointer;font-family:'Noto Sans KR',sans-serif;
+  border-bottom:2px solid transparent;
+  transition:all .2s;
+}
+.nav-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.nav-tab:hover{color:var(--text)}
+
+/* ── section pages ── */
+.page{display:none}
+.page.active{display:block}
+
+/* ── ranking ── */
+.rank-section{margin-bottom:20px}
+.rank-title{
+  font-size:13px;font-weight:700;color:var(--gold);
+  letter-spacing:.5px;margin-bottom:12px;
+}
+.rank-list{display:flex;flex-direction:column;gap:8px}
+.rank-item{
+  display:flex;align-items:center;gap:14px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:13px 16px;
+}
+.rank-item.me{border-color:var(--gold);background:linear-gradient(135deg,#c9a84c12,#c9a84c06)}
+.rank-num{
+  font-size:16px;font-weight:900;
+  width:28px;text-align:center;
+  font-family:'Noto Serif KR',serif;
+  color:var(--muted);flex-shrink:0;
+}
+.rank-num.gold{color:#ffd700}
+.rank-num.silver{color:#c0c0c0}
+.rank-num.bronze{color:#cd7f32}
+.rank-info{flex:1}
+.rank-name{font-size:14px;font-weight:700}
+.rank-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.rank-pts{font-size:16px;font-weight:700;color:var(--gold2)}
+.score-formula{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:16px;font-size:12px;
+  color:var(--muted);line-height:1.8;margin-top:16px;
+}
+.score-formula b{color:var(--text)}
+
+/* ── mission ── */
+.mission-section{margin-bottom:24px}
+.mission-header{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:12px;
+}
+.mission-title{font-size:13px;font-weight:700;color:var(--gold);letter-spacing:.5px}
+.mission-reset{font-size:11px;color:var(--muted)}
+.mission-list{display:flex;flex-direction:column;gap:8px}
+.mission-item{
+  display:flex;align-items:center;gap:14px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:14px 16px;
+}
+.mission-item.done{border-color:var(--correct);opacity:.7}
+.mission-icon{font-size:22px;width:32px;text-align:center;flex-shrink:0}
+.mission-info{flex:1}
+.mission-name{font-size:14px;font-weight:700}
+.mission-desc{font-size:11px;color:var(--muted);margin-top:2px}
+.mission-pts{
+  font-size:13px;font-weight:700;
+  color:var(--gold);white-space:nowrap;
+}
+.mission-pts.done{color:var(--correct)}
+.badge-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:8px}
+.badge-item{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:14px 8px;text-align:center;
+}
+.badge-item.unlocked{border-color:var(--gold);background:linear-gradient(135deg,#c9a84c18,#c9a84c08)}
+.badge-icon{font-size:24px;margin-bottom:6px}
+.badge-name{font-size:10px;color:var(--muted)}
+.badge-item.unlocked .badge-name{color:var(--gold)}
+
 /* ── footer ── */
 footer{
   text-align:center;
@@ -319,7 +407,17 @@ footer a{color:var(--muted);text-decoration:underline}
   <div class="ad-ph">📢 광고 영역 (728×90) — 애드센스 승인 후 활성화</div>
 </div>
 
+<!-- 상단 네비게이션 -->
+<div class="nav-tabs">
+  <button class="nav-tab active" id="nav-quiz" onclick="showPage('quiz')">📝 오늘의 퀴즈</button>
+  <button class="nav-tab" id="nav-rank" onclick="showPage('rank')">🏆 랭킹</button>
+  <button class="nav-tab" id="nav-mission" onclick="showPage('mission')">🎯 미션</button>
+</div>
+
 <main>
+
+<!-- ══ 퀴즈 페이지 ══ -->
+<div class="page active" id="page-quiz">
   <div class="tabs">
     <button class="tab active" id="tab-spelling" onclick="switchMode('spelling')">
       <span class="tab-icon">✏️</span>맞춤법
@@ -353,6 +451,50 @@ footer a{color:var(--muted);text-decoration:underline}
   <div class="ad-bottom">
     <div class="ad-ph2">📢 광고 영역 (336×280)<br>애드센스 승인 후 활성화</div>
   </div>
+</div>
+
+<!-- ══ 랭킹 페이지 ══ -->
+<div class="page" id="page-rank">
+  <div class="rank-section">
+    <div class="rank-title">🏅 내 순위</div>
+    <div class="rank-list" id="my-rank-area"></div>
+  </div>
+  <div class="rank-section">
+    <div class="rank-title">🏆 전체 랭킹 (로컬)</div>
+    <div class="rank-list" id="rank-list-area"></div>
+  </div>
+  <div class="score-formula">
+    <b>🧮 점수 계산 공식</b><br>
+    기본: 정답 1개당 <b>10점</b><br>
+    만점 보너스: 10/10 달성 시 <b>+50점</b><br>
+    연속 보너스: 연속 플레이일 × <b>5점</b><br>
+    정답률 보너스: 80% 이상 <b>+20점</b>
+  </div>
+</div>
+
+<!-- ══ 미션 페이지 ══ -->
+<div class="page" id="page-mission">
+  <div class="mission-section">
+    <div class="mission-header">
+      <div class="mission-title">📅 일일 미션</div>
+      <div class="mission-reset" id="daily-reset"></div>
+    </div>
+    <div class="mission-list" id="daily-mission-list"></div>
+  </div>
+  <div class="mission-section">
+    <div class="mission-header">
+      <div class="mission-title">📆 주간 미션</div>
+      <div class="mission-reset" id="weekly-reset"></div>
+    </div>
+    <div class="mission-list" id="weekly-mission-list"></div>
+  </div>
+  <div class="mission-section">
+    <div class="mission-title">🏅 업적 뱃지</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:10px" id="badge-count"></div>
+    <div class="badge-grid" id="badge-grid"></div>
+  </div>
+</div>
+
 </main>
 
 <footer>
@@ -670,6 +812,7 @@ function showResult(){
   stats.lastDate = today;
   saveStats();
   updateStatsUI();
+  checkMissions();
 
   document.getElementById('prog-fill').style.width = '100%';
   document.getElementById('prog-text').textContent = '완료!';
@@ -717,6 +860,163 @@ function showToast(msg){
   var t=document.getElementById('toast');
   t.textContent=msg; t.classList.add('show');
   setTimeout(function(){ t.classList.remove('show'); }, 1800);
+}
+
+// ════════════════════════════════════════════
+// 페이지 전환
+// ════════════════════════════════════════════
+function showPage(p){
+  ['quiz','rank','mission'].forEach(function(x){
+    document.getElementById('page-'+x).classList.toggle('active', x===p);
+    document.getElementById('nav-'+x).classList.toggle('active', x===p);
+  });
+  if(p==='rank') renderRanking();
+  if(p==='mission') renderMission();
+}
+
+// ════════════════════════════════════════════
+// 랭킹
+// ════════════════════════════════════════════
+function renderRanking(){
+  var totalScore = stats.correct * 10 + (stats.streak * 5);
+  var rate = stats.total > 0 ? Math.round(stats.correct/stats.total*100) : 0;
+  var tier = totalScore >= 500 ? '골드' : totalScore >= 200 ? '실버' : '브론즈';
+  var tierIcon = totalScore >= 500 ? '🥇' : totalScore >= 200 ? '🥈' : '🥉';
+
+  document.getElementById('my-rank-area').innerHTML =
+    '<div class="rank-item me">'+
+    '<div class="rank-num">?</div>'+
+    '<div class="rank-info">'+
+    '<div class="rank-name">나 '+tierIcon+' '+tier+'</div>'+
+    '<div class="rank-sub">플레이 '+stats.total+'회 · 정답률 '+rate+'% · 연속 '+stats.streak+'일</div>'+
+    '</div>'+
+    '<div class="rank-pts">'+totalScore+' pts</div>'+
+    '</div>';
+
+  // 샘플 랭킹 (Firebase 연동 전 데모)
+  var sample = [
+    {name:'한국어마스터',pts:1240,sub:'플레이 87회 · 정답률 92%'},
+    {name:'맞춤법왕',pts:980,sub:'플레이 65회 · 정답률 88%'},
+    {name:'사자성어박사',pts:750,sub:'플레이 52회 · 정답률 84%'},
+    {name:'속담달인',pts:620,sub:'플레이 44회 · 정답률 79%'},
+    {name:'퀴즈고수',pts:410,sub:'플레이 31회 · 정답률 75%'},
+  ];
+  var numClasses = ['gold','silver','bronze','',''];
+  var html = sample.map(function(s,i){
+    return '<div class="rank-item">'+
+      '<div class="rank-num '+numClasses[i]+'">'+(i+1)+'</div>'+
+      '<div class="rank-info"><div class="rank-name">'+s.name+'</div><div class="rank-sub">'+s.sub+'</div></div>'+
+      '<div class="rank-pts">'+s.pts+' pts</div>'+
+      '</div>';
+  }).join('');
+  document.getElementById('rank-list-area').innerHTML = html +
+    '<div style="text-align:center;font-size:11px;color:var(--muted);margin-top:12px">🔒 실시간 글로벌 랭킹은 준비 중입니다</div>';
+}
+
+// ════════════════════════════════════════════
+// 미션
+// ════════════════════════════════════════════
+var DAILY_MISSIONS = [
+  {icon:'🎯', name:'오늘의 퀴즈 완료', desc:'맞춤법·사자성어·속담 중 1회 완료', pts:30, key:'dm_quiz'},
+  {icon:'⭐', name:'8문제 이상 정답', desc:'한 게임에서 8개 이상 맞추기', pts:20, key:'dm_8correct'},
+  {icon:'🔥', name:'두 모드 완료', desc:'오늘 두 가지 모드 플레이하기', pts:50, key:'dm_two_modes'},
+  {icon:'🏅', name:'만점 달성', desc:'10문제 모두 정답 맞추기', pts:50, key:'dm_perfect'},
+];
+var WEEKLY_MISSIONS = [
+  {icon:'📝', name:'5일 플레이', desc:'이번 주 5일 이상 퀴즈 완료', pts:100, key:'wm_5days'},
+  {icon:'🎯', name:'주간 만점 3회', desc:'이번 주 10/10 만점 3번 달성', pts:150, key:'wm_perfect3'},
+  {icon:'⚡', name:'세 모드 각 2회 완료', desc:'맞춤법·사자성어·속담 각 2회', pts:200, key:'wm_allmode'},
+  {icon:'🏆', name:'주간 정답률 80%', desc:'이번 주 평균 정답률 80% 달성', pts:120, key:'wm_rate80'},
+];
+var BADGES = [
+  {icon:'🌟', name:'첫 퀴즈', key:'b_first'},
+  {icon:'🔥', name:'3일 연속', key:'b_streak3'},
+  {icon:'⚡', name:'7일 연속', key:'b_streak7'},
+  {icon:'🏆', name:'첫 만점', key:'b_perfect1'},
+  {icon:'💎', name:'만점 5회', key:'b_perfect5'},
+  {icon:'📚', name:'100문제', key:'b_q100'},
+  {icon:'🎓', name:'500문제', key:'b_q500'},
+  {icon:'👑', name:'마스터', key:'b_master'},
+];
+
+function getMissionData(){ return JSON.parse(localStorage.getItem('otnl_missions') || '{}'); }
+function saveMissionData(d){ localStorage.setItem('otnl_missions', JSON.stringify(d)); }
+
+function renderMission(){
+  var mData = getMissionData();
+  var today = todayStr();
+
+  // 리셋 타이머
+  var now = new Date();
+  var tomorrow = new Date(now); tomorrow.setDate(tomorrow.getDate()+1); tomorrow.setHours(0,0,0,0);
+  var diff = Math.floor((tomorrow-now)/1000);
+  var hh = Math.floor(diff/3600), mm = Math.floor((diff%3600)/60);
+  document.getElementById('daily-reset').textContent = hh+'시간 '+mm+'분 후 리셋';
+
+  var dayOfWeek = now.getDay();
+  var daysLeft = dayOfWeek===0 ? 0 : 7-dayOfWeek;
+  document.getElementById('weekly-reset').textContent = daysLeft+'일 후 리셋';
+
+  // 일일 미션
+  var dlHtml = DAILY_MISSIONS.map(function(m){
+    var done = mData[today+'_'+m.key];
+    return '<div class="mission-item'+(done?' done':'')+'">'+
+      '<div class="mission-icon">'+m.icon+'</div>'+
+      '<div class="mission-info"><div class="mission-name">'+m.name+'</div><div class="mission-desc">'+m.desc+'</div></div>'+
+      '<div class="mission-pts'+(done?' done':'')+'">'+( done ? '✅ 완료' : '+'+m.pts+'pts')+'</div>'+
+      '</div>';
+  }).join('');
+  document.getElementById('daily-mission-list').innerHTML = dlHtml;
+
+  // 주간 미션
+  var wkHtml = WEEKLY_MISSIONS.map(function(m){
+    var done = mData['week_'+m.key];
+    return '<div class="mission-item'+(done?' done':'')+'">'+
+      '<div class="mission-icon">'+m.icon+'</div>'+
+      '<div class="mission-info"><div class="mission-name">'+m.name+'</div><div class="mission-desc">'+m.desc+'</div></div>'+
+      '<div class="mission-pts'+(done?' done':'')+'">'+( done ? '✅ 완료' : '+'+m.pts+'pts')+'</div>'+
+      '</div>';
+  }).join('');
+  document.getElementById('weekly-mission-list').innerHTML = wkHtml;
+
+  // 뱃지
+  var unlocked = 0;
+  var bdHtml = BADGES.map(function(b){
+    var has = mData['badge_'+b.key];
+    if(has) unlocked++;
+    return '<div class="badge-item'+(has?' unlocked':'')+'">'+
+      '<div class="badge-icon">'+(has ? b.icon : '🔒')+'</div>'+
+      '<div class="badge-name">'+b.name+'</div>'+
+      '</div>';
+  }).join('');
+  document.getElementById('badge-grid').innerHTML = bdHtml;
+  document.getElementById('badge-count').textContent = unlocked+' / '+BADGES.length+' 획득';
+}
+
+// 미션 달성 체크 (게임 종료 시 호출)
+function checkMissions(){
+  var mData = getMissionData();
+  var today = todayStr();
+  var rate = Math.round(correctCount/TOTAL*100);
+
+  mData[today+'_dm_quiz'] = true;
+  if(correctCount >= 8) mData[today+'_dm_8correct'] = true;
+  if(correctCount === TOTAL) mData[today+'_dm_perfect'] = true;
+
+  // 두 모드 완료 체크
+  if(!mData[today+'_modes']) mData[today+'_modes'] = {};
+  mData[today+'_modes'][mode] = true;
+  if(Object.keys(mData[today+'_modes']).length >= 2) mData[today+'_dm_two_modes'] = true;
+
+  // 뱃지
+  if(stats.total >= 1) mData['badge_b_first'] = true;
+  if(stats.streak >= 3) mData['badge_b_streak3'] = true;
+  if(stats.streak >= 7) mData['badge_b_streak7'] = true;
+  if(correctCount === TOTAL) mData['badge_b_perfect1'] = true;
+  if(stats.correct >= 100) mData['badge_b_q100'] = true;
+  if(stats.correct >= 500) mData['badge_b_q500'] = true;
+
+  saveMissionData(mData);
 }
 
 // ════════════════════════════════════════════
