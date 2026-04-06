@@ -3,282 +3,315 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>오늘의 한국어 — 매일 새로운 퀴즈</title>
-<meta name="description" content="매일 바뀌는 맞춤법과 사자성어 퀴즈. 오늘의 한국어 실력을 확인하세요.">
+<meta name="description" content="매일 바뀌는 맞춤법·사자성어·속담 퀴즈. 오늘의 한국어 실력을 확인하세요.">
 <meta name="google-site-verification" content="0ldHLLWTQZU_skjDMDa1hleyu0AsgbHjLi5IOB6R30U" />
-<meta name="google-site-verification" content="ZzowaUmC-KBxIkhRe_Rg0wsxM7j28O5L3pvTAnIfEp0" />
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7764966046793364" crossorigin="anonymous"></script>
+<title>오늘의 한국어 — 매일 새로운 퀴즈</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --ink:#1a1008;--paper:#faf6ef;--paper2:#f2ebe0;
-  --accent:#c84b2f;--gold:#d4a017;--green:#2d7a4f;--muted:#8a7a6a;
-  --border:rgba(26,16,8,.12);
+:root {
+  --bg: #0d0d0f;
+  --surface: #17171a;
+  --surface2: #1e1e23;
+  --border: #2a2a32;
+  --gold: #c9a84c;
+  --gold2: #e8c97a;
+  --text: #f0ede8;
+  --muted: #7a7880;
+  --correct: #4caf82;
+  --wrong: #e05252;
+  --accent: #6b8cff;
+  --radius: 14px;
 }
+*{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(circle at 20% 20%,rgba(200,75,47,.04) 0%,transparent 50%),radial-gradient(circle at 80% 80%,rgba(212,160,23,.06) 0%,transparent 50%);pointer-events:none;z-index:0}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Noto Sans KR',sans-serif;
+  min-height:100vh;
+  line-height:1.6;
+}
 
-/* ── 헤더 ── */
-header{position:relative;z-index:10;border-bottom:2px solid var(--ink);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;background:var(--paper)}
-.logo{font-family:'Noto Serif KR',serif;font-weight:900;font-size:22px;color:var(--ink)}
-.logo span{color:var(--accent)}
-.header-info{font-size:12px;color:var(--muted);text-align:right;line-height:1.6}
-.header-date{font-weight:700;color:var(--ink);font-size:13px}
+/* ── header ── */
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px 24px;
+  border-bottom:1px solid var(--border);
+  background:var(--surface);
+  position:sticky;top:0;z-index:100;
+}
+.logo{
+  font-family:'Noto Serif KR',serif;
+  font-size:22px;
+  font-weight:900;
+  letter-spacing:-0.5px;
+}
+.logo span{color:var(--gold)}
+.header-sub{font-size:11px;color:var(--muted);margin-top:2px;letter-spacing:1px}
+.header-right{text-align:right;font-size:13px;color:var(--muted)}
+.streak-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  background:linear-gradient(135deg,#c9a84c22,#c9a84c11);
+  border:1px solid var(--gold);
+  border-radius:20px;padding:3px 10px;
+  font-size:12px;font-weight:700;color:var(--gold);
+  margin-top:4px;
+}
 
-.ad-bar{background:var(--paper2);border-bottom:1px solid var(--border);padding:8px;text-align:center;min-height:64px;display:flex;align-items:center;justify-content:center;position:relative;z-index:5}
-.ad-ph{border:1.5px dashed var(--border);border-radius:4px;padding:12px 28px;color:var(--muted);font-size:11px;letter-spacing:1px}
+/* ── ad ── */
+.ad-bar{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  text-align:center;padding:12px;
+}
+.ad-ph{
+  display:inline-block;
+  border:1px dashed var(--border);
+  border-radius:6px;
+  padding:8px 20px;
+  font-size:12px;color:var(--muted);
+}
 
-main{flex:1;max-width:700px;width:100%;margin:0 auto;padding:24px 20px 60px;position:relative;z-index:5}
+/* ── main ── */
+main{max-width:680px;margin:0 auto;padding:24px 16px 60px}
 
-/* ── 탭 (퀴즈/랭킹/미션) ── */
-.top-tabs{display:flex;border:2px solid var(--ink);border-radius:6px;overflow:hidden;margin-bottom:22px}
-.top-tab{flex:1;padding:11px;border:none;background:var(--paper);font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;border-right:2px solid var(--ink);display:flex;align-items:center;justify-content:center;gap:5px}
-.top-tab:last-child{border-right:none}
-.top-tab.active{background:var(--ink);color:var(--paper)}
-.top-tab .new-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:none}
-.top-tab .new-dot.show{display:inline-block}
+/* ── tabs ── */
+.tabs{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:8px;margin-bottom:20px;
+}
+.tab{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:12px 8px;
+  cursor:pointer;
+  text-align:center;
+  transition:all .2s;
+  font-family:'Noto Sans KR',sans-serif;
+  font-size:13px;font-weight:600;
+  color:var(--muted);
+}
+.tab:hover{border-color:var(--gold);color:var(--text)}
+.tab.active{
+  background:linear-gradient(135deg,#c9a84c1a,#c9a84c08);
+  border-color:var(--gold);
+  color:var(--gold);
+}
+.tab-icon{display:block;font-size:20px;margin-bottom:4px}
 
-/* ── 모드 탭 ── */
-.mode-tabs{display:flex;border:2px solid var(--ink);border-radius:6px;overflow:hidden;margin-bottom:20px}
-.mode-tab{flex:1;padding:11px;border:none;background:var(--paper);font-family:'Noto Sans KR',sans-serif;font-size:14px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;border-right:2px solid var(--ink);display:flex;flex-direction:column;align-items:center;gap:3px}
-.mode-tab:last-child{border-right:none}
-.mode-tab.active{background:var(--ink);color:var(--paper)}
-.mode-tab .ti{font-size:18px}
-.mode-tab .tl{font-size:11px;letter-spacing:.5px}
+/* ── stats ── */
+.stats-bar{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  margin-bottom:20px;overflow:hidden;
+}
+.stat{
+  padding:12px 8px;text-align:center;
+  border-right:1px solid var(--border);
+}
+.stat:last-child{border-right:none}
+.stat-n{font-size:20px;font-weight:700;color:var(--gold2);font-family:'Noto Serif KR',serif}
+.stat-l{font-size:10px;color:var(--muted);margin-top:2px;letter-spacing:.5px}
 
-/* ── 스탯 바 ── */
-.streak-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding:10px 14px;background:var(--paper2);border:1.5px solid var(--border);border-radius:6px}
-.s-item{text-align:center;cursor:default}
-.s-num{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:900;color:var(--accent);line-height:1}
-.s-lbl{font-size:10px;color:var(--muted);letter-spacing:1px;margin-top:2px}
-.s-div{width:1px;height:32px;background:var(--border)}
+/* ── progress ── */
+.prog-wrap{margin-bottom:18px}
+.prog-top{
+  display:flex;justify-content:space-between;
+  font-size:12px;color:var(--muted);margin-bottom:6px;
+}
+.prog-track{
+  height:5px;background:var(--surface2);
+  border-radius:10px;overflow:hidden;
+}
+.prog-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--gold),var(--gold2));
+  border-radius:10px;
+  transition:width .4s ease;
+}
 
-/* ── 프로그레스 ── */
-.prog-wrap{margin-bottom:16px}
-.prog-lbl{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px}
-.prog-track{height:6px;background:var(--paper2);border:1.5px solid var(--border);border-radius:3px;overflow:hidden}
-.prog-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .4s ease}
+/* ── quiz card ── */
+.q-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:28px 24px;
+  margin-bottom:14px;
+  animation:fadeIn .3s ease;
+}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.q-num{font-size:11px;color:var(--gold);font-weight:700;letter-spacing:1px;margin-bottom:10px}
+.q-q{
+  font-size:17px;font-weight:700;
+  font-family:'Noto Serif KR',serif;
+  margin-bottom:10px;line-height:1.5;
+}
+.q-hint{
+  font-size:12px;color:var(--muted);
+  background:var(--surface2);
+  border-left:3px solid var(--gold);
+  padding:7px 12px;border-radius:4px;
+  margin-bottom:18px;
+}
 
-/* ── 퀴즈 카드 ── */
-.q-card{background:#fff;border:2px solid var(--ink);border-radius:8px;overflow:hidden;box-shadow:4px 4px 0 var(--ink);margin-bottom:16px;animation:up .3s ease}
-@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.q-hd{background:var(--ink);padding:10px 18px;display:flex;align-items:center;justify-content:space-between}
-.q-badge{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
-.q-num{font-size:11px;color:rgba(255,255,255,.45);letter-spacing:1px}
-.q-body{padding:20px 18px 16px}
-.idiom-box{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:900;color:var(--ink);text-align:center;padding:14px;background:var(--paper2);border-radius:6px;margin-bottom:14px;letter-spacing:2px}
-.q-q{font-family:'Noto Serif KR',serif;font-size:16px;font-weight:700;line-height:1.6;color:var(--ink);margin-bottom:8px}
-.q-hint{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;padding:8px 12px;background:var(--paper2);border-radius:4px;border-left:3px solid var(--gold)}
-.options{display:flex;flex-direction:column;gap:8px}
-.opt{width:100%;padding:12px 15px;border:2px solid var(--border);border-radius:6px;background:var(--paper);font-family:'Noto Sans KR',sans-serif;font-size:14px;font-weight:500;color:var(--ink);cursor:pointer;text-align:left;transition:all .15s;display:flex;align-items:center;gap:10px}
-.opt:hover:not(:disabled){border-color:var(--ink);background:var(--paper2);transform:translateX(3px)}
-.opt-lbl{width:26px;height:26px;border:2px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;transition:all .15s}
-.opt:hover:not(:disabled) .opt-lbl{border-color:var(--ink);background:var(--ink);color:var(--paper)}
-.opt.correct{border-color:var(--green);background:rgba(45,122,79,.08);color:var(--green);cursor:default}
-.opt.correct .opt-lbl{border-color:var(--green);background:var(--green);color:#fff}
-.opt.wrong{border-color:var(--accent);background:rgba(200,75,47,.07);color:var(--accent);cursor:default;opacity:.7}
-.opt.wrong .opt-lbl{border-color:var(--accent);background:var(--accent);color:#fff}
+/* ── options ── */
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:13px 18px;
+  cursor:pointer;
+  font-size:15px;font-weight:500;
+  color:var(--text);
+  text-align:left;
+  transition:all .18s;
+  font-family:'Noto Sans KR',sans-serif;
+  display:flex;align-items:center;gap:12px;
+}
+.opt:hover:not(:disabled){
+  border-color:var(--gold);
+  background:linear-gradient(135deg,#c9a84c18,#c9a84c08);
+}
 .opt:disabled{cursor:default}
-.exp-box{display:none;margin-top:12px;padding:12px 14px;border-radius:6px;font-size:13px;line-height:1.7;animation:fi .3s ease}
-@keyframes fi{from{opacity:0}to{opacity:1}}
-.exp-box.show{display:block}
-.exp-box.cok{background:rgba(45,122,79,.08);border:1.5px solid rgba(45,122,79,.25);color:#1d5c38}
-.exp-box.cwrong{background:rgba(200,75,47,.07);border:1.5px solid rgba(200,75,47,.2);color:#8b2212}
-.exp-title{font-weight:700;font-size:14px;margin-bottom:4px}
-.next-btn{display:none;width:100%;margin-top:12px;padding:12px;background:var(--ink);color:var(--paper);border:2px solid var(--ink);border-radius:6px;font-family:'Noto Sans KR',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .15s}
-.next-btn:hover{background:var(--accent);border-color:var(--accent)}
-.next-btn.show{display:block}
+.opt.correct{border-color:var(--correct);background:#4caf8218;color:var(--correct)}
+.opt.wrong{border-color:var(--wrong);background:#e0525218;color:var(--wrong)}
+.opt-letter{
+  width:26px;height:26px;
+  border-radius:50%;
+  background:var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:var(--muted);
+  flex-shrink:0;
+}
+.opt.correct .opt-letter{background:var(--correct);color:#fff}
+.opt.wrong .opt-letter{background:var(--wrong);color:#fff}
 
-/* ── 결과 카드 ── */
-.res-card{display:none;background:#fff;border:2px solid var(--ink);border-radius:8px;box-shadow:4px 4px 0 var(--ink);padding:28px 22px;text-align:center;animation:up .35s ease}
-.res-card.show{display:block}
-.res-emoji{font-size:50px;margin-bottom:10px;display:block}
-.res-title{font-family:'Noto Serif KR',serif;font-size:23px;font-weight:900;color:var(--ink);margin-bottom:5px}
-.score-big{font-family:'Noto Serif KR',serif;font-size:48px;font-weight:900;color:var(--accent);line-height:1;display:block;margin-bottom:4px}
-.res-sub{font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.6}
-.res-grid{display:flex;gap:4px;justify-content:center;margin:16px 0;flex-wrap:wrap}
-.r-dot{width:32px;height:32px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:16px}
-.r-ok{background:var(--green)}.r-ng{background:var(--accent)}
+/* ── explanation ── */
+.exp-box{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px 16px;
+  font-size:13px;line-height:1.7;
+  margin-top:12px;
+  animation:fadeIn .3s ease;
+}
+.exp-box b{color:var(--gold2)}
 
-/* 점수 획득 애니 */
-.pts-pop{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:900;color:var(--gold);margin:8px 0;animation:ptsPop .5s ease}
-@keyframes ptsPop{0%{transform:scale(.7);opacity:0}60%{transform:scale(1.2)}100%{transform:scale(1);opacity:1}}
+/* ── next btn ── */
+.btn-next{
+  display:block;width:100%;
+  background:linear-gradient(135deg,var(--gold),#a8822e);
+  border:none;border-radius:10px;
+  padding:14px;
+  font-size:15px;font-weight:700;
+  color:#0d0d0f;
+  cursor:pointer;
+  margin-top:12px;
+  font-family:'Noto Sans KR',sans-serif;
+  transition:opacity .2s;
+  letter-spacing:.5px;
+}
+.btn-next:hover{opacity:.9}
 
-/* 새 뱃지 알림 */
-.badge-alert{background:linear-gradient(135deg,var(--gold),#f5c842);border-radius:8px;padding:14px 16px;margin:14px 0;display:flex;align-items:center;gap:12px;animation:up .4s ease}
-.badge-alert-icon{font-size:32px}
-.badge-alert-txt{text-align:left}
-.badge-alert-title{font-size:11px;font-weight:700;letter-spacing:2px;color:rgba(26,16,8,.6);text-transform:uppercase;margin-bottom:2px}
-.badge-alert-name{font-size:15px;font-weight:700;color:var(--ink)}
+/* ── result card ── */
+.res-card{
+  display:none;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:32px 24px;
+  text-align:center;
+  animation:fadeIn .4s ease;
+}
+.res-emoji{font-size:52px;margin-bottom:12px}
+.res-score{
+  font-family:'Noto Serif KR',serif;
+  font-size:42px;font-weight:900;
+  color:var(--gold);
+  margin-bottom:4px;
+}
+.res-sub{font-size:14px;color:var(--muted);margin-bottom:24px}
+.res-breakdown{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:10px;margin-bottom:24px;
+}
+.res-item{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:10px;padding:14px;
+}
+.res-item-n{font-size:22px;font-weight:700;color:var(--gold2)}
+.res-item-l{font-size:11px;color:var(--muted);margin-top:2px}
+.btn-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn-share,.btn-retry{
+  border-radius:10px;padding:11px 22px;
+  font-size:14px;font-weight:700;
+  cursor:pointer;border:none;
+  font-family:'Noto Sans KR',sans-serif;
+}
+.btn-share{background:var(--gold);color:#0d0d0f}
+.btn-retry{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
 
-.cd-lbl{font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:12px}
-.countdown{font-family:'Noto Serif KR',serif;font-size:26px;font-weight:900;color:var(--accent);letter-spacing:2px;margin:5px 0 14px}
-.btn-row{display:flex;gap:9px;margin-top:4px}
-.sh-btn{flex:1;padding:12px;background:#FEE500;border:2px solid #3C1E1E;border-radius:6px;font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;cursor:pointer;color:#3C1E1E;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px}
-.sh-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.15)}
-.cp-btn{flex:1;padding:12px;background:var(--ink);border:2px solid var(--ink);border-radius:6px;font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;cursor:pointer;color:var(--paper);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px}
-.cp-btn:hover{background:var(--accent);border-color:var(--accent)}
-.re-btn{width:100%;padding:10px;background:transparent;border:2px solid var(--border);border-radius:6px;font-family:'Noto Sans KR',sans-serif;font-size:13px;cursor:pointer;color:var(--muted);margin-top:8px;transition:all .15s}
-.re-btn:hover{border-color:var(--ink);color:var(--ink)}
+/* ── ad bottom ── */
+.ad-bottom{text-align:center;margin-top:28px}
+.ad-ph2{
+  display:inline-block;
+  border:1px dashed var(--border);
+  border-radius:8px;
+  padding:30px 20px;
+  font-size:12px;color:var(--muted);
+  width:100%;max-width:336px;
+}
 
-/* ══ 랭킹 페이지 ══ */
-#page-rank{display:none}
-.rank-section{margin-bottom:24px}
-.section-title{font-family:'Noto Serif KR',serif;font-size:16px;font-weight:900;color:var(--ink);margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.section-title::after{content:'';flex:1;height:2px;background:var(--border)}
+/* ── footer ── */
+footer{
+  text-align:center;
+  padding:24px 16px;
+  font-size:11px;color:var(--muted);
+  border-top:1px solid var(--border);
+  letter-spacing:.5px;
+}
+footer a{color:var(--muted);text-decoration:underline}
 
-/* 내 점수 카드 */
-.my-score-card{background:#fff;border:2px solid var(--ink);border-radius:8px;padding:20px;box-shadow:3px 3px 0 var(--ink);margin-bottom:20px;display:flex;align-items:center;gap:16px}
-.my-rank-badge{width:60px;height:60px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Noto Serif KR',serif;font-size:22px;font-weight:900;color:#fff;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.2)}
-.my-score-info{flex:1}
-.my-score-name{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px}
-.my-score-pts{font-family:'Noto Serif KR',serif;font-size:28px;font-weight:900;color:var(--accent);line-height:1}
-.my-score-sub{font-size:11px;color:var(--muted);margin-top:2px}
-.tier-badge{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:1px}
-.tier-bronze{background:rgba(176,124,60,.15);color:#b07c3c;border:1px solid rgba(176,124,60,.3)}
-.tier-silver{background:rgba(130,130,150,.15);color:#6e6e8a;border:1px solid rgba(130,130,150,.3)}
-.tier-gold{background:rgba(212,160,23,.15);color:var(--gold);border:1px solid rgba(212,160,23,.3)}
-.tier-platinum{background:rgba(45,122,79,.15);color:var(--green);border:1px solid rgba(45,122,79,.3)}
-.tier-diamond{background:rgba(100,100,220,.15);color:#5555cc;border:1px solid rgba(100,100,220,.3)}
-.tier-master{background:rgba(200,75,47,.15);color:var(--accent);border:1px solid rgba(200,75,47,.3)}
-
-/* 랭킹 리스트 */
-.rank-list{background:#fff;border:2px solid var(--ink);border-radius:8px;overflow:hidden;box-shadow:3px 3px 0 var(--ink)}
-.rank-row{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);gap:12px;transition:background .15s}
-.rank-row:last-child{border-bottom:none}
-.rank-row:hover{background:var(--paper2)}
-.rank-row.rank-me{background:rgba(200,75,47,.05);border-left:3px solid var(--accent)}
-.rk-num{font-family:'Noto Serif KR',serif;font-size:16px;font-weight:900;width:28px;text-align:center;flex-shrink:0}
-.rk-num.gold{color:#f5c842}.rk-num.silver{color:#9e9e9e}.rk-num.bronze{color:#cd7f32}
-.rk-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;border:2px solid var(--border)}
-.rk-info{flex:1;min-width:0}
-.rk-name{font-size:13px;font-weight:700;color:var(--ink)}
-.rk-sub{font-size:11px;color:var(--muted);margin-top:1px}
-.rk-pts{font-family:'Noto Serif KR',serif;font-size:16px;font-weight:900;color:var(--accent);flex-shrink:0}
-.rk-tier{flex-shrink:0}
-
-/* 점수 계산 안내 */
-.score-formula{background:var(--paper2);border:1.5px solid var(--border);border-radius:6px;padding:14px 16px;margin-bottom:20px;font-size:12px;line-height:1.8;color:var(--muted)}
-.score-formula strong{color:var(--ink)}
-
-/* ══ 미션 페이지 ══ */
-#page-mission{display:none}
-
-/* 일일 미션 */
-.mission-card{background:#fff;border:2px solid var(--ink);border-radius:8px;overflow:hidden;box-shadow:3px 3px 0 var(--ink);margin-bottom:18px}
-.mission-hd{background:var(--ink);padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
-.mission-hd-title{font-size:12px;font-weight:700;letter-spacing:2px;color:var(--gold);text-transform:uppercase}
-.mission-reset{font-size:11px;color:rgba(255,255,255,.45)}
-.mission-item{display:flex;align-items:center;padding:13px 16px;border-bottom:1px solid var(--border);gap:12px}
-.mission-item:last-child{border-bottom:none}
-.mission-icon{font-size:22px;flex-shrink:0;width:36px;text-align:center}
-.mission-info{flex:1}
-.mission-name{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px}
-.mission-desc{font-size:11px;color:var(--muted)}
-.mission-reward{font-size:12px;font-weight:700;color:var(--gold);flex-shrink:0;white-space:nowrap}
-.mission-check{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;transition:all .3s}
-.mission-check.done{background:var(--green);border-color:var(--green);animation:checkPop .4s ease}
-@keyframes checkPop{0%{transform:scale(0)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
-.mission-prog-bar{height:4px;background:var(--paper2);border-radius:2px;overflow:hidden;margin-top:4px}
-.mission-prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .5s ease}
-
-/* 업적 뱃지 그리드 */
-.badge-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:8px}
-.badge-item{background:#fff;border:2px solid var(--border);border-radius:8px;padding:14px 10px;text-align:center;transition:all .2s;position:relative}
-.badge-item.unlocked{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
-.badge-item.locked{opacity:.45;filter:grayscale(.6)}
-.badge-emoji{font-size:28px;display:block;margin-bottom:6px}
-.badge-name{font-size:11px;font-weight:700;color:var(--ink);line-height:1.3;margin-bottom:2px}
-.badge-cond{font-size:10px;color:var(--muted);line-height:1.3}
-.badge-new{position:absolute;top:-6px;right:-6px;background:var(--accent);color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;letter-spacing:.5px}
-
-/* 하단 광고 */
-.ad-bottom{text-align:center;padding:14px 0;margin-top:8px}
-.ad-ph2{border:1.5px dashed var(--border);border-radius:4px;padding:16px 24px;color:var(--muted);font-size:11px;letter-spacing:1px;max-width:360px;margin:0 auto}
-
-footer{position:relative;z-index:5;border-top:2px solid var(--ink);padding:13px 24px;text-align:center;font-size:11px;color:var(--muted);letter-spacing:.5px;background:var(--paper)}
-.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:var(--paper);padding:10px 22px;border-radius:30px;font-size:14px;font-weight:600;transition:transform .3s ease;z-index:1000;white-space:nowrap}
-.toast.show{transform:translateX(-50%) translateY(0)}
+/* ── toast ── */
+.toast{
+  position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:#fff;color:#0d0d0f;
+  padding:10px 22px;border-radius:30px;
+  font-size:14px;font-weight:700;
+  opacity:0;transition:all .3s;pointer-events:none;
+  white-space:nowrap;z-index:999;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 @media(max-width:480px){
-  .logo{font-size:18px}.q-q{font-size:15px}.opt{font-size:13px;padding:10px 12px}
-  .btn-row{flex-direction:column}.badge-grid{grid-template-columns:repeat(2,1fr)}
-  .my-score-card{flex-direction:column;text-align:center}
+  .tabs{grid-template-columns:repeat(3,1fr);gap:6px}
+  .tab{padding:10px 4px;font-size:12px}
+  .tab-icon{font-size:18px}
+  .q-q{font-size:15px}
+  .opt{font-size:14px;padding:11px 14px}
+  .res-score{font-size:34px}
 }
 </style>
-
-
-
-<!-- Firebase compat -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<script>
-var firebaseConfig = {
-  apiKey: "AIzaSyCqPc-buNdXyP0soREc9EpHrZcDKGg2Bio",
-  authDomain: "hangul-quiz-978f5.firebaseapp.com",
-  projectId: "hangul-quiz-978f5",
-  storageBucket: "hangul-quiz-978f5.firebasestorage.app",
-  messagingSenderId: "735858651757",
-  appId: "1:735858651757:web:0fd413fa358c3c887b0564"
-};
-firebase.initializeApp(firebaseConfig);
-var db = firebase.firestore();
-
-window.fbSaveScore = function(nick, pts, play, rate, tier) {
-  db.collection("rankings").add({
-    nick: nick,
-    pts: pts,
-    play: play,
-    rate: rate,
-    tier: tier,
-    ts: firebase.firestore.FieldValue.serverTimestamp()
-  }).catch(function(e){ console.log("저장오류:", e); });
-};
-
-window.fbLoadRanking = function() {
-  return db.collection("rankings")
-    .orderBy("pts", "desc")
-    .limit(50)
-    .get()
-    .then(function(snap) {
-      var rows = [];
-      snap.forEach(function(doc) { rows.push(doc.data()); });
-      return rows;
-    });
-};
-
-window.fbLoadRankingWeek = function() {
-  var weekAgo = new Date();
-  weekAgo.setDate(weekAgo.getDate() - 7);
-  return db.collection("rankings")
-    .orderBy("pts", "desc")
-    .limit(50)
-    .get()
-    .then(function(snap) {
-      var rows = [];
-      snap.forEach(function(doc) {
-        var d = doc.data();
-        if (d.ts && d.ts.toDate && d.ts.toDate() >= weekAgo) rows.push(d);
-        else if (!d.ts) rows.push(d);
-      });
-      return rows;
-    });
-};
-</script>
 </head>
 <body>
 
 <header>
   <div>
-    <div class="logo" onclick="showPage('quiz',document.getElementById('ttab-quiz'))" style="cursor:pointer">오늘의 <span>한국어</span></div>
-    <div style="font-size:11px;color:var(--muted);margin-top:2px;letter-spacing:.5px">매일 바뀌는 퀴즈</div>
+    <div class="logo">오늘의 <span>한국어</span></div>
+    <div class="header-sub">매일 바뀌는 퀴즈</div>
   </div>
-  <div class="header-info">
-    <div class="header-date" id="today-date"></div>
-    <div>연속 <span id="streak-display">0</span>일 🔥</div>
+  <div class="header-right">
+    <div id="today-date"></div>
+    <div class="streak-badge">🔥 연속 <span id="streak-display">0</span>일</div>
   </div>
 </header>
 
@@ -287,864 +320,416 @@ window.fbLoadRankingWeek = function() {
 </div>
 
 <main>
-  <!-- 상단 탭: 퀴즈 / 랭킹 / 미션 -->
-  <div class="top-tabs">
-    <button class="top-tab active" id="ttab-quiz" onclick="showPage('quiz')">📝 오늘의 퀴즈</button>
-    <button class="top-tab" id="ttab-rank" onclick="showPage('rank');setTimeout(renderRank,500)">🏆 랭킹</button>
-    <button class="top-tab" id="ttab-mission" onclick="showPage('mission')">🎯 미션
-      <span class="new-dot" id="mission-dot"></span>
+  <div class="tabs">
+    <button class="tab active" id="tab-spelling" onclick="switchMode('spelling')">
+      <span class="tab-icon">✏️</span>맞춤법
+    </button>
+    <button class="tab" id="tab-idiom" onclick="switchMode('idiom')">
+      <span class="tab-icon">📖</span>사자성어
+    </button>
+    <button class="tab" id="tab-proverb" onclick="switchMode('proverb')">
+      <span class="tab-icon">🌾</span>속담
     </button>
   </div>
 
-  <!-- ═══ 퀴즈 페이지 ═══ -->
-  <div id="page-quiz">
-    <div class="mode-tabs">
-      <button class="mode-tab active" id="tab-spelling" onclick="switchMode('spelling')">
-        <span class="ti">✏️</span><span class="tl">맞춤법</span>
-      </button>
-      <button class="mode-tab" id="tab-idiom" onclick="switchMode('idiom')">
-        <span class="ti">📖</span><span class="tl">사자성어</span>
-      </button>
-    </div>
-    <div class="streak-bar">
-      <div class="s-item"><div class="s-num" id="st-streak">0</div><div class="s-lbl">연속정복</div></div>
-      <div class="s-div"></div>
-      <div class="s-item"><div class="s-num" id="st-total">0</div><div class="s-lbl">총플레이</div></div>
-      <div class="s-div"></div>
-      <div class="s-item"><div class="s-num" id="st-correct">0</div><div class="s-lbl">정답수</div></div>
-      <div class="s-div"></div>
-      <div class="s-item"><div class="s-num" id="st-rate">0%</div><div class="s-lbl">정답률</div></div>
-      <div class="s-div"></div>
-      <div class="s-item"><div class="s-num" id="st-pts" style="color:var(--gold)">0</div><div class="s-lbl">총점수</div></div>
-    </div>
-    <div class="prog-wrap">
-      <div class="prog-lbl"><span id="prog-text">문제 1 / 7</span><span id="score-text">점수: 0</span></div>
-      <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
-    </div>
-    <div id="quiz-area"></div>
-    <div class="res-card" id="res-card"></div>
-    <div class="ad-bottom"><div class="ad-ph2">📢 광고 영역 (336×280) — 애드센스 승인 후 활성화</div></div>
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-n" id="st-streak">0</div><div class="stat-l">연속정복</div></div>
+    <div class="stat"><div class="stat-n" id="st-total">0</div><div class="stat-l">총플레이</div></div>
+    <div class="stat"><div class="stat-n" id="st-correct">0</div><div class="stat-l">정답수</div></div>
+    <div class="stat"><div class="stat-n" id="st-rate">0%</div><div class="stat-l">정답률</div></div>
   </div>
 
-  <!-- ═══ 랭킹 페이지 ═══ -->
-  <div id="page-rank">
-    <!-- 전체/주간 탭 -->
-    <div style="display:flex;gap:0;border:2px solid var(--ink);border-radius:6px;overflow:hidden;margin-bottom:20px">
-      <button id="rank-tab-all" onclick="switchRankTab('all')" style="flex:1;padding:9px;border:none;background:var(--ink);color:var(--paper);font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s">🏆 전체 랭킹</button>
-      <button id="rank-tab-week" onclick="switchRankTab('week')" style="flex:1;padding:9px;border:none;background:var(--paper);color:var(--muted);font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s">📅 주간 랭킹</button>
+  <div class="prog-wrap">
+    <div class="prog-top">
+      <span id="prog-text">문제 1 / 10</span>
+      <span id="score-text">점수: 0</span>
     </div>
-    <div class="rank-section">
-      <div class="section-title">내 순위</div>
-      <div class="my-score-card">
-        <div class="my-rank-badge" id="my-rank-num">?</div>
-        <div class="my-score-info">
-          <div class="my-score-name" id="my-rank-name">나</div>
-          <div class="my-score-pts" id="my-rank-pts">0 <span style="font-size:14px;color:var(--muted)">pts</span></div>
-          <div class="my-score-sub">플레이 <span id="my-rank-play">0</span>회 · 정답률 <span id="my-rank-rate">0</span>% · <span class="tier-badge" id="my-tier-badge">브론즈</span></div>
-        </div>
-      </div>
-      <div class="score-formula">
-        <strong>🧮 점수 계산 공식</strong><br>
-        기본점수: 정답 1개당 <strong>10점</strong><br>
-        만점 보너스: 7/7 달성 시 <strong>+50점</strong><br>
-        연속 보너스: 연속 플레이일 × <strong>5점</strong><br>
-        정답률 보너스: 정답률 80% 이상 <strong>+20점</strong>
-      </div>
-    </div>
-    <div class="rank-section">
-      <div class="section-title">전체 랭킹</div>
-      <div class="rank-list" id="rank-list"></div>
-    </div>
+    <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
   </div>
 
-  <!-- ═══ 미션 페이지 ═══ -->
-  <div id="page-mission">
+  <div id="quiz-area"></div>
+  <div class="res-card" id="res-card"></div>
 
-    <!-- 일일 미션 -->
-    <div class="mission-card">
-      <div class="mission-hd">
-        <div class="mission-hd-title">📅 일일 미션</div>
-        <div class="mission-reset" id="mission-reset-time">--:-- 후 리셋</div>
-      </div>
-      <div class="mission-item">
-        <div class="mission-icon">🎯</div>
-        <div class="mission-info">
-          <div class="mission-name">오늘의 퀴즈 완료</div>
-          <div class="mission-desc">맞춤법 또는 사자성어 퀴즈 1회 완료</div>
-          <div class="mission-prog-bar"><div class="mission-prog-fill" id="dm1-fill" style="width:0%"></div></div>
-        </div>
-        <div class="mission-reward">+30pts</div>
-        <div class="mission-check" id="dm1-check"></div>
-      </div>
-      <div class="mission-item">
-        <div class="mission-icon">⭐</div>
-        <div class="mission-info">
-          <div class="mission-name">5문제 이상 정답</div>
-          <div class="mission-desc">한 게임에서 5개 이상 맞추기</div>
-          <div class="mission-prog-bar"><div class="mission-prog-fill" id="dm2-fill" style="width:0%"></div></div>
-        </div>
-        <div class="mission-reward">+20pts</div>
-        <div class="mission-check" id="dm2-check"></div>
-      </div>
-      <div class="mission-item">
-        <div class="mission-icon">🔥</div>
-        <div class="mission-info">
-          <div class="mission-name">맞춤법 + 사자성어 모두 완료</div>
-          <div class="mission-desc">오늘 두 모드 전부 플레이하기</div>
-          <div class="mission-prog-bar"><div class="mission-prog-fill" id="dm3-fill" style="width:0%"></div></div>
-        </div>
-        <div class="mission-reward">+50pts</div>
-        <div class="mission-check" id="dm3-check"></div>
-      </div>
-      <div class="mission-item">
-        <div class="mission-icon">🏅</div>
-        <div class="mission-info">
-          <div class="mission-name">오늘 만점 달성</div>
-          <div class="mission-desc">7문제 모두 정답 맞추기</div>
-          <div class="mission-prog-bar"><div class="mission-prog-fill" id="dm4-fill" style="width:0%"></div></div>
-        </div>
-        <div class="mission-reward">+50pts</div>
-        <div class="mission-check" id="dm4-check"></div>
-      </div>
-    </div>
-
-    <!-- 주간 미션 -->
-    <div class="mission-card">
-      <div class="mission-hd">
-        <div class="mission-hd-title">📅 주간 미션</div>
-        <div class="mission-reset" id="weekly-reset-time">-- 후 리셋</div>
-      </div>
-      <div class="mission-item">
-        <div class="mission-icon">📝</div>
-        <div class="mission-info">
-          <div class="mission-name">이번 주 5일 플레이</div>
-          <div class="mission-desc">월~일 중 5일 이상 퀴즈 완료</div>
-          <div class="mission-prog-bar"><div class="mission-prog-fill" id="wm1-fill" style="width:0%"></div></div>
-        </div>
-        <div class="mission-reward">+100pts</div>
-        <div class="mission-check" id="wm1-check"></div>
-      </div>
-      <div class="mission-item">
-        <div class="mission-icon">🎯</div>
-        <div class="mission-info">
-          <div class="mission-name">주간 만점 3회</div>
-          <div class="mission-desc">이번 주 7/7 만점 3번 달성</div>
-          <div class="mission-prog-bar"><div class="mission-prog-fill" id="wm2-fill" style="width:0%"></div></div>
-        </div>
-        <div class="mission-reward">+150pts</div>
-        <div class="mission-check" id="wm2-check"></div>
-      </div>
-      <div class="mission-item">
-        <div class="mission-icon">⚡</div>
-        <div class="mission-info">
-          <div class="mission-name">두 모드 각 3회 완료</div>
-          <div class="mission-desc">맞춤법 3회 + 사자성어 3회</div>
-          <div class="mission-prog-bar"><div class="mission-prog-fill" id="wm3-fill" style="width:0%"></div></div>
-        </div>
-        <div class="mission-reward">+200pts</div>
-        <div class="mission-check" id="wm3-check"></div>
-      </div>
-      <div class="mission-item">
-        <div class="mission-icon">🏆</div>
-        <div class="mission-info">
-          <div class="mission-name">주간 정답률 80% 이상</div>
-          <div class="mission-desc">이번 주 평균 정답률 80% 달성</div>
-          <div class="mission-prog-bar"><div class="mission-prog-fill" id="wm4-fill" style="width:0%"></div></div>
-        </div>
-        <div class="mission-reward">+120pts</div>
-        <div class="mission-check" id="wm4-check"></div>
-      </div>
-    </div>
-
-    <!-- 업적 뱃지 -->
-    <div class="mission-card">
-      <div class="mission-hd">
-        <div class="mission-hd-title">🏅 업적 뱃지</div>
-        <div class="mission-reset" id="badge-cnt-lbl">0 / 20 획득</div>
-      </div>
-      <div style="padding:14px">
-        <div class="badge-grid" id="badge-grid"></div>
-      </div>
-    </div>
-
+  <div class="ad-bottom">
+    <div class="ad-ph2">📢 광고 영역 (336×280)<br>애드센스 승인 후 활성화</div>
   </div>
-
 </main>
 
-<footer>오늘의 한국어 · 매일 오전 0시 새 문제 · <a href="/privacy.html" style="color:var(--muted);text-decoration:underline">개인정보처리방침</a></footer>
+<footer>
+  오늘의 한국어 · 매일 오전 0시 새 문제 · <a href="/privacy.html">개인정보처리방침</a>
+</footer>
 <div class="toast" id="toast"></div>
 
 <script>
-// ═══════════════════════════════════════════════════
-// 문제 데이터
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════════
+// 데이터 — 맞춤법 50문제
+// ════════════════════════════════════════════
 var SPELLING = [
-  {q:'다음 중 올바른 표기는?',hint:'시간이 흐르다는 의미의 부사입니다.',opts:['금새','금세'],ans:1,exp:'<b>금세</b>가 맞습니다. "금시에"가 줄어든 말로 "이미 또는 방금"을 뜻합니다.'},
-  {q:'"왠지 모르게 끌린다"의 올바른 표기는?',hint:'"왜인지"의 준말입니다.',opts:['왠지','웬지'],ans:0,exp:'<b>왠지</b>가 맞습니다. "왜인지"가 줄어든 말입니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'무언가를 세거나 확인하다는 의미입니다.',opts:['갯수','개수'],ans:1,exp:'<b>개수</b>(個數)가 맞습니다. 한자어 사이에는 사이시옷을 쓰지 않습니다.'},
-  {q:'"그는 _____ 모습으로 나타났다"의 빈칸은?',hint:'"변변치 못하고 보잘것없는"을 뜻합니다.',opts:['남루한','납루한'],ans:0,exp:'<b>남루한</b>(襤褸-)이 맞습니다. 옷이 낡고 해진 초라한 모습을 뜻합니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'배탈이 날 때 아프다는 표현입니다.',opts:['배탈이 났다','배탈이 낫다'],ans:0,exp:'<b>배탈이 났다</b>가 맞습니다. "낫다"는 병이 치유될 때 씁니다.'},
-  {q:'"이번 일은 _____ 싸다"의 빈칸은?',hint:'"값어치보다 싸다"는 의미입니다.',opts:['헐값에','헐갑에'],ans:0,exp:'<b>헐값에</b>가 맞습니다. "헐값"은 형편없이 싼 값을 뜻합니다.'},
-  {q:'"그녀는 _____ 웃었다"의 빈칸은?',hint:'소리 없이 조용히 웃는 모습입니다.',opts:['방긋이','방긋히'],ans:0,exp:'<b>방긋이</b>가 맞습니다. 의태어 뒤에는 "-이"를 붙입니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'어떤 일을 다시 하지 않겠다는 결심입니다.',opts:['두번 다시','두 번 다시'],ans:1,exp:'<b>두 번 다시</b>가 맞습니다. "번"은 의존명사로 앞말과 띄어 써야 합니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'의견이나 생각이 서로 맞지 않다는 뜻입니다.',opts:['틀리다','다르다'],ans:1,exp:'<b>다르다</b>가 맞습니다. 두 개 이상이 같지 않다는 뜻은 "다르다"입니다.'},
-  {q:'"시험에 합격하여 _____ 기분이다"의 빈칸은?',hint:'"날아갈 것 같은"의 의미입니다.',opts:['날아갈듯한','날아갈 듯한'],ans:1,exp:'<b>날아갈 듯한</b>이 맞습니다. "듯"은 의존명사로 앞말과 띄어 씁니다.'},
-  {q:'"그는 _____ 사람이다"의 빈칸은?',hint:'"거짓이 없이 바른"의 의미입니다.',opts:['올바른','옳바른'],ans:0,exp:'<b>올바른</b>이 맞습니다. "올바르다"는 "올"과 "바르다"의 합성어입니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'힘들고 고생스럽다는 의미입니다.',opts:['고달프다','고단하다'],ans:0,exp:'<b>고달프다</b>는 몹시 힘들고 지치다는 뜻입니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'오래도록 간직하다는 의미입니다.',opts:['간직하다','간지하다'],ans:0,exp:'<b>간직하다</b>가 맞습니다. "간지하다"는 없는 말입니다.'},
-  {q:'"그 사람은 _____ 생겼다"의 빈칸은?',hint:'잘생긴 것을 뜻합니다.',opts:['잘 생겼다','잘생겼다'],ans:1,exp:'<b>잘생겼다</b>가 맞습니다. "잘생기다"는 하나의 단어로 붙여 씁니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'아무것도 없다는 의미입니다.',opts:['아무것도 없다','아무 것도 없다'],ans:0,exp:'<b>아무것도 없다</b>가 맞습니다. "아무것"은 붙여 씁니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'꼭 맞는 시간이나 정도를 뜻합니다.',opts:['딱맞다','딱 맞다'],ans:1,exp:'<b>딱 맞다</b>가 맞습니다. 부사 "딱"은 앞말과 띄어 씁니다.'},
-  {q:'"물이 _____ 끓는다"의 빈칸은?',hint:'세차게 끓는 모양을 뜻합니다.',opts:['팔팔','활활'],ans:0,exp:'<b>팔팔</b>이 맞습니다. "팔팔 끓다"는 물이 세차게 끓는 모양입니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'어떤 일이 이루어지기를 바라다는 뜻입니다.',opts:['바라다','바래다'],ans:0,exp:'<b>바라다</b>가 맞습니다. "바래다"는 색이 변하다는 뜻입니다.'},
-  {q:'"그녀가 _____ 왔다"의 빈칸은?',hint:'직접 온 것을 강조하는 표현입니다.',opts:['몸소','몸수'],ans:0,exp:'<b>몸소</b>가 맞습니다. "몸소"는 자기 자신이 직접 한다는 뜻입니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'어떤 일이 끝났다는 의미입니다.',opts:['다됐다','다 됐다'],ans:1,exp:'<b>다 됐다</b>가 맞습니다. 부사 "다"는 뒷말과 띄어 씁니다.'},
-  {q:'"그는 _____ 먹었다"의 빈칸은?',hint:'음식을 남기지 않고 전부 먹었다는 의미입니다.',opts:['깨끗이','깨끗히'],ans:0,exp:'<b>깨끗이</b>가 맞습니다. "깨끗하다"의 어근에는 "-이"를 붙입니다.'},
-  {q:'"_____ 모르게 빠져들었다"의 빈칸은?',hint:'자신도 의식하지 못하는 사이를 뜻합니다.',opts:['어느새','어느세'],ans:0,exp:'<b>어느새</b>가 맞습니다. "어느 사이에"가 줄어든 말입니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'매우 적은 양을 뜻합니다.',opts:['조금씩','조금 씩'],ans:0,exp:'<b>조금씩</b>이 맞습니다. 접미사 "-씩"은 앞말에 붙여 씁니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'탈이 났다는 표현입니다.',opts:['탈이 났다','탈이 낫다'],ans:0,exp:'<b>탈이 났다</b>가 맞습니다. 과거에 일어난 일이므로 "났다"를 씁니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'사물을 가리키는 지시어입니다.',opts:['이것저것','이 것 저 것'],ans:0,exp:'<b>이것저것</b>이 맞습니다. 하나의 단어로 붙여 씁니다.'},
-  {q:'"그는 _____ 달렸다"의 빈칸은?',hint:'있는 힘껏 빠르게 달리는 모양입니다.',opts:['냅다','냉다'],ans:0,exp:'<b>냅다</b>가 맞습니다. "냅다"는 갑자기 힘차게 행동하는 모양을 뜻합니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'눈물이 흐르다는 뜻입니다.',opts:['눈물이 나다','눈물이 났다'],ans:0,exp:'<b>눈물이 나다</b>가 기본형입니다. 현재형으로는 "눈물이 난다"가 맞습니다.'},
-  {q:'"_____ 생각이 들었다"의 빈칸은?',hint:'"갑자기"와 비슷한 의미입니다.',opts:['문득','문뜩'],ans:0,exp:'<b>문득</b>이 맞습니다. "문뜩"은 잘못된 표기입니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'차례를 기다리다는 의미입니다.',opts:['줄을 서다','줄을 스다'],ans:0,exp:'<b>줄을 서다</b>가 맞습니다.'},
-  {q:'"그는 말을 _____ 했다"의 빈칸은?',hint:'말을 빙빙 돌려서 하는 모양입니다.',opts:['에둘러','에두러'],ans:0,exp:'<b>에둘러</b>가 맞습니다. "에두르다"의 활용형입니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'그렇지 않으면이라는 뜻입니다.',opts:['안그러면','안 그러면'],ans:1,exp:'<b>안 그러면</b>이 맞습니다. 부사 "안"은 뒷말과 띄어 씁니다.'},
-  {q:'"_____ 일어나다"의 빈칸은?',hint:'갑작스럽게 일어나는 모양입니다.',opts:['벌떡','벌떡이'],ans:0,exp:'<b>벌떡</b>이 맞습니다. 부사로 단독으로 씁니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'허락을 받지 않다는 의미입니다.',opts:['무단으로','무단히'],ans:0,exp:'<b>무단으로</b>가 맞습니다. "무단히"는 잘못된 표기입니다.'},
-  {q:'"그는 _____ 사과했다"의 빈칸은?',hint:'매우 간절하고 진지하게 사과하는 모양입니다.',opts:['진심으로','진심히'],ans:0,exp:'<b>진심으로</b>가 맞습니다. "진심히"는 없는 말입니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'시간이 얼마 남지 않았다는 뜻입니다.',opts:['얼마안남았다','얼마 안 남았다'],ans:1,exp:'<b>얼마 안 남았다</b>가 맞습니다. 부사 "안"은 띄어 씁니다.'},
-  {q:'"_____ 맞는 말이다"의 빈칸은?',hint:'정말로, 틀림없이의 의미입니다.',opts:['맞다','맞아'],ans:0,exp:'<b>맞다</b>가 기본형입니다. 문장 안에서는 "틀림없이 맞는 말이다"로 씁니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'일이 이루어지기를 원한다는 의미입니다.',opts:['됬으면','됐으면'],ans:1,exp:'<b>됐으면</b>이 맞습니다. "되었으면"의 준말입니다. "됬다"는 없는 말입니다.'},
-  {q:'"그는 _____ 화를 냈다"의 빈칸은?',hint:'이유 없이 갑자기 화내는 모양입니다.',opts:['괜히','괜이'],ans:0,exp:'<b>괜히</b>가 맞습니다. "공연히"가 줄어든 말입니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'잠이 오지 않는 상태입니다.',opts:['잠이 안와','잠이 안 와'],ans:1,exp:'<b>잠이 안 와</b>가 맞습니다. 부사 "안"은 뒷말과 띄어 씁니다.'},
-  {q:'"그는 _____ 잘 생각했다"의 빈칸은?',hint:'무언가를 곰곰이 깊이 생각하는 모양입니다.',opts:['곰곰이','곰곰히'],ans:0,exp:'<b>곰곰이</b>가 맞습니다. "곰곰하다"라는 형용사가 없으므로 "-이"를 붙입니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'빠짐없이 모두라는 의미입니다.',opts:['하나하나','하나 하나'],ans:0,exp:'<b>하나하나</b>가 맞습니다. 부사로 붙여 씁니다.'},
-  {q:'"오늘 _____ 만났다"의 빈칸은?',hint:'처음으로 만났다는 의미입니다.',opts:['처음으로','처음으로서'],ans:0,exp:'<b>처음으로</b>가 맞습니다. "처음으로서"는 없는 말입니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'매우 많다는 의미입니다.',opts:['수없이','수 없이'],ans:0,exp:'<b>수없이</b>가 맞습니다. 부사로 붙여 씁니다.'},
-  {q:'"그는 _____ 떠났다"의 빈칸은?',hint:'아무런 소식도 없이 사라졌다는 의미입니다.',opts:['홀연히','홀연이'],ans:0,exp:'<b>홀연히</b>가 맞습니다. "홀연하다"의 부사형입니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'생각하지도 않게 뜻밖에라는 의미입니다.',opts:['뜻밖에','뜻밖의'],ans:0,exp:'<b>뜻밖에</b>가 맞습니다. 부사로 쓸 때는 "에"를 붙입니다.'},
-  {q:'"그는 _____ 않겠다고 했다"의 빈칸은?',hint:'다시는 하지 않겠다는 의미입니다.',opts:['두번다시','두 번 다시'],ans:1,exp:'<b>두 번 다시</b>가 맞습니다. 의존명사 "번"은 띄어 씁니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'알아보기 어렵게 적다는 의미입니다.',opts:['갈겨쓰다','갈겨 쓰다'],ans:0,exp:'<b>갈겨쓰다</b>가 맞습니다. 합성동사로 붙여 씁니다.'},
-  {q:'"_____ 하면 된다"의 빈칸은?',hint:'열심히 노력하면이라는 의미입니다.',opts:['열심히','열심이'],ans:0,exp:'<b>열심히</b>가 맞습니다. "열심"에 부사형 어미 "-히"를 붙입니다.'},
-  {q:'다음 중 올바른 표기는?',hint:'서로 반대 방향을 뜻합니다.',opts:['반대로','반대히'],ans:0,exp:'<b>반대로</b>가 맞습니다. "반대히"는 없는 말입니다.'},
-  {q:'"그는 _____ 기다렸다"의 빈칸은?',hint:'매우 오랫동안 기다렸다는 의미입니다.',opts:['하염없이','하염없히'],ans:0,exp:'<b>하염없이</b>가 맞습니다. "-없다"로 끝나는 말의 부사형은 "-이"입니다.'},
+  {q:'다음 중 올바른 표기는?',hint:'시간이 흐르다는 의미의 부사입니다.',opts:['금새','금세'],ans:1,exp:'<b>금세</b>가 맞습니다. "금시에"의 준말로 "이미·방금"을 뜻합니다. "금새"는 없는 단어입니다.'},
+  {q:'"왠지 모르게 끌린다" — 밑줄 친 말의 올바른 표기는?',hint:'"왜인지"의 준말입니다.',opts:['왠지','웬지'],ans:0,exp:'<b>왠지</b>가 맞습니다. "왜인지"가 줄어든 말입니다. "웬"은 "어찌 된"이라는 뜻으로 "웬일", "웬만하면"처럼 씁니다.'},
+  {q:'다음 중 올바른 표기는?',hint:'무언가를 세거나 확인한다는 의미입니다.',opts:['갯수','개수'],ans:1,exp:'<b>개수</b>(個數)가 맞습니다. 한자어 사이에는 사이시옷을 쓰지 않습니다.'},
+  {q:'"그는 _____ 모습으로 나타났다" — 빈칸에 알맞은 것은?',hint:'"변변치 못하고 보잘것없는"을 뜻합니다.',opts:['남루한','납루한'],ans:0,exp:'<b>남루한</b>(襤褸-)이 맞습니다. 옷이 낡고 해진 초라한 모습을 표현합니다.'},
+  {q:'배탈이 났을 때 아프다는 표현의 올바른 표기는?',hint:'"낫다"와 혼동하기 쉽습니다.',opts:['배탈이 났다','배탈이 낫다'],ans:0,exp:'<b>배탈이 났다</b>가 맞습니다. "낫다"는 병이 치유될 때 씁니다. (예: 감기가 나았다)'},
+  {q:'다음 중 올바른 표기는?',hint:'비교할 때 쓰는 표현입니다.',opts:['로서','로써'],ans:0,exp:'자격이나 신분을 나타낼 때는 <b>로서</b>, 수단·도구를 나타낼 때는 <b>로써</b>를 씁니다. (예: 학생으로서, 말로써)'},
+  {q:'"그 일을 _____ 알아두어라" — 빈칸에 알맞은 것은?',hint:'반드시 그렇게 하라는 의미입니다.',opts:['반드시','반듯이'],ans:0,exp:'<b>반드시</b>는 "꼭·틀림없이"를 뜻하고, <b>반듯이</b>는 "바르게·곧게"를 뜻합니다.'},
+  {q:'다음 중 올바른 표기는?',hint:'"어떠하다"가 줄어든 말입니다.',opts:['어떻해','어떡해'],ans:1,exp:'<b>어떡해</b>가 맞습니다. "어떻게 해"가 줄어든 말입니다. "어떻해"는 없는 단어입니다.'},
+  {q:'"그것은 _____ 일이다" — 빈칸에 알맞은 것은?',hint:'"있을 수 없는"을 뜻합니다.',opts:['있을 수 없는','있을수없는'],ans:0,exp:'<b>있을 수 없는</b>이 맞습니다. "수"는 의존명사로 앞 말과 띄어 씁니다.'},
+  {q:'다음 중 올바른 표기는?',hint:'비교·열거할 때 쓰는 표현입니다.',opts:['든지','던지'],ans:0,exp:'선택을 나타낼 때는 <b>든지</b>를 씁니다. (예: 가든지 오든지) "던지"는 과거를 회상할 때 씁니다. (예: 얼마나 예쁘던지)'},
+  {q:'"사과를 _____ 먹었다" — 빈칸에 알맞은 것은?',hint:'통째로 다 먹었다는 의미입니다.',opts:['통채로','통째로'],ans:1,exp:'<b>통째로</b>가 맞습니다. "통째"에 "-로"가 붙은 형태입니다. "통채로"는 없는 표현입니다.'},
+  {q:'다음 중 올바른 표기는?',hint:'계획대로 잘 되지 않을 때 쓰는 표현입니다.',opts:['뒤쳐지다','뒤처지다'],ans:1,exp:'<b>뒤처지다</b>가 맞습니다. "뒤쳐지다"는 틀린 표기입니다.'},
+  {q:'"그 사람이 _____ 나는 싫다" — 빈칸에 알맞은 것은?',hint:'이유·원인을 나타내는 연결어미입니다.',opts:['싫어서','싫어서라도'],ans:0,exp:'문맥상 <b>싫어서</b>가 자연스럽습니다. 이유를 나타내는 "-아서/어서"가 맞습니다.'},
+  {q:'다음 중 올바른 표기는?',hint:'사귀다가 헤어진 사람을 가리킵니다.',opts:['전 남자친구','전남자친구'],ans:0,exp:'"전(前)"은 관형사로 다음 단어와 띄어 씁니다. <b>전 남자친구</b>가 맞습니다.'},
+  {q:'"그는 매우 _____ 사람이다" — 빈칸에 알맞은 것은?',hint:'지식이 풍부하고 박식하다는 의미입니다.',opts:['해박한','해발한'],ans:0,exp:'<b>해박한</b>(該博-)이 맞습니다. 지식이 넓고 풍부함을 뜻합니다.'},
+  {q:'다음 중 올바른 표기는?',hint:'기회를 놓쳤을 때 쓰는 표현입니다.',opts:['낭패를 봤다','낭패를 봤다'],ans:0,exp:'<b>낭패를 봤다</b>가 맞습니다. 일이 뜻대로 되지 않아 어려운 처지에 놓임을 뜻합니다.'},
+  {q:'"서로 _____ 인사를 나눴다" — 빈칸에 알맞은 것은?',hint:'"눈을 마주치며"라는 의미입니다.',opts:['눈인사를','눈짓 인사를'],ans:0,exp:'<b>눈인사를</b>이 자연스러운 표현입니다. "눈인사"는 한 단어입니다.'},
+  {q:'다음 중 올바른 표기는?',hint:'자꾸 생각이 난다는 의미입니다.',opts:['귀에 못이 박히다','귀에 못이 박이다'],ans:1,exp:'<b>귀에 못이 박이다</b>가 맞습니다. "박히다"는 피동 표현이고, "박이다"는 "단단히 배다"의 뜻입니다.'},
+  {q:'"이번 회의는 _____ 진행됩니다" — 빈칸에 알맞은 것은?',hint:'"예정한 대로"를 뜻합니다.',opts:['계획대로','계획 대로'],ans:0,exp:'"대로"는 의존명사로 앞 명사에 붙여 씁니다. <b>계획대로</b>가 맞습니다.'},
+  {q:'다음 중 올바른 표기는?',hint:'굽이굽이 돌아가는 길을 뜻합니다.',opts:['꼬불꼬불','꾸불꾸불'],ans:0,exp:'<b>꼬불꼬불</b>이 표준어입니다. "꾸불꾸불"도 쓰이지만 표준어는 꼬불꼬불입니다.'},
+  {q:'"음식이 입에 _____ 잘 먹었다" — 빈칸에 알맞은 것은?',hint:'맛이 잘 맞는다는 의미입니다.',opts:['맞아서','맞춰서'],ans:0,exp:'맛이 취향에 <b>맞아서</b>가 맞습니다. "맞추다"는 기준에 맞게 조정한다는 뜻입니다.'},
+  {q:'다음 중 올바른 표기는?',hint:'"늘·항상"을 뜻하는 부사입니다.',opts:['항상','항상히'],ans:0,exp:'<b>항상</b>이 맞습니다. "항상히"는 없는 단어입니다.'},
+  {q:'"그 의견은 _____ 않다" — 빈칸에 알맞은 것은?',hint:'적절하거나 옳지 않다는 의미입니다.',opts:['옳지','올치'],ans:0,exp:'<b>옳지</b>가 맞습니다. "옳다"의 어간 "옳-"에 "-지"가 붙은 형태입니다.'},
+  {q:'다음 중 올바른 표기는?',hint:'상황이 좋지 않을 때 쓰는 표현입니다.',opts:['최악의','최악에'],ans:0,exp:'<b>최악의</b> 상황이 맞습니다. "최악에"는 문맥에 따라 다르게 씁니다.'},
+  {q:'"그는 _____ 행동을 했다" — 빈칸에 알맞은 것은?',hint:'"생각이 없고 어리석은"을 뜻합니다.',opts:['경솔한','경솔히'],ans:0,exp:'<b>경솔한</b>이 관형어 자리에 알맞습니다. "경솔히"는 부사입니다.'},
+  {q:'다음 중 올바른 표기는?',hint:'무언가를 감추거나 덮는다는 의미입니다.',opts:['숨기다','숨기우다'],ans:0,exp:'<b>숨기다</b>가 맞습니다. "숨기우다"는 잘못된 이중 피동 표현입니다.'},
+  {q:'"그 소식이 _____ 됐다" — 빈칸에 알맞은 것은?',hint:'"알려지게"를 뜻합니다.',opts:['알려지게','알리워지게'],ans:0,exp:'<b>알려지게</b>가 맞습니다. "알리워지다"는 이중 피동으로 잘못된 표현입니다.'},
+  {q:'다음 중 올바른 표기는?',hint:'오랫동안 생각해 왔다는 의미입니다.',opts:['오랫동안','오래동안'],ans:0,exp:'<b>오랫동안</b>이 맞습니다. 사이시옷이 들어가서 "오랫동안"이 됩니다.'},
+  {q:'"_____이 좋은 사람" — 빈칸에 알맞은 것은?',hint:'"사람됨이 훌륭한"을 뜻합니다.',opts:['인성','인품'],ans:0,exp:'<b>인성</b>은 사람의 성품·됨됨이를, <b>인품</b>은 사람의 품격을 뜻합니다. 문맥에 따라 다르게 씁니다.'},
+  {q:'다음 중 올바른 표기는?',hint:'"크게 웃다"는 표현입니다.',opts:['哄笑','홍소'],ans:1,exp:'웃음 표현으로는 <b>홍소(哄笑)</b>보다 "크게 웃다", "폭소"가 자연스럽습니다.'},
+  {q:'"일이 _____ 풀렸다" — 빈칸에 알맞은 것은?',hint:'"예상보다 쉽게"를 뜻합니다.',opts:['순조롭게','순탄하게'],ans:0,exp:'<b>순조롭게</b>는 거침없이 잘 되어 감을, <b>순탄하게</b>는 험하거나 어렵지 않음을 뜻합니다.'},
+  {q:'다음 중 올바른 표기는?',hint:'"기대가 어긋났다"는 의미입니다.',opts:['실망스럽다','실망스런다'],ans:0,exp:'<b>실망스럽다</b>가 맞습니다. "실망스런다"는 없는 단어입니다.'},
+  {q:'"그는 _____ 없이 말했다" — 빈칸에 알맞은 것은?',hint:'"머뭇거림이나 꺼림"을 뜻합니다.',opts:['거리낌','거리낌'],ans:0,exp:'<b>거리낌</b>이 맞습니다. 거리낌 없이 = 꺼림이나 부담 없이.'},
+  {q:'다음 중 올바른 표기는?',hint:'"아무것도 없다"는 의미입니다.',opts:['텅 비다','텅비다'],ans:0,exp:'"텅"은 부사로 뒤의 용언과 띄어 씁니다. <b>텅 비다</b>가 맞습니다.'},
+  {q:'"그 일은 _____ 했어야 했다" — 빈칸에 알맞은 것은?',hint:'이미 지난 일에 대한 후회를 나타냅니다.',opts:['진작에','진작'],ans:0,exp:'<b>진작에</b>가 맞습니다. "진작"만 써도 되지만 "진작에"가 더 자연스럽습니다.'},
+  {q:'다음 중 올바른 표기는?',hint:'"확실하지 않다"는 의미입니다.',opts:['애매하다','애매모호하다'],ans:0,exp:'<b>애매하다</b>와 <b>애매모호하다</b> 모두 맞습니다. "애매모호"는 중복 표현이지만 관용적으로 허용됩니다.'},
+  {q:'"그 사람이 _____ 모른다" — 빈칸에 알맞은 것은?',hint:'확실하지 않을 때 쓰는 표현입니다.',opts:['올 지도','올지도'],ans:1,exp:'<b>올지도</b>가 맞습니다. "-ㄹ지도"는 붙여 씁니다.'},
+  {q:'다음 중 올바른 표기는?',hint:'"몹시 지쳐서 힘들다"는 의미입니다.',opts:['녹초가 되다','녹쵸가 되다'],ans:0,exp:'<b>녹초</b>가 맞습니다. "녹쵸"는 없는 단어입니다.'},
+  {q:'"그의 말은 _____ 맞다" — 빈칸에 알맞은 것은?',hint:'"틀림없이"를 뜻합니다.',opts:['분명히','분명이'],ans:0,exp:'<b>분명히</b>가 맞습니다. "분명이"는 틀린 표기입니다.'},
+  {q:'다음 중 올바른 표기는?',hint:'"시작과 끝"을 뜻합니다.',opts:['처음부터 끝까지','처음부터 끝까지'],ans:0,exp:'"처음부터 끝까지"가 맞습니다. "시종일관(始終一貫)"과 같은 의미입니다.'},
+  {q:'"그는 _____ 행동했다" — 빈칸에 알맞은 것은?',hint:'"자기 뜻대로"를 뜻합니다.',opts:['제멋대로','제 멋대로'],ans:0,exp:'<b>제멋대로</b>는 한 단어입니다. 붙여 씁니다.'},
+  {q:'다음 중 올바른 표기는?',hint:'"일부러 하지 않았다"는 의미입니다.',opts:['일부러','일부러'],ans:0,exp:'<b>일부러</b>가 맞습니다. 고의로·의도적으로를 뜻합니다.'},
+  {q:'"공부를 _____ 한다" — 빈칸에 알맞은 것은?',hint:'"열심히·부지런히"를 뜻합니다.',opts:['열심히','열심이'],ans:0,exp:'<b>열심히</b>가 맞습니다. "열심이"는 없는 표현입니다.'},
+  {q:'다음 중 올바른 표기는?',hint:'"꽤·상당히"를 뜻하는 부사입니다.',opts:['제법','제 법'],ans:0,exp:'<b>제법</b>은 한 단어입니다. "꽤·상당히"를 뜻하는 부사입니다.'},
+  {q:'"그 소식이 _____ 충격적이다" — 빈칸에 알맞은 것은?',hint:'"매우·상당히"를 뜻합니다.',opts:['꽤나','퀴나'],ans:0,exp:'<b>꽤나</b>가 맞습니다. "꽤"에 "나"가 붙어 강조를 나타냅니다.'},
+  {q:'다음 중 올바른 표기는?',hint:'"기운이 없다"는 의미입니다.',opts:['축 처지다','축 쳐지다'],ans:0,exp:'<b>축 처지다</b>가 맞습니다. "처지다"는 아래로 늘어지다, "쳐지다"는 뒤에 남겨지다를 뜻합니다.'},
+  {q:'"그 물건은 _____ 않다" — 빈칸에 알맞은 것은?',hint:'"가격이 크게 비싸지 않다"를 뜻합니다.',opts:['그다지 비싸지','그 다지 비싸지'],ans:0,exp:'<b>그다지</b>는 한 단어입니다. "그리 크게"를 뜻하는 부사입니다.'},
+  {q:'다음 중 올바른 표기는?',hint:'"사이가 나쁘다"는 의미입니다.',opts:['사이가 벌어지다','사이가 벌어진다'],ans:0,exp:'<b>사이가 벌어지다</b>가 맞습니다. 관계가 악화됨을 뜻합니다.'},
+  {q:'"나는 _____ 그 사람을 좋아한다" — 빈칸에 알맞은 것은?',hint:'"여전히·언제나"를 뜻합니다.',opts:['아직도','아직'],ans:0,exp:'<b>아직도</b>는 "여전히"의 강조 표현입니다. 문맥에 따라 "아직"만 써도 됩니다.'},
+  {q:'다음 중 올바른 표기는?',hint:'병이 나아 회복됐다는 의미입니다.',opts:['병이 나았다','병이 낫았다'],ans:0,exp:'<b>병이 나았다</b>가 맞습니다. "낫다"의 과거형은 "나았다"입니다.'},
 ];
+
+// ════════════════════════════════════════════
+// 데이터 — 사자성어 50문제
+// ════════════════════════════════════════════
 var IDIOM = [
-  {idiom:'일석이조 (一石二鳥)',q:'이 사자성어의 뜻은?',hint:'돌 하나로 새 두 마리를 잡는다는 의미입니다.',opts:['열심히 노력하면 반드시 성공','한 가지 일로 두 가지 이득','어려운 상황에서도 기회를 만듦','포기하지 않고 끝까지 밀어붙임'],ans:1,exp:'<b>일석이조(一石二鳥)</b> — 한 가지 일로 두 가지 이익을 얻음을 말합니다.'},
-  {idiom:'인과응보 (因果應報)',q:'이 사자성어가 의미하는 것은?',hint:'선악의 결과가 반드시 돌아온다는 뜻입니다.',opts:['선악의 결과는 반드시 자신에게 돌아옴','열심히 일한 사람만이 좋은 결과를 얻음','친구를 잘 사귀어야 성공할 수 있음','포기하지 말고 최선을 다해야 함'],ans:0,exp:'<b>인과응보(因果應報)</b> — 선인에는 선과, 악인에는 악과가 따른다는 뜻입니다.'},
-  {idiom:'뜻: 시작은 좋았으나 끝이 나쁨',q:'다음 뜻에 해당하는 사자성어는?',hint:'"용의 머리와 뱀의 꼬리"를 한자로 표현합니다.',opts:['두문불출 (杜門不出)','설상가상 (雪上加霜)','용두사미 (龍頭蛇尾)','어부지리 (漁父之利)'],ans:2,exp:'<b>용두사미(龍頭蛇尾)</b> — 처음은 성대하지만 나중은 보잘것없음을 이릅니다.'},
-  {idiom:'오리무중 (五里霧中)',q:'이 사자성어의 뜻은?',hint:'"다섯 리에 걸친 안개 속"이라는 뜻입니다.',opts:['먼 길을 돌아가는 어리석음','어려운 상황에서도 희망을 잃지 않음','계획을 잘 세워야 한다는 뜻','갈피를 잡을 수 없는 상태'],ans:3,exp:'<b>오리무중(五里霧中)</b> — 짙은 안개 속처럼 일의 갈피를 잡을 수 없는 상태를 말합니다.'},
-  {idiom:'뜻: 두 사람이 싸우는 사이 제3자가 이익을 챙김',q:'다음 뜻에 해당하는 사자성어는?',hint:'어부가 이익을 얻는 상황을 묘사합니다.',opts:['어부지리 (漁父之利)','새옹지마 (塞翁之馬)','호가호위 (狐假虎威)','와신상담 (臥薪嘗膽)'],ans:0,exp:'<b>어부지리(漁父之利)</b> — 제3자가 이익을 얻는 것을 말합니다.'},
-  {idiom:'새옹지마 (塞翁之馬)',q:'이 사자성어가 의미하는 것은?',hint:'변방 노인의 말에 관한 고사입니다.',opts:['열심히 노력하면 반드시 성공함','인생의 길흉화복은 예측하기 어려움','오래 참으면 반드시 기회가 옴','좋은 친구를 사귀어야 복이 옴'],ans:1,exp:'<b>새옹지마(塞翁之馬)</b> — 인생의 화복은 예측하기 어렵다는 뜻입니다.'},
-  {idiom:'촌철살인 (寸鐵殺人)',q:'이 사자성어의 뜻은?',hint:'"한 치의 쇠로 사람을 죽인다"는 의미입니다.',opts:['사소한 것도 무시하면 안 됨','적은 것으로도 큰일을 이룰 수 있음','짧은 말 한마디가 상대방의 핵심을 찌름','작은 일도 집중하면 완벽하게 할 수 있음'],ans:2,exp:'<b>촌철살인(寸鐵殺人)</b> — 짧은 말로 상대방의 핵심을 날카롭게 찌르는 것을 이릅니다.'},
-  {idiom:'뜻: 눈 위에 서리가 덮인다',q:'다음 뜻에 해당하는 사자성어는?',hint:'안 좋은 일이 연달아 생길 때 씁니다.',opts:['전화위복 (轉禍爲福)','고진감래 (苦盡甘來)','기사회생 (起死回生)','설상가상 (雪上加霜)'],ans:3,exp:'<b>설상가상(雪上加霜)</b> — 불행이 엎친 데 덮친 격으로 겹쳐 옴을 말합니다.'},
-  {idiom:'와신상담 (臥薪嘗膽)',q:'이 사자성어의 뜻은?',hint:'섶에 누워 자고 쓸개를 핥는다는 의미입니다.',opts:['복수를 위해 온갖 고난을 참고 견딤','가난해도 절개를 굽히지 않음','어려움 속에서 희망을 잃지 않음','고통이 끝나면 반드시 즐거움이 옴'],ans:0,exp:'<b>와신상담(臥薪嘗膽)</b> — 복수나 목표를 위해 고난을 참고 견디는 것을 말합니다.'},
-  {idiom:'뜻: 고통이 다하면 즐거움이 온다',q:'다음 뜻에 해당하는 사자성어는?',hint:'힘든 시간 끝에 좋은 때가 온다는 뜻입니다.',opts:['전화위복 (轉禍爲福)','고진감래 (苦盡甘來)','새옹지마 (塞翁之馬)','기사회생 (起死回生)'],ans:1,exp:'<b>고진감래(苦盡甘來)</b> — 고생 끝에 즐거움이 온다는 말입니다.'},
-  {idiom:'호가호위 (狐假虎威)',q:'이 사자성어의 뜻은?',hint:'여우가 호랑이의 위세를 빌린다는 의미입니다.',opts:['스스로의 힘으로 성공함','작은 힘이 모이면 큰 힘이 됨','남의 권세를 빌려 위세를 부림','겉으로는 친한 척 속으로는 해코지함'],ans:2,exp:'<b>호가호위(狐假虎威)</b> — 남의 권세를 빌려 위세를 부림을 이릅니다.'},
-  {idiom:'경국지색 (傾國之色)',q:'이 사자성어의 뜻은?',hint:'"나라를 기울게 할 만큼 아름다운"이라는 의미입니다.',opts:['나라를 위해 헌신하는 충신','재물을 탐하는 간신배','나라의 발전을 이끄는 인물','나라를 기울게 할 만큼의 절세 미인'],ans:3,exp:'<b>경국지색(傾國之色)</b> — 나라를 기울게 할 만큼 아름다운 미인을 뜻합니다.'},
-  {idiom:'전화위복 (轉禍爲福)',q:'이 사자성어의 뜻은?',hint:'재앙이 바뀌어 오히려 복이 된다는 의미입니다.',opts:['나쁜 일이 오히려 좋은 결과로 바뀜','좋은 일이 나쁜 결과로 바뀜','포기하지 않으면 반드시 성공함','어려운 상황에서도 기회를 잡음'],ans:0,exp:'<b>전화위복(轉禍爲福)</b> — 화가 바뀌어 복이 된다는 뜻입니다.'},
-  {idiom:'뜻: 죽을 고비에서 다시 살아남',q:'다음 뜻에 해당하는 사자성어는?',hint:'거의 죽다가 살아난 상황을 표현합니다.',opts:['구사일생 (九死一生)','기사회생 (起死回生)','십중팔구 (十中八九)','천신만고 (千辛萬苦)'],ans:1,exp:'<b>기사회생(起死回生)</b> — 죽을 뻔한 상황에서 다시 살아남을 뜻합니다.'},
-  {idiom:'군계일학 (群鷄一鶴)',q:'이 사자성어의 뜻은?',hint:'"닭 무리 속의 한 마리 학"이라는 의미입니다.',opts:['혼자서 모든 일을 해내는 사람','많은 사람 중에 가장 평범한 사람','여럿 중에 가장 뛰어난 사람','다른 사람을 이끄는 지도자'],ans:2,exp:'<b>군계일학(群鷄一鶴)</b> — 평범한 사람들 중에 뛰어난 인물을 말합니다.'},
-  {idiom:'온고지신 (溫故知新)',q:'이 사자성어의 뜻은?',hint:'공자의 말씀에서 유래한 사자성어입니다.',opts:['새로운 것만을 추구함','과거를 잊고 앞만 보고 나아감','옛 방식을 고집함','옛것을 익혀 새것을 앎'],ans:3,exp:'<b>온고지신(溫故知新)</b> — 옛것을 익혀 새로운 것을 안다는 뜻입니다.'},
-  {idiom:'뜻: 백 번 듣는 것이 한 번 보는 것만 못함',q:'다음 뜻에 해당하는 사자성어는?',hint:'직접 경험의 중요성을 강조합니다.',opts:['백문불여일견 (百聞不如一見)','견물생심 (見物生心)','이심전심 (以心傳心)','동병상련 (同病相憐)'],ans:0,exp:'<b>백문불여일견(百聞不如一見)</b> — 백 번 듣는 것보다 한 번 직접 보는 것이 낫다는 뜻입니다.'},
-  {idiom:'이심전심 (以心傳心)',q:'이 사자성어의 뜻은?',hint:'말하지 않아도 서로 마음이 통한다는 의미입니다.',opts:['진심으로 노력하면 반드시 통함','마음에서 마음으로 뜻이 전해짐','서로의 감정을 솔직하게 전달함','오랜 시간 함께해야 마음을 알 수 있음'],ans:1,exp:'<b>이심전심(以心傳心)</b> — 마음에서 마음으로 뜻이 통한다는 의미입니다.'},
-  {idiom:'동병상련 (同病相憐)',q:'이 사자성어의 뜻은?',hint:'같은 어려움을 겪는 사람끼리 서로 불쌍히 여긴다는 의미입니다.',opts:['어려운 상황에서 협력하여 이겨냄','친한 친구끼리는 무조건 도와야 함','같은 처지의 사람끼리 서로 동정함','고통은 나누면 반이 된다는 뜻'],ans:2,exp:'<b>동병상련(同病相憐)</b> — 같은 처지의 사람끼리 서로 가엾게 여김을 말합니다.'},
-  {idiom:'식자우환 (識字憂患)',q:'이 사자성어의 뜻은?',hint:'지식이 오히려 걱정과 고민을 만든다는 의미입니다.',opts:['배움이 많을수록 더 행복해짐','지식은 힘이다','모르는 게 약이다','아는 것이 오히려 근심이 됨'],ans:3,exp:'<b>식자우환(識字憂患)</b> — 글자를 알기 때문에 오히려 근심이 생긴다는 뜻입니다.'},
-  {idiom:'과유불급 (過猶不及)',q:'이 사자성어의 뜻은?',hint:'지나친 것은 모자란 것과 같다는 의미입니다.',opts:['지나침은 모자람과 같음','더 많을수록 더 좋음','절제하면 반드시 성공함','욕심을 부리면 모든 것을 잃음'],ans:0,exp:'<b>과유불급(過猶不及)</b> — 지나친 것은 미치지 못한 것과 같다는 뜻입니다.'},
-  {idiom:'지피지기 (知彼知己)',q:'이 사자성어의 뜻은?',hint:'손자병법에서 유래한 말입니다.',opts:['상대를 알아야 이길 수 있음','적을 알고 나를 알면 백전불태','나를 알아야 발전할 수 있음','지식이 곧 승리다'],ans:1,exp:'<b>지피지기(知彼知己)</b> — 적을 알고 나를 알면 백 번 싸워도 위태롭지 않다는 뜻입니다.'},
-  {idiom:'일취월장 (日就月將)',q:'이 사자성어의 뜻은?',hint:'날마다 달마다 발전한다는 의미입니다.',opts:['하루아침에 크게 성공함','꾸준히 노력하면 결국 성공함','날마다 달마다 성장하고 발전함','시간이 지날수록 더욱 강해짐'],ans:2,exp:'<b>일취월장(日就月將)</b> — 날로 달로 나아간다는 뜻으로, 끊임없이 발전함을 말합니다.'},
-  {idiom:'지성감천 (至誠感天)',q:'이 사자성어의 뜻은?',hint:'진심으로 노력하면 하늘도 감동한다는 의미입니다.',opts:['하늘이 정한 운명은 바꿀 수 없음','성실한 사람만이 하늘의 도움을 받음','노력보다 타고난 재능이 중요함','지극한 정성은 하늘도 감동시킴'],ans:3,exp:'<b>지성감천(至誠感天)</b> — 지극한 정성은 하늘도 감동시킨다는 뜻입니다.'},
-  {idiom:'청출어람 (靑出於藍)',q:'이 사자성어의 뜻은?',hint:'쪽에서 나온 파란색이 쪽보다 더 파랗다는 의미입니다.',opts:['제자가 스승보다 더 뛰어남','스승의 가르침이 가장 중요함','배움은 끝이 없다','노력하면 반드시 스승을 넘을 수 있음'],ans:0,exp:'<b>청출어람(靑出於藍)</b> — 제자가 스승보다 더 뛰어남을 이르는 말입니다.'},
-  {idiom:'마이동풍 (馬耳東風)',q:'이 사자성어의 뜻은?',hint:'말의 귀에 동쪽 바람이라는 의미입니다.',opts:['바람처럼 빠르게 행동함','남의 말을 귀담아듣지 않음','어려운 상황을 쉽게 넘김','좋은 기회를 놓치지 않음'],ans:1,exp:'<b>마이동풍(馬耳東風)</b> — 남의 말을 전혀 듣지 않음을 뜻합니다.'},
-  {idiom:'유비무환 (有備無患)',q:'이 사자성어의 뜻은?',hint:'미리 준비하면 걱정이 없다는 의미입니다.',opts:['걱정이 많으면 실패함','준비보다 실행이 중요함','미리 준비하면 걱정이 없음','모든 일은 때가 있음'],ans:2,exp:'<b>유비무환(有備無患)</b> — 미리 준비해 두면 걱정이 없다는 뜻입니다.'},
-  {idiom:'막상막하 (莫上莫下)',q:'이 사자성어의 뜻은?',hint:'위도 아래도 없다는 의미입니다.',opts:['위아래가 분명히 구별되는 상태','아무도 이길 수 없는 상태','모두가 평등한 상태','서로 우열을 가리기 힘든 상태'],ans:3,exp:'<b>막상막하(莫上莫下)</b> — 서로 비슷하여 우열을 가리기 어려운 상태를 말합니다.'},
-  {idiom:'다다익선 (多多益善)',q:'이 사자성어의 뜻은?',hint:'많으면 많을수록 좋다는 의미입니다.',opts:['다다익선 (多多益善) — 많으면 많을수록 더욱 좋음','적을수록 더 가치 있음','욕심은 화를 부름','나눌수록 더 풍요로워짐'],ans:0,exp:'<b>다다익선(多多益善)</b> — 많으면 많을수록 더욱 좋다는 뜻입니다.'},
-  {idiom:'구사일생 (九死一生)',q:'이 사자성어의 뜻은?',hint:'아홉 번 죽을 고비에서 한 번 살아난다는 의미입니다.',opts:['아홉 명이 힘을 합쳐 살아남','여러 번의 위험을 겨우 벗어남','죽음을 각오하고 싸움','반드시 살아남겠다는 의지'],ans:1,exp:'<b>구사일생(九死一生)</b> — 아홉 번 죽을 고비에서 한 번 겨우 살아남을 뜻합니다.'},
-  {idiom:'견물생심 (見物生心)',q:'이 사자성어의 뜻은?',hint:'물건을 보면 갖고 싶은 마음이 생긴다는 의미입니다.',opts:['아름다운 것을 보면 기분이 좋아짐','좋은 것을 보면 배우고 싶어짐','물건을 보면 갖고 싶은 마음이 생김','남의 것을 탐내면 안 됨'],ans:2,exp:'<b>견물생심(見物生心)</b> — 어떤 물건을 보면 그것을 갖고 싶은 욕심이 생긴다는 뜻입니다.'},
-  {idiom:'뜻: 하나를 보면 열을 안다',q:'다음 뜻에 해당하는 사자성어는?',hint:'매우 영특하고 총명하다는 의미입니다.',opts:['일취월장 (日就月將)','박학다식 (博學多識)','총명예지 (聰明睿智)','문일지십 (聞一知十)'],ans:3,exp:'<b>문일지십(聞一知十)</b> — 하나를 들으면 열을 안다는 뜻으로, 매우 총명함을 말합니다.'},
-  {idiom:'박학다식 (博學多識)',q:'이 사자성어의 뜻은?',hint:'넓게 배우고 많이 안다는 의미입니다.',opts:['학식이 넓고 아는 것이 많음','한 분야를 깊이 파고드는 전문가','배움에 끝이 없음','지식보다 경험이 중요함'],ans:0,exp:'<b>박학다식(博學多識)</b> — 학문이 넓고 아는 것이 많음을 뜻합니다.'},
-  {idiom:'천재일우 (千載一遇)',q:'이 사자성어의 뜻은?',hint:'천 년에 한 번 만날 수 있는 기회라는 의미입니다.',opts:['천 명이 힘을 합쳐야 해결되는 일','좀처럼 만나기 어려운 절호의 기회','매우 오랫동안 기다려온 일','하늘이 준 특별한 재능'],ans:1,exp:'<b>천재일우(千載一遇)</b> — 천 년에 한 번 만날 수 있을 만한 아주 좋은 기회를 뜻합니다.'},
-  {idiom:'일편단심 (一片丹心)',q:'이 사자성어의 뜻은?',hint:'한 조각의 붉은 마음이라는 의미입니다.',opts:['굳은 결심으로 도전하는 마음','한 사람만을 바라보는 사랑','변치 않는 한결같은 충성심','오직 한 가지 목표만 향한 집중력'],ans:2,exp:'<b>일편단심(一片丹心)</b> — 변하지 않는 한결같은 마음을 뜻합니다.'},
-  {idiom:'뜻: 등잔 밑이 어둡다',q:'다음 뜻에 해당하는 사자성어는?',hint:'가까운 곳의 일을 오히려 모른다는 의미입니다.',opts:['근묵자흑 (近墨者黑)','타산지석 (他山之石)','반면교사 (反面敎師)','등하불명 (燈下不明)'],ans:3,exp:'<b>등하불명(燈下不明)</b> — 등잔 밑이 어둡다는 뜻으로, 가까이 있는 것을 오히려 모름을 말합니다.'},
-  {idiom:'타산지석 (他山之石)',q:'이 사자성어의 뜻은?',hint:'다른 산의 돌이라는 의미입니다.',opts:['남의 잘못도 자신을 갈고닦는 데 도움이 됨','다른 사람의 장점을 배워야 함','돌도 꾸준히 갈면 빛이 남','어떤 것도 쓸모가 있음'],ans:0,exp:'<b>타산지석(他山之石)</b> — 남의 잘못도 교훈이 됨을 말합니다.'},
-  {idiom:'반면교사 (反面敎師)',q:'이 사자성어의 뜻은?',hint:'나쁜 사례에서도 교훈을 얻는다는 의미입니다.',opts:['나쁜 스승에게 배우면 안 됨','부정적인 사례도 좋은 교훈이 됨','실패를 거울삼아 성장함','좋은 점은 배우고 나쁜 점은 버림'],ans:1,exp:'<b>반면교사(反面敎師)</b> — 부정적인 사례도 좋은 교훈이 됨을 말합니다.'},
-  {idiom:'근묵자흑 (近墨者黑)',q:'이 사자성어의 뜻은?',hint:'먹 가까이 있으면 검어진다는 의미입니다.',opts:['열심히 하면 실력이 늘어남','친한 친구를 잘 사귀어야 함','나쁜 환경에 있으면 나빠짐','환경보다 의지가 중요함'],ans:2,exp:'<b>근묵자흑(近墨者黑)</b> — 나쁜 환경에 있으면 나빠짐을 말합니다.'},
-  {idiom:'아전인수 (我田引水)',q:'이 사자성어의 뜻은?',hint:'자기 논에 물을 끌어들인다는 의미입니다.',opts:['다른 사람의 입장을 먼저 생각함','이익을 공동으로 나눔','모든 일을 공평하게 처리함','자기에게만 유리하게 해석함'],ans:3,exp:'<b>아전인수(我田引水)</b> — 자기에게만 유리하게 행동함을 말합니다.'},
-  {idiom:'문전성시 (門前成市)',q:'이 사자성어의 뜻은?',hint:'문 앞이 시장처럼 북적인다는 의미입니다.',opts:['찾아오는 사람이 많아 매우 붐빔','장사가 잘 되어 부자가 됨','사람이 많아 혼란스러운 상태','인기가 많아 유명해짐'],ans:0,exp:'<b>문전성시(門前成市)</b> — 방문객이 매우 많음을 말합니다.'},
-  {idiom:'반포지효 (反哺之孝)',q:'이 사자성어의 뜻은?',hint:'까마귀 새끼가 자라서 어미에게 먹이를 물어다 준다는 의미입니다.',opts:['부모가 자식을 위해 희생함','자식이 부모에게 효도함','은혜를 반드시 갚아야 함','효도는 살아있을 때 해야 함'],ans:1,exp:'<b>반포지효(反哺之孝)</b> — 자식이 부모에게 효도함을 말합니다.'},
-  {idiom:'뜻: 입술이 없으면 이가 시리다',q:'다음 뜻에 해당하는 사자성어는?',hint:'서로 의지하는 관계를 표현합니다.',opts:['동고동락 (同苦同樂)','오월동주 (吳越同舟)','순망치한 (脣亡齒寒)','상부상조 (相扶相助)'],ans:2,exp:'<b>순망치한(脣亡齒寒)</b> — 서로 밀접한 관계에 있어 하나가 망하면 다른 하나도 위험함을 말합니다.'},
-  {idiom:'동고동락 (同苦同樂)',q:'이 사자성어의 뜻은?',hint:'괴로움과 즐거움을 함께한다는 의미입니다.',opts:['언제나 평등한 관계','즐거울 때만 함께하는 관계','어려울 때만 도와주는 관계','고통과 즐거움을 함께 나눔'],ans:3,exp:'<b>동고동락(同苦同樂)</b> — 괴로움과 즐거움을 함께 한다는 뜻입니다.'},
-  {idiom:'오월동주 (吳越同舟)',q:'이 사자성어의 뜻은?',hint:'원수지간이 같은 배를 탄다는 의미입니다.',opts:['적대적인 관계도 위기엔 협력함','같은 목표를 향해 나아감','오랜 적이 결국 화해함','위기 상황에서 진정한 친구를 알게 됨'],ans:0,exp:'<b>오월동주(吳越同舟)</b> — 적대적인 관계도 위기에는 협력함을 말합니다.'},
-  {idiom:'상부상조 (相扶相助)',q:'이 사자성어의 뜻은?',hint:'서로 돕는다는 의미입니다.',opts:['강한 자가 약한 자를 도움','혼자보다 함께가 강함','서로 돕고 협력함','어려울 때 친구를 알 수 있음'],ans:2,exp:'<b>상부상조(相扶相助)</b> — 서로 붙잡아 주고 도와준다는 뜻입니다.'},
-  {idiom:'언중유골 (言中有骨)',q:'이 사자성어의 뜻은?',hint:'말 속에 뼈가 있다는 의미입니다.',opts:['말이 많으면 실수가 생김','좋은 말도 때로는 상처가 됨','말은 반드시 행동으로 옮겨야 함','예사로운 말 속에 날카로운 의미가 담겨 있음'],ans:3,exp:'<b>언중유골(言中有骨)</b> — 예사로운 말 같아도 그 속에 날카로운 뜻이 담겨 있음을 말합니다.'},
+  {q:'아무리 어렵고 힘든 상황에도 희망이 있다는 뜻의 사자성어는?',hint:'극심한 고통 속에서도 살 길이 있다는 의미입니다.',opts:['절처봉생(絶處逢生)','사필귀정(事必歸正)'],ans:0,exp:'<b>절처봉생(絶處逢生)</b> — 끊어진 곳에서 살아남을 길을 만난다. 극한 상황에서도 희망을 찾을 수 있음을 뜻합니다.'},
+  {q:'"등잔 밑이 어둡다"와 비슷한 의미의 사자성어는?',hint:'가장 가까운 곳을 오히려 모른다는 의미입니다.',opts:['등하불명(燈下不明)','근묵자흑(近墨者黑)'],ans:0,exp:'<b>등하불명(燈下不明)</b> — 등잔 밑이 어둡다. 가까이 있는 것을 오히려 알기 어렵다는 뜻입니다.'},
+  {q:'세상 모든 일은 반드시 바른 데로 돌아간다는 뜻의 사자성어는?',hint:'인과응보와 비슷한 의미입니다.',opts:['사필귀정(事必歸正)','인과응보(因果應報)'],ans:0,exp:'<b>사필귀정(事必歸正)</b> — 모든 일은 반드시 옳은 이치대로 돌아간다는 뜻입니다.'},
+  {q:'혼자서 여러 가지 일을 해낸다는 뜻의 사자성어는?',hint:'한 사람이 여러 역할을 한다는 의미입니다.',opts:['일인다역(一人多役)','팔방미인(八方美人)'],ans:0,exp:'<b>일인다역(一人多役)</b> — 한 사람이 여러 역할을 맡아 한다는 뜻입니다.'},
+  {q:'어리석은 사람도 여러 번 생각하면 좋은 생각이 나온다는 뜻의 사자성어는?',hint:'"천 번에 한 번"의 의미가 담겨 있습니다.',opts:['천려일득(千慮一得)','백전백승(百戰百勝)'],ans:0,exp:'<b>천려일득(千慮一得)</b> — 어리석은 사람의 천 가지 생각 중에도 한 가지는 맞는 것이 있다는 뜻입니다.'},
+  {q:'남의 처지를 자기 처지로 삼아 생각한다는 뜻의 사자성어는?',hint:'"역지"는 위치를 바꾼다는 뜻입니다.',opts:['역지사지(易地思之)','이심전심(以心傳心)'],ans:0,exp:'<b>역지사지(易地思之)</b> — 처지를 바꾸어 생각해 보라. 상대방의 입장에서 이해하라는 뜻입니다.'},
+  {q:'아무리 훌륭한 것도 쓸모가 없으면 소용없다는 뜻의 사자성어는?',hint:'가장 좋은 것도 때와 장소를 잘못 만나면 쓸모없습니다.',opts:['명불허전(名不虛傳)','유명무실(有名無實)'],ans:1,exp:'<b>유명무실(有名無實)</b> — 이름만 있고 실속이 없다는 뜻입니다.'},
+  {q:'서로 공격하고 방어하며 실력을 겨룬다는 뜻의 사자성어는?',hint:'"창과 방패"의 관계를 뜻합니다.',opts:['모순(矛盾)','경쟁(競爭)'],ans:0,exp:'<b>모순(矛盾)</b> — 서로 앞뒤가 맞지 않는 것. 창과 방패 이야기에서 유래했습니다.'},
+  {q:'좋은 기회는 두 번 오지 않는다는 뜻과 관련된 사자성어는?',hint:'"시간과 물"이 관련된 사자성어입니다.',opts:['일각천금(一刻千金)','수적천석(水滴穿石)'],ans:0,exp:'<b>일각천금(一刻千金)</b> — 매우 짧은 시간도 천금의 가치가 있다는 뜻입니다.'},
+  {q:'겉은 훌륭하지만 속은 변변치 못하다는 뜻의 사자성어는?',hint:'"양과 개"가 등장하는 사자성어입니다.',opts:['양두구육(羊頭狗肉)','표리부동(表裏不同)'],ans:0,exp:'<b>양두구육(羊頭狗肉)</b> — 양 머리를 걸어 놓고 개고기를 판다. 겉과 속이 다르다는 뜻입니다.'},
+  {q:'하나를 보면 열을 안다는 뜻의 사자성어는?',hint:'작은 것으로 전체를 파악할 수 있다는 의미입니다.',opts:['일이관지(一以貫之)','일엽지추(一葉知秋)'],ans:1,exp:'<b>일엽지추(一葉知秋)</b> — 나뭇잎 하나가 떨어짐을 보고 가을이 왔음을 안다. 작은 것으로 전체를 미루어 알 수 있다는 뜻입니다.'},
+  {q:'아무 관련이 없는 일에 억지로 끼어든다는 뜻의 사자성어는?',hint:'"긁어서 부스럼 만든다"는 의미입니다.',opts:['견강부회(牽强附會)','긁어부스럼'],ans:0,exp:'<b>견강부회(牽强附會)</b> — 이치에 맞지 않는 것을 억지로 끌어다 붙인다는 뜻입니다.'},
+  {q:'말보다 행동이 먼저라는 뜻의 사자성어는?',hint:'"말이 앞서고 행동이 뒤따른다"와 반대 개념입니다.',opts:['선언후실(先言後實)','실사구시(實事求是)'],ans:1,exp:'<b>실사구시(實事求是)</b> — 사실에 근거하여 진리를 탐구한다. 실제로 행동하며 진실을 추구한다는 뜻입니다.'},
+  {q:'어느 한쪽을 위해 다른 한쪽을 희생시킨다는 뜻의 사자성어는?',hint:'"동쪽 담장 것을 허물어 서쪽 담장을 고친다"는 의미입니다.',opts:['동가홍상(同價紅裳)','동벽서보(東壁西補)'],ans:1,exp:'<b>동벽서보(東壁西補)</b> — 동쪽 벽을 허물어 서쪽 벽을 보수한다. 임시방편으로 한 곳을 해결하고 다른 곳이 생기는 상황을 뜻합니다.'},
+  {q:'한 가지 일로 두 가지 이득을 본다는 뜻의 사자성어는?',hint:'"돌 하나로 두 마리"의 의미입니다.',opts:['일석이조(一石二鳥)','일거양득(一擧兩得)'],ans:0,exp:'<b>일석이조(一石二鳥)</b>와 <b>일거양득(一擧兩得)</b> 모두 같은 의미입니다. 돌 하나로 새 두 마리를 잡는다는 뜻입니다.'},
+  {q:'뜻밖의 행운이나 좋은 일이 생긴다는 뜻의 사자성어는?',hint:'"하늘이 선물을 내려준다"는 의미입니다.',opts:['천재일우(千載一遇)','횡재(橫財)'],ans:0,exp:'<b>천재일우(千載一遇)</b> — 천 년에 한 번 만날 수 있는 좋은 기회라는 뜻입니다.'},
+  {q:'마음이 통하여 말을 하지 않아도 서로 안다는 뜻의 사자성어는?',hint:'"마음에서 마음으로 전한다"는 의미입니다.',opts:['이심전심(以心傳心)','동심동덕(同心同德)'],ans:0,exp:'<b>이심전심(以心傳心)</b> — 마음에서 마음으로 전한다. 말하지 않아도 서로의 뜻이 통한다는 뜻입니다.'},
+  {q:'지나친 것은 미치지 못함과 같다는 뜻의 사자성어는?',hint:'"과도함"과 "부족함"을 비교합니다.',opts:['과유불급(過猶不及)','중용지도(中庸之道)'],ans:0,exp:'<b>과유불급(過猶不及)</b> — 지나친 것은 미치지 못한 것과 같다. 무엇이든 적당히 해야 한다는 뜻입니다.'},
+  {q:'좋은 약은 입에 쓰다는 뜻의 사자성어는?',hint:'쓴 약이 병에는 효과적이라는 의미입니다.',opts:['고진감래(苦盡甘來)','양약고구(良藥苦口)'],ans:1,exp:'<b>양약고구(良藥苦口)</b> — 좋은 약은 입에 쓰다. 충고나 바른 말은 듣기 싫지만 자신에게 이롭다는 뜻입니다.'},
+  {q:'오랜 시간과 정성을 들이면 이루지 못할 것이 없다는 뜻의 사자성어는?',hint:'"물방울이 돌을 뚫는다"는 의미입니다.',opts:['수적천석(水滴穿石)','우공이산(愚公移山)'],ans:0,exp:'<b>수적천석(水滴穿石)</b> — 물방울이 끊임없이 떨어지면 돌도 뚫는다. 작은 노력도 꾸준히 하면 큰 일을 이룬다는 뜻입니다.'},
+  {q:'이미 지나간 일을 돌이켜 후회해도 소용없다는 뜻의 사자성어는?',hint:'"엎질러진 물"과 비슷한 의미입니다.',opts:['후회막급(後悔莫及)','복수불반분(覆水不反盆)'],ans:0,exp:'<b>후회막급(後悔莫及)</b> — 뒤늦게 후회해도 이미 돌이킬 수 없다는 뜻입니다.'},
+  {q:'여러 사람이 같은 목표를 위해 힘을 합친다는 뜻의 사자성어는?',hint:'"마음과 힘을 하나로 모은다"는 의미입니다.',opts:['동심협력(同心協力)','이구동성(異口同聲)'],ans:0,exp:'<b>동심협력(同心協力)</b> — 마음을 같이하여 힘을 합친다. 함께 협력한다는 뜻입니다.'},
+  {q:'눈앞의 작은 이익에 눈이 멀어 큰 것을 잃는다는 뜻의 사자성어는?',hint:'"참새를 잡으려다 황새를 놓친다"와 비슷합니다.',opts:['소탐대실(小貪大失)','대의멸친(大義滅親)'],ans:0,exp:'<b>소탐대실(小貪大失)</b> — 작은 것을 탐하다가 큰 것을 잃는다는 뜻입니다.'},
+  {q:'고생 끝에 즐거움이 온다는 뜻의 사자성어는?',hint:'"쓴 것이 다하면 단 것이 온다"는 의미입니다.',opts:['고진감래(苦盡甘來)','새옹지마(塞翁之馬)'],ans:0,exp:'<b>고진감래(苦盡甘來)</b> — 쓴 것이 다하면 단 것이 온다. 고생 끝에 낙이 온다는 뜻입니다.'},
+  {q:'인생의 길흉화복은 예측하기 어렵다는 뜻의 사자성어는?',hint:'"변방 노인의 말"에서 유래했습니다.',opts:['새옹지마(塞翁之馬)','인생무상(人生無常)'],ans:0,exp:'<b>새옹지마(塞翁之馬)</b> — 변방 노인의 말. 인생의 좋고 나쁨은 알 수 없다는 뜻입니다.'},
+  {q:'배움에는 끝이 없다는 뜻의 사자성어는?',hint:'"학문의 바다는 끝이 없다"는 의미입니다.',opts:['학해무변(學海無邊)','독서백편(讀書百遍)'],ans:0,exp:'<b>학해무변(學海無邊)</b> — 학문의 바다는 끝이 없다. 배움에는 한계가 없다는 뜻입니다.'},
+  {q:'자기가 한 행동의 결과는 자기가 받는다는 뜻의 사자성어는?',hint:'"스스로 묘혈을 판다"는 의미입니다.',opts:['자업자득(自業自得)','자포자기(自暴自棄)'],ans:0,exp:'<b>자업자득(自業自得)</b> — 자기가 저지른 일의 결과는 자기가 받는다는 뜻입니다.'},
+  {q:'어떤 일이든 시작이 반이라는 뜻과 가장 가까운 사자성어는?',hint:'시작하는 것이 가장 중요하다는 의미입니다.',opts:['천리지행(千里之行)','유비무환(有備無患)'],ans:0,exp:'<b>천리지행시어족하(千里之行始於足下)</b> — 천 리 길도 한 걸음부터. 어떤 큰 일도 작은 시작에서 비롯된다는 뜻입니다.'},
+  {q:'이미 결정된 일에 쓸데없이 의견을 덧붙인다는 뜻의 사자성어는?',hint:'"뱀에 발을 그린다"는 의미입니다.',opts:['화사첨족(畵蛇添足)','용두사미(龍頭蛇尾)'],ans:0,exp:'<b>화사첨족(畵蛇添足)</b> — 뱀을 그리고 나서 없는 발까지 그린다. 쓸데없는 군더더기를 덧붙인다는 뜻입니다.'},
+  {q:'시작은 화려하지만 끝이 보잘것없다는 뜻의 사자성어는?',hint:'"용의 머리와 뱀의 꼬리"라는 의미입니다.',opts:['용두사미(龍頭蛇尾)','작심삼일(作心三日)'],ans:0,exp:'<b>용두사미(龍頭蛇尾)</b> — 용의 머리와 뱀의 꼬리. 처음은 거창하나 끝이 흐지부지해짐을 뜻합니다.'},
+  {q:'결심한 것이 오래가지 못한다는 뜻의 사자성어는?',hint:'"마음먹기 삼 일"이라는 의미입니다.',opts:['작심삼일(作心三日)','용두사미(龍頭蛇尾)'],ans:0,exp:'<b>작심삼일(作心三日)</b> — 단단히 먹은 마음이 사흘을 못 간다. 결심이 오래가지 못함을 뜻합니다.'},
+  {q:'같은 말도 여러 번 들으면 사실처럼 느껴진다는 뜻의 사자성어는?',hint:'허위 정보도 반복되면 믿게 된다는 의미입니다.',opts:['삼인성호(三人成虎)','중구난방(衆口難防)'],ans:0,exp:'<b>삼인성호(三人成虎)</b> — 세 사람이 호랑이가 나타났다 하면 믿게 된다. 거짓말도 여러 번 들으면 사실처럼 느껴진다는 뜻입니다.'},
+  {q:'여러 사람이 각자 자기 주장만 내세운다는 뜻의 사자성어는?',hint:'방향 없이 제각각 떠든다는 의미입니다.',opts:['중구난방(衆口難防)','이구동성(異口同聲)'],ans:0,exp:'<b>중구난방(衆口難防)</b> — 여러 사람의 말을 막기가 어렵다. 여럿이 제각각 떠든다는 뜻입니다.'},
+  {q:'나쁜 친구를 사귀면 나쁜 영향을 받는다는 뜻의 사자성어는?',hint:'"먹물 가까이 있으면 검어진다"는 의미입니다.',opts:['근묵자흑(近墨者黑)','유유상종(類類相從)'],ans:0,exp:'<b>근묵자흑(近墨者黑)</b> — 먹을 가까이하면 검어진다. 나쁜 환경에 있으면 나쁜 영향을 받는다는 뜻입니다.'},
+  {q:'비슷한 것끼리 모인다는 뜻의 사자성어는?',hint:'"같은 류끼리 서로 따른다"는 의미입니다.',opts:['유유상종(類類相從)','근묵자흑(近墨者黑)'],ans:0,exp:'<b>유유상종(類類相從)</b> — 같은 종류끼리 서로 모이고 따른다는 뜻입니다.'},
+  {q:'겉으로는 친한 척하면서 속으로는 해치려 한다는 뜻의 사자성어는?',hint:'"입술과 배"가 다르다는 의미입니다.',opts:['표리부동(表裏不同)','양두구육(羊頭狗肉)'],ans:0,exp:'<b>표리부동(表裏不同)</b> — 겉과 속이 다르다. 겉으로 드러나는 것과 마음속이 일치하지 않는다는 뜻입니다.'},
+  {q:'준비가 잘 되어 있으면 걱정할 필요가 없다는 뜻의 사자성어는?',hint:'"미리 갖추면 근심이 없다"는 의미입니다.',opts:['유비무환(有備無患)','선견지명(先見之明)'],ans:0,exp:'<b>유비무환(有備無患)</b> — 미리 준비해 두면 걱정할 근심이 없다는 뜻입니다.'},
+  {q:'일이 이미 다 끝나버려 후회해도 소용없다는 뜻의 사자성어는?',hint:'"이미 지나간 일"을 뜻합니다.',opts:['이미지사(已往之事)','기왕지사(旣往之事)'],ans:1,exp:'<b>기왕지사(旣往之事)</b> — 이미 지나간 일. 되돌릴 수 없는 일을 뜻합니다.'},
+  {q:'위기 상황에서 임시로 대처한다는 뜻의 사자성어는?',hint:'"급한 불을 끄는 것"과 관련된 의미입니다.',opts:['임기응변(臨機應變)','속수무책(束手無策)'],ans:0,exp:'<b>임기응변(臨機應變)</b> — 그때그때의 상황에 맞게 재치 있게 대처한다는 뜻입니다.'},
+  {q:'아무런 대책 없이 손을 놓고 있다는 뜻의 사자성어는?',hint:'"손이 묶여 아무 계책이 없다"는 의미입니다.',opts:['속수무책(束手無策)','임기응변(臨機應變)'],ans:0,exp:'<b>속수무책(束手無策)</b> — 손이 묶인 것처럼 아무런 방법이 없다는 뜻입니다.'},
+  {q:'서로 도우며 살아간다는 뜻의 사자성어는?',hint:'"입술이 없으면 이가 시리다"는 의미입니다.',opts:['순망치한(脣亡齒寒)','동주공제(同舟共濟)'],ans:0,exp:'<b>순망치한(脣亡齒寒)</b> — 입술이 없으면 이가 시리다. 서로 의지하며 존재한다는 뜻입니다.'},
+  {q:'배우고 때때로 익히면 즐겁다는 뜻의 사자성어와 관련된 한자성어는?',hint:'논어의 첫 구절과 관련됩니다.',opts:['학이시습(學而時習)','온고지신(溫故知新)'],ans:0,exp:'<b>학이시습(學而時習)</b> — 배우고 때때로 익히면 기쁘지 아니한가. 논어의 첫 구절입니다.'},
+  {q:'옛것을 익혀 새것을 안다는 뜻의 사자성어는?',hint:'"옛 것을 따뜻이 하여 새것을 안다"는 의미입니다.',opts:['온고지신(溫故知新)','법고창신(法古創新)'],ans:0,exp:'<b>온고지신(溫故知新)</b> — 옛 것을 익혀 거기에서 새것을 안다. 전통을 바탕으로 새로운 것을 창조한다는 뜻입니다.'},
+  {q:'임박해서야 서두른다는 뜻의 사자성어는?',hint:'"목이 마른 뒤에야 우물을 판다"는 의미입니다.',opts:['갈이천정(渴而穿井)','소 잃고 외양간 고치기'],ans:0,exp:'<b>갈이천정(渴而穿井)</b> — 목마른 뒤에 우물을 판다. 준비 없이 있다가 급해지면 그때야 서두른다는 뜻입니다.'},
+  {q:'아무 이유 없이 어떤 일이 저절로 된다는 뜻의 사자성어는?',hint:'"저절로 그렇게 된다"는 의미입니다.',opts:['자연스럽게','자연지리(自然之理)'],ans:0,exp:'자연의 이치, 즉 <b>자연스럽게</b> 되는 것을 뜻합니다. 인위적이지 않고 스스로 그러함을 뜻합니다.'},
+  {q:'형제나 친척 간의 우애가 깊다는 뜻의 사자성어는?',hint:'"형제가 뭉치면 강하다"는 의미입니다.',opts:['형우제공(兄友弟恭)','우애(友愛)'],ans:0,exp:'<b>형우제공(兄友弟恭)</b> — 형은 아우를 사랑하고, 아우는 형을 공경한다. 형제 간의 우애를 뜻합니다.'},
+  {q:'앞뒤가 맞지 않는 말이나 행동을 뜻하는 사자성어는?',hint:'"창과 방패"에서 유래한 사자성어입니다.',opts:['모순(矛盾)','자기당착(自己撞着)'],ans:0,exp:'<b>모순(矛盾)</b> — 창과 방패. 서로 앞뒤가 맞지 않는 것을 뜻합니다.'},
+  {q:'어떤 일에 있어서 앞을 내다볼 수 있는 안목이 있다는 뜻의 사자성어는?',hint:'"먼저 보는 밝음"을 뜻합니다.',opts:['선견지명(先見之明)','통찰력(洞察力)'],ans:0,exp:'<b>선견지명(先見之明)</b> — 앞일을 미리 내다보는 밝은 눈. 미래를 예측하는 안목이 있다는 뜻입니다.'},
+  {q:'정성을 다하여 노력하면 하늘도 감동한다는 뜻의 사자성어는?',hint:'"하늘이 감동한다"는 의미입니다.',opts:['지성감천(至誠感天)','천우신조(天佑神助)'],ans:0,exp:'<b>지성감천(至誠感天)</b> — 지극한 정성은 하늘도 감동시킨다는 뜻입니다.'},
 ];
 
+// ════════════════════════════════════════════
+// 데이터 — 속담 30문제
+// ════════════════════════════════════════════
+var PROVERB = [
+  {q:'"가는 말이 고와야 _____ 말이 곱다" — 빈칸에 알맞은 것은?',hint:'자신이 먼저 잘 해야 상대도 잘 한다는 의미입니다.',opts:['오는','돌아오는'],ans:0,exp:'"<b>가는 말이 고와야 오는 말이 곱다</b>" — 내가 먼저 잘 해야 상대도 잘 대해 준다는 뜻입니다.'},
+  {q:'다음 속담의 뜻으로 알맞은 것은? "콩 심은 데 콩 나고 팥 심은 데 팥 난다"',hint:'원인과 결과의 관계입니다.',opts:['모든 일에는 그만한 원인이 있다','콩과 팥의 재배방식이 다르다'],ans:0,exp:'"<b>콩 심은 데 콩 나고 팥 심은 데 팥 난다</b>" — 모든 일은 그 원인에 따라 결과가 생긴다는 뜻입니다.'},
+  {q:'"소 잃고 _____ 고친다" — 빈칸에 알맞은 것은?',hint:'이미 잘못된 후에야 대처한다는 의미입니다.',opts:['외양간','마굿간'],ans:0,exp:'"<b>소 잃고 외양간 고친다</b>" — 이미 일이 다 잘못된 뒤에야 수습하려 한다는 뜻입니다.'},
+  {q:'"윗물이 맑아야 _____ 맑다" — 빈칸에 알맞은 것은?',hint:'위에 있는 사람이 모범을 보여야 한다는 의미입니다.',opts:['아랫물이','아래물도'],ans:0,exp:'"<b>윗물이 맑아야 아랫물이 맑다</b>" — 윗사람이 바르게 행동해야 아랫사람도 바르게 된다는 뜻입니다.'},
+  {q:'"호랑이도 제 말 하면 온다"의 뜻으로 알맞은 것은?',hint:'이야기하던 사람이 갑자기 나타날 때 씁니다.',opts:['말을 조심해야 한다','이야기하던 사람이 갑자기 나타났을 때','호랑이는 청력이 좋다'],ans:1,exp:'"<b>호랑이도 제 말 하면 온다</b>" — 마침 이야기하고 있던 사람이 갑자기 나타났을 때 쓰는 말입니다.'},
+  {q:'"낮말은 새가 듣고 _____ 말은 쥐가 듣는다" — 빈칸에 알맞은 것은?',hint:'어디서든 말을 조심해야 한다는 의미입니다.',opts:['밤말은','밤에 하는'],ans:0,exp:'"<b>낮말은 새가 듣고 밤말은 쥐가 듣는다</b>" — 어디서나 말을 조심해야 한다는 뜻입니다.'},
+  {q:'"급할수록 _____ 가라"의 속담에서 빈칸에 알맞은 것은?',hint:'서두르지 말고 차분히 행동하라는 의미입니다.',opts:['돌아','빨리'],ans:0,exp:'"<b>급할수록 돌아가라</b>" — 급한 상황일수록 서두르지 말고 침착하게 행동하라는 뜻입니다.'},
+  {q:'"천 리 길도 _____ 시작"의 빈칸에 알맞은 것은?',hint:'큰 일도 작은 시작에서 비롯된다는 의미입니다.',opts:['한 걸음부터','첫 발부터'],ans:0,exp:'"<b>천 리 길도 한 걸음부터</b>" — 아무리 큰 일도 처음 한 걸음부터 시작된다는 뜻입니다.'},
+  {q:'다음 속담의 뜻으로 알맞은 것은? "배보다 배꼽이 더 크다"',hint:'본말이 전도된 상황을 뜻합니다.',opts:['부수적인 것이 주된 것보다 더 큰 상황','배꼽의 크기를 비교하는 말'],ans:0,exp:'"<b>배보다 배꼽이 더 크다</b>" — 부수적인 것이 주된 것보다 오히려 더 큰 이상한 상황을 뜻합니다.'},
+  {q:'"가재는 게 편이다"의 뜻으로 알맞은 것은?',hint:'비슷한 처지에 있는 것끼리 서로 편을 든다는 의미입니다.',opts:['비슷한 처지끼리 서로 편든다','수중 생물은 단결한다'],ans:0,exp:'"<b>가재는 게 편이다</b>" — 생김새나 형편이 비슷한 것끼리 서로 편들고 돕는다는 뜻입니다.'},
+  {q:'"아니 땐 굴뚝에 _____ 날까" — 빈칸에 알맞은 것은?',hint:'원인 없는 결과는 없다는 의미입니다.',opts:['연기','불꽃'],ans:0,exp:'"<b>아니 땐 굴뚝에 연기 날까</b>" — 원인 없는 결과는 없다, 근거 없는 소문은 없다는 뜻입니다.'},
+  {q:'"바늘 도둑이 _____ 된다" — 빈칸에 알맞은 것은?',hint:'작은 나쁜 습관이 커진다는 의미입니다.',opts:['소도둑','큰 도둑'],ans:0,exp:'"<b>바늘 도둑이 소도둑 된다</b>" — 작은 나쁜 짓도 버릇이 되면 점점 큰 죄를 저지르게 된다는 뜻입니다.'},
+  {q:'"세 살 버릇 여든까지 간다"의 뜻으로 알맞은 것은?',hint:'어릴 때 형성된 습관은 오래간다는 의미입니다.',opts:['어린 시절의 나쁜 버릇은 고치기 어렵다','세 살 때부터 교육해야 한다'],ans:0,exp:'"<b>세 살 버릇 여든까지 간다</b>" — 어릴 때 형성된 습관은 평생 가므로 처음부터 잘 들여야 한다는 뜻입니다.'},
+  {q:'"눈에서 멀어지면 _____ 멀어진다" — 빈칸에 알맞은 것은?',hint:'보지 못하면 정도 희미해진다는 의미입니다.',opts:['마음도','기억도'],ans:0,exp:'"<b>눈에서 멀어지면 마음도 멀어진다</b>" — 자주 보지 못하면 정도 점점 희미해진다는 뜻입니다.'},
+  {q:'"공든 탑이 _____ 않는다" — 빈칸에 알맞은 것은?',hint:'정성껏 한 일은 쉽게 무너지지 않는다는 의미입니다.',opts:['무너지지','흔들리지'],ans:0,exp:'"<b>공든 탑이 무너지지 않는다</b>" — 정성을 다해 한 일은 쉽게 실패하지 않는다는 뜻입니다.'},
+  {q:'"쥐구멍에도 볕 들 날 있다"의 뜻으로 알맞은 것은?',hint:'아무리 힘든 상황도 좋아질 때가 있다는 의미입니다.',opts:['어렵고 힘든 처지에도 행운이 올 수 있다','쥐의 생태와 관련된 말'],ans:0,exp:'"<b>쥐구멍에도 볕 들 날 있다</b>" — 아무리 힘든 처지에도 행운이 올 때가 있다는 뜻입니다.'},
+  {q:'"빈 수레가 _____ 요란하다" — 빈칸에 알맞은 것은?',hint:'실속 없는 사람이 더 떠든다는 의미입니다.',opts:['더','가장'],ans:0,exp:'"<b>빈 수레가 더 요란하다</b>" — 실속이 없는 사람이 겉으로 더 떠들고 나선다는 뜻입니다.'},
+  {q:'"모르면 약이요 알면 병이다"의 뜻으로 알맞은 것은?',hint:'때로는 모르는 게 나을 수도 있다는 의미입니다.',opts:['어떤 것은 모르는 편이 더 나을 수도 있다','지식은 해롭다'],ans:0,exp:'"<b>모르면 약이요 알면 병이다</b>" — 때로는 모르는 편이 마음이 편하고 좋을 수 있다는 뜻입니다.'},
+  {q:'"우물 안 개구리"의 뜻으로 알맞은 것은?',hint:'좁은 세계만 아는 사람을 가리킵니다.',opts:['식견이 좁아 세상 물정을 모르는 사람','개구리가 우물에 빠진 상황'],ans:0,exp:'"<b>우물 안 개구리</b>" — 좁은 우물 안에서만 살아 세상이 넓은 줄 모르는 사람을 뜻합니다.'},
+  {q:'"그림의 떡"의 뜻으로 알맞은 것은?',hint:'아무리 좋아도 실제로 가질 수 없는 것을 뜻합니다.',opts:['보기는 좋으나 실제로는 소용없는 것','맛있어 보이는 떡의 그림'],ans:0,exp:'"<b>그림의 떡</b>" — 보기에는 좋으나 실제로 가질 수 없거나 이용할 수 없는 것을 뜻합니다.'},
+  {q:'"닭 쫓던 개 지붕 쳐다본다"의 뜻으로 알맞은 것은?',hint:'애써 하던 일을 이루지 못한 허탈한 상황입니다.',opts:['애써 하려던 일을 이루지 못해 허탈함','개가 닭을 쫓다가 실패한 상황'],ans:0,exp:'"<b>닭 쫓던 개 지붕 쳐다본다</b>" — 애써 하던 일이 실패로 끝나 허탈하게 바라보기만 하는 처지를 뜻합니다.'},
+  {q:'"첫술에 배부르랴"의 뜻으로 알맞은 것은?',hint:'무슨 일이든 처음부터 완벽할 수 없다는 의미입니다.',opts:['처음부터 만족스런 결과를 기대하기 어렵다','첫 번째 식사로는 배가 부르지 않다'],ans:0,exp:'"<b>첫술에 배부르랴</b>" — 처음부터 완벽한 결과를 기대하기 어렵다, 무슨 일이든 시간이 걸린다는 뜻입니다.'},
+  {q:'"발 없는 말이 _____ 리 간다" — 빈칸에 알맞은 것은?',hint:'말은 빠르게 퍼진다는 의미입니다.',opts:['천','만'],ans:0,exp:'"<b>발 없는 말이 천 리 간다</b>" — 말은 발이 없지만 빠르게 멀리 퍼져 나간다, 말을 조심해야 한다는 뜻입니다.'},
+  {q:'"가랑비에 옷 젖는 줄 모른다"의 뜻으로 알맞은 것은?',hint:'작은 것도 쌓이면 큰 피해가 된다는 의미입니다.',opts:['사소한 것도 계속되면 큰 영향을 미친다','가랑비의 특성에 관한 말'],ans:0,exp:'"<b>가랑비에 옷 젖는 줄 모른다</b>" — 사소하게 여기던 것도 계속되면 나중에 큰 결과를 초래한다는 뜻입니다.'},
+  {q:'"돌다리도 두드려 보고 건너라"의 뜻으로 알맞은 것은?',hint:'확실한 것도 한 번 더 확인하라는 의미입니다.',opts:['확실한 일도 신중하게 확인하고 행동하라','돌다리는 두드려봐야 안전한지 안다'],ans:0,exp:'"<b>돌다리도 두드려 보고 건너라</b>" — 확실한 것도 다시 한 번 확인하고 신중하게 행동하라는 뜻입니다.'},
+  {q:'"지렁이도 밟으면 꿈틀한다"의 뜻으로 알맞은 것은?',hint:'아무리 유순한 사람도 한계가 있다는 의미입니다.',opts:['아무리 참을성 있는 사람도 너무 핍박하면 반항한다','지렁이의 반사 행동에 관한 말'],ans:0,exp:'"<b>지렁이도 밟으면 꿈틀한다</b>" — 아무리 유약한 사람도 너무 핍박하면 반항한다는 뜻입니다.'},
+  {q:'"구슬이 서 말이라도 _____ 보배" — 빈칸에 알맞은 것은?',hint:'아무리 좋은 것도 쓸모 있게 만들어야 한다는 의미입니다.',opts:['꿰어야','모아야'],ans:0,exp:'"<b>구슬이 서 말이라도 꿰어야 보배</b>" — 아무리 좋은 것이 있어도 제대로 활용해야 가치가 있다는 뜻입니다.'},
+  {q:'"원숭이도 나무에서 떨어진다"의 뜻으로 알맞은 것은?',hint:'아무리 능숙한 사람도 실수할 수 있다는 의미입니다.',opts:['아무리 능숙한 사람도 때로는 실수한다','원숭이는 나무에서 자주 떨어진다'],ans:0,exp:'"<b>원숭이도 나무에서 떨어진다</b>" — 아무리 익숙하고 잘 하는 사람도 실수할 때가 있다는 뜻입니다.'},
+  {q:'"하늘이 무너져도 _____ 있다" — 빈칸에 알맞은 것은?',hint:'아무리 어려운 상황에도 방법이 있다는 의미입니다.',opts:['솟아날 구멍','나갈 방법'],ans:0,exp:'"<b>하늘이 무너져도 솟아날 구멍이 있다</b>" — 아무리 절망적인 상황에도 살아날 방법은 있다는 뜻입니다.'},
+  {q:'"병 주고 약 준다"의 뜻으로 알맞은 것은?',hint:'해를 끼치고 나서 도와주는 척한다는 의미입니다.',opts:['먼저 해를 끼치고 나서 도와주는 척하는 상황','의사가 병을 치료한다'],ans:0,exp:'"<b>병 주고 약 준다</b>" — 먼저 괴롭히거나 해를 끼치고 나서 마치 도와주는 것처럼 하는 행동을 뜻합니다.'},
+];
 
-// ═══════════════════════════════════════════════════
-// 상태
-// ═══════════════════════════════════════════════════
-var N = 7;
+// ════════════════════════════════════════════
+// 게임 상태
+// ════════════════════════════════════════════
 var mode = 'spelling';
-var qs = [], qi = 0, score = 0, answers = [], answered = false;
-var todayModes = { spelling: false, idiom: false }; // 오늘 완료한 모드
+var questions = [];
+var qi = 0;      // 현재 문제 인덱스
+var score = 0;
+var correctCount = 0;
+var answered = false;
+var TOTAL = 10;
 
-var stats = JSON.parse(localStorage.getItem('kq_stats2') || '{"streak":0,"lastDate":"","total":0,"correct":0,"totalPts":0,"bestScore":0}');
-var missions = JSON.parse(localStorage.getItem('kq_missions') || '{"date":"","dm1":false,"dm2":false,"dm3":false,"dm4":false}');
-var weeklyMissions = JSON.parse(localStorage.getItem('kq_weekly') || '{"week":"","wm1":0,"wm2":0,"wm3":0,"wm4":0,"spellCount":0,"idiomCount":0,"perfectCount":0,"totalScore":0,"totalQ":0,"daySet":[]}');
-var badges = JSON.parse(localStorage.getItem('kq_badges') || '{}');
-var newBadges = []; // 방금 획득한 뱃지
+// ── 저장된 통계 ──
+var stats = JSON.parse(localStorage.getItem('otnl_stats') || '{"streak":0,"total":0,"correct":0,"lastDate":"","streakDate":""}');
 
-// ═══════════════════════════════════════════════════
-// 점수 계산
-// ═══════════════════════════════════════════════════
-function calcPts(sc, streak) {
-  var pts = sc * 10;
-  if (sc === N) pts += 50;
-  pts += streak * 5;
-  var rate = sc / N * 100;
-  if (rate >= 80) pts += 20;
-  return pts;
-}
-
-// 티어 계산
-var TIERS = [
-  {name:'마스터',cls:'tier-master',min:3000,icon:'👑'},
-  {name:'다이아',cls:'tier-diamond',min:1500,icon:'💎'},
-  {name:'플래티넘',cls:'tier-platinum',min:800,icon:'🏆'},
-  {name:'골드',cls:'tier-gold',min:400,icon:'🥇'},
-  {name:'실버',cls:'tier-silver',min:150,icon:'🥈'},
-  {name:'브론즈',cls:'tier-bronze',min:0,icon:'🥉'},
-];
-function getTier(pts) {
-  return TIERS.find(function(t){ return pts >= t.min; }) || TIERS[TIERS.length-1];
-}
-
-// ═══════════════════════════════════════════════════
-// 업적 뱃지 정의
-// ═══════════════════════════════════════════════════
-var BADGE_DEFS = [
-  // 기본
-  {id:'first',emoji:'🎉',name:'첫 도전',cond:'퀴즈 첫 완료',check:function(s){ return s.total >= 1; }},
-  {id:'perfect1',emoji:'💯',name:'완벽주의자',cond:'만점 1회 달성',check:function(s){ return s.bestScore >= N; }},
-  {id:'allmode',emoji:'🎯',name:'만능 한국어인',cond:'오늘 두 모드 완료',check:function(){ return missions.dm3; }},
-  // 연속 스트릭
-  {id:'streak3',emoji:'🔥',name:'꾸준한 학생',cond:'3일 연속 플레이',check:function(s){ return s.streak >= 3; }},
-  {id:'streak7',emoji:'🔥🔥',name:'한국어 마니아',cond:'7일 연속 플레이',check:function(s){ return s.streak >= 7; }},
-  {id:'streak30',emoji:'👑',name:'한국어 전설',cond:'30일 연속 플레이',check:function(s){ return s.streak >= 30; }},
-  // 플레이 횟수
-  {id:'play10',emoji:'📚',name:'열공러',cond:'총 10회 플레이',check:function(s){ return s.total >= 10; }},
-  {id:'play50',emoji:'🎓',name:'학구파',cond:'총 50회 플레이',check:function(s){ return s.total >= 50; }},
-  {id:'play100',emoji:'🌈',name:'한국어 덕후',cond:'총 100회 플레이',check:function(s){ return s.total >= 100; }},
-  {id:'play200',emoji:'🎪',name:'퀴즈 중독자',cond:'총 200회 플레이',check:function(s){ return s.total >= 200; }},
-  // 점수
-  {id:'pts500',emoji:'⭐',name:'500점 달성',cond:'누적 점수 500점',check:function(s){ return s.totalPts >= 500; }},
-  {id:'pts2000',emoji:'🌟',name:'2000점 달성',cond:'누적 점수 2000점',check:function(s){ return s.totalPts >= 2000; }},
-  {id:'pts5000',emoji:'🏅',name:'5000점 달성',cond:'누적 점수 5000점',check:function(s){ return s.totalPts >= 5000; }},
-  // 실력
-  {id:'spell3',emoji:'🎯',name:'맞춤법 마스터',cond:'맞춤법 만점 3회',check:function(s){ return (s.spellPerfect||0) >= 3; }},
-  {id:'idiom3',emoji:'📖',name:'사자성어 박사',cond:'사자성어 만점 3회',check:function(s){ return (s.idiomPerfect||0) >= 3; }},
-  {id:'rate90',emoji:'🧠',name:'천재',cond:'정답률 90% 이상 10회',check:function(s){ return (s.highRateCount||0) >= 10; }},
-  // 시간
-  {id:'night',emoji:'🌙',name:'올빼미',cond:'자정 이후 플레이',check:function(s){ return s.nightPlay||false; }},
-  {id:'dawn',emoji:'🌅',name:'새벽형 인간',cond:'새벽 6시 이전 플레이',check:function(s){ return s.dawnPlay||false; }},
-  // 도전
-  {id:'retry5',emoji:'🔄',name:'집념',cond:'같은 날 5회 재도전',check:function(s){ return (s.todayRetry||0) >= 5; }},
-  {id:'master',emoji:'👑',name:'마스터 달성',cond:'마스터 등급 달성',check:function(s){ return s.totalPts >= 3000; }},
-];
-
-function checkBadges() {
-  newBadges = [];
-  BADGE_DEFS.forEach(function(b) {
-    if (!badges[b.id] && b.check(stats)) {
-      badges[b.id] = true;
-      newBadges.push(b);
-    }
-  });
-  localStorage.setItem('kq_badges', JSON.stringify(badges));
-}
-
-// ═══════════════════════════════════════════════════
-// 유틸
-// ═══════════════════════════════════════════════════
-function todayStr() {
+function todayStr(){
   var d = new Date();
-  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-}
-function saveStats() { localStorage.setItem('kq_stats2', JSON.stringify(stats)); }
-function saveMissions() { localStorage.setItem('kq_missions', JSON.stringify(missions)); }
-function saveWeekly() { localStorage.setItem('kq_weekly', JSON.stringify(weeklyMissions)); }
-function getWeekStr() {
-  var d = new Date();
-  var day = d.getDay();
-  var mon = new Date(d);
-  mon.setDate(d.getDate() - (day===0?6:day-1));
-  return mon.getFullYear()+'-'+String(mon.getMonth()+1).padStart(2,'0')+'-'+String(mon.getDate()).padStart(2,'0');
-}
-function updateWeeklyMissions(sc, md) {
-  var w = getWeekStr();
-  if (weeklyMissions.week !== w) {
-    weeklyMissions = {week:w,wm1:0,wm2:0,wm3:0,wm4:0,spellCount:0,idiomCount:0,perfectCount:0,totalScore:0,totalQ:0,daySet:[]};
-  }
-  var today2 = todayStr();
-  if (weeklyMissions.daySet.indexOf(today2) === -1) weeklyMissions.daySet.push(today2);
-  if (md === 'spelling') weeklyMissions.spellCount++;
-  if (md === 'idiom') weeklyMissions.idiomCount++;
-  if (sc === N) weeklyMissions.perfectCount++;
-  weeklyMissions.totalScore += sc;
-  weeklyMissions.totalQ += N;
-  // 미션 달성 체크
-  weeklyMissions.wm1 = weeklyMissions.daySet.length >= 5 ? 1 : 0;
-  weeklyMissions.wm2 = weeklyMissions.perfectCount >= 3 ? 1 : 0;
-  weeklyMissions.wm3 = (weeklyMissions.spellCount >= 3 && weeklyMissions.idiomCount >= 3) ? 1 : 0;
-  weeklyMissions.wm4 = weeklyMissions.totalQ > 0 && (weeklyMissions.totalScore/weeklyMissions.totalQ*100) >= 80 ? 1 : 0;
-  saveWeekly();
+  return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
 }
 
-function updateStatUI() {
+function updateStatsUI(){
+  var rate = stats.total > 0 ? Math.round(stats.correct/stats.total*100) : 0;
   document.getElementById('st-streak').textContent = stats.streak;
   document.getElementById('st-total').textContent = stats.total;
   document.getElementById('st-correct').textContent = stats.correct;
-  var r = stats.total > 0 ? Math.min(Math.round(stats.correct / (stats.total * N) * 100), 100) : 0;
-  document.getElementById('st-rate').textContent = r + '%';
-  document.getElementById('st-pts').textContent = stats.totalPts;
+  document.getElementById('st-rate').textContent = rate+'%';
   document.getElementById('streak-display').textContent = stats.streak;
 }
 
-// ═══════════════════════════════════════════════════
-// 페이지 전환
-// ═══════════════════════════════════════════════════
-function showPage(p) {
-  ['quiz','rank','mission'].forEach(function(id) {
-    document.getElementById('page-'+id).style.display = (id===p) ? 'block' : 'none';
-    document.getElementById('ttab-'+id).classList.toggle('active', id===p);
-  });
-  if (p === 'rank') setTimeout(renderRank, 300);
-  if (p === 'mission') renderMission();
+function saveStats(){ localStorage.setItem('otnl_stats', JSON.stringify(stats)); }
+
+// ════════════════════════════════════════════
+// 날짜 기반 문제 선택
+// ════════════════════════════════════════════
+function getDayIndex(){
+  var d = new Date();
+  return d.getFullYear()*10000 + (d.getMonth()+1)*100 + d.getDate();
 }
 
-// ═══════════════════════════════════════════════════
-// 퀴즈 로직
-// ═══════════════════════════════════════════════════
-function getDailyQ(data, n) {
-  var arr = data.slice();
-  for (var i = arr.length-1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i+1));
-    var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+function pickQuestions(pool, n){
+  var seed = getDayIndex();
+  var arr = pool.slice();
+  // 간단한 seed shuffle
+  for(var i=arr.length-1;i>0;i--){
+    seed = (seed*1664525+1013904223)&0xffffffff;
+    var j = Math.abs(seed)%(i+1);
+    var t=arr[i];arr[i]=arr[j];arr[j]=t;
   }
-  return arr.slice(0, n);
+  return arr.slice(0, Math.min(n, arr.length));
 }
-function switchMode(m) {
+
+// ════════════════════════════════════════════
+// 모드 전환
+// ════════════════════════════════════════════
+function switchMode(m){
   mode = m;
-  document.getElementById('tab-spelling').classList.toggle('active', m==='spelling');
-  document.getElementById('tab-idiom').classList.toggle('active', m==='idiom');
-  initGame();
-}
-function initGame() {
-  qs = getDailyQ(mode==='spelling' ? SPELLING : IDIOM, N);
-  qi=0; score=0; answers=[]; answered=false;
-  document.getElementById('res-card').classList.remove('show');
-  document.getElementById('quiz-area').style.display='';
-  renderQ(); updateProg();
-}
-function renderQ() {
-  answered = false;
-  var q = qs[qi];
-  var isI = mode==='idiom';
-  var lbl = isI ? '사자성어' : '맞춤법';
-  var OL = ['A','B','C','D'];
-  var idiomH = (isI && q.idiom) ? '<div class="idiom-box">'+q.idiom+'</div>' : '';
-  var optsH = q.opts.map(function(o,i){
-    return '<button class="opt" onclick="selectAns('+i+')"><div class="opt-lbl">'+OL[i]+'</div><span>'+o+'</span></button>';
-  }).join('');
-  document.getElementById('quiz-area').innerHTML =
-    '<div class="q-card"><div class="q-hd"><div class="q-badge">'+lbl+'</div><div class="q-num">'+(qi+1)+' / '+N+'</div></div>' +
-    '<div class="q-body">'+idiomH+'<div class="q-q">'+q.q+'</div><div class="q-hint">💡 '+q.hint+'</div>' +
-    '<div class="options">'+optsH+'</div>' +
-    '<div class="exp-box" id="exp-box"></div>' +
-    '<button class="next-btn" id="next-btn" onclick="nextQ()">'+(qi<N-1?'다음 문제 →':'결과 보기 🎉')+'</button>' +
-    '</div></div>';
-}
-function selectAns(idx) {
-  if (answered) return;
-  answered = true;
-  var q = qs[qi];
-  var ok = idx === q.ans;
-  if (ok) score++;
-  answers.push(ok);
-  document.querySelectorAll('.opt').forEach(function(b,i){
-    b.disabled=true;
-    if (i===q.ans) b.classList.add('correct');
-    else if (i===idx && !ok) b.classList.add('wrong');
+  ['spelling','idiom','proverb'].forEach(function(x){
+    document.getElementById('tab-'+x).classList.toggle('active', x===m);
   });
-  var exp = document.getElementById('exp-box');
-  exp.className = 'exp-box show '+(ok?'cok':'cwrong');
-  exp.innerHTML = '<div class="exp-title">'+(ok?'✅ 정답!':'❌ 오답')+'</div>'+q.exp;
-  document.getElementById('next-btn').classList.add('show');
-}
-function nextQ() {
-  qi++;
-  if (qi >= N) { showResult(); return; }
-  renderQ(); updateProg();
-}
-function updateProg() {
-  document.getElementById('prog-fill').style.width=(qi/N*100)+'%';
-  document.getElementById('prog-text').textContent='문제 '+(qi+1)+' / '+N;
-  document.getElementById('score-text').textContent='점수: '+score;
+  startGame();
 }
 
-// ═══════════════════════════════════════════════════
-// 결과 처리
-// ═══════════════════════════════════════════════════
-function showResult() {
-  document.getElementById('quiz-area').style.display='none';
-  document.getElementById('prog-fill').style.width='100%';
-  document.getElementById('prog-text').textContent='완료!';
-  document.getElementById('score-text').textContent='최종: '+score+'/'+N;
+// ════════════════════════════════════════════
+// 게임 시작
+// ════════════════════════════════════════════
+function startGame(){
+  var pool = mode==='spelling' ? SPELLING : mode==='idiom' ? IDIOM : PROVERB;
+  questions = pickQuestions(pool, TOTAL);
+  qi = 0; score = 0; correctCount = 0; answered = false;
+  document.getElementById('res-card').style.display = 'none';
+  renderQuestion();
+}
 
-  var today = todayStr();
-  var earnedPts = calcPts(score, stats.streak);
-  var myRate2 = stats.total > 0 ? Math.min(Math.round(stats.correct/(stats.total*N)*100),100) : 0;
+// ════════════════════════════════════════════
+// 문제 렌더링
+// ════════════════════════════════════════════
+function renderQuestion(){
+  var qData = questions[qi];
+  var pct = (qi/TOTAL)*100;
+  document.getElementById('prog-text').textContent = '문제 '+(qi+1)+' / '+TOTAL;
+  document.getElementById('score-text').textContent = '점수: '+score;
+  document.getElementById('prog-fill').style.width = pct+'%';
 
-  // 미션 리셋 (날짜 바뀌면)
-  if (missions.date !== today) {
-    missions = {date:today, dm1:false, dm2:false, dm3:false, dm4:false};
+  var letters = ['A','B','C','D'];
+  var optsHtml = qData.opts.map(function(opt,i){
+    return '<button class="opt" onclick="answer('+i+')" id="opt-'+i+'"><span class="opt-letter">'+letters[i]+'</span>'+opt+'</button>';
+  }).join('');
+
+  document.getElementById('quiz-area').innerHTML =
+    '<div class="q-card">'+
+    '<div class="q-num">Q'+(qi+1)+' / '+TOTAL+'</div>'+
+    '<div class="q-q">'+qData.q+'</div>'+
+    '<div class="q-hint">💡 '+qData.hint+'</div>'+
+    '<div class="opts">'+optsHtml+'</div>'+
+    '<div id="exp-area"></div>'+
+    '</div>';
+  answered = false;
+}
+
+// ════════════════════════════════════════════
+// 정답 처리
+// ════════════════════════════════════════════
+function answer(idx){
+  if(answered) return;
+  answered = true;
+  var qData = questions[qi];
+  var correct = idx === qData.ans;
+  var opts = document.querySelectorAll('.opt');
+  opts.forEach(function(o){ o.disabled=true; });
+  opts[qData.ans].classList.add('correct');
+  if(!correct){ opts[idx].classList.add('wrong'); }
+
+  document.getElementById('exp-area').innerHTML =
+    '<div class="exp-box">'+qData.exp+'</div>'+
+    '<button class="btn-next" onclick="nextQuestion()">'+
+    (qi+1 < TOTAL ? '다음 문제 →' : '결과 보기')+'</button>';
+
+  if(correct){
+    score += 10;
+    correctCount++;
+    showToast('정답! +10점');
+  } else {
+    showToast('아쉽습니다 😢');
   }
+  document.getElementById('score-text').textContent = '점수: '+score;
+}
+
+// ════════════════════════════════════════════
+// 다음 문제
+// ════════════════════════════════════════════
+function nextQuestion(){
+  qi++;
+  if(qi >= TOTAL){ showResult(); return; }
+  renderQuestion();
+}
+
+// ════════════════════════════════════════════
+// 결과 화면
+// ════════════════════════════════════════════
+function showResult(){
+  // 보너스 점수
+  if(correctCount === TOTAL){ score += 50; }
+  var rate = Math.round(correctCount/TOTAL*100);
+  if(rate >= 80){ score += 20; }
+  score += stats.streak * 5;
 
   // 통계 업데이트
-  if (stats.lastDate !== today) {
-    stats.total++;
-    stats.correct += score;
-    stats.totalPts += earnedPts;
-    if (score > stats.bestScore) stats.bestScore = score;
-    if (score >= Math.ceil(N*0.4)) {
-      if (stats.lastDate) {
-        var last = new Date(stats.lastDate), now = new Date(today);
-        stats.streak = ((now-last)/86400000) <= 1 ? stats.streak+1 : 1;
-      } else { stats.streak = 1; }
-    } else { stats.streak = 0; }
-    stats.lastDate = today;
-    saveStats();
-    todayModes[mode] = true;
-  } else {
-    // 같은 날 재플레이 — 점수는 추가 안 함, 미션만 체크
-    todayModes[mode] = true;
-  }
-
-  // 주간 미션 업데이트
-  updateWeeklyMissions(score, mode);
-
-  // 미션 체크
-  missions.dm1 = true;
-  if (score >= 5) missions.dm2 = true;
-  if (todayModes.spelling && todayModes.idiom) missions.dm3 = true;
-  if (score === N) missions.dm4 = true;
-  saveMissions();
-
-  // 미션 보너스 pts (오늘 처음 완료 시)
-  var missionPtsAdded = 0;
-  if (missions.dm1 && !stats['dm1_'+today]) { missionPtsAdded+=30; stats['dm1_'+today]=true; stats.totalPts+=30; }
-  if (missions.dm2 && !stats['dm2_'+today]) { missionPtsAdded+=20; stats['dm2_'+today]=true; stats.totalPts+=20; }
-  if (missions.dm3 && !stats['dm3_'+today]) { missionPtsAdded+=50; stats['dm3_'+today]=true; stats.totalPts+=50; }
-  if (missions.dm4 && !stats['dm4_'+today]) { missionPtsAdded+=50; stats['dm4_'+today]=true; stats.totalPts+=50; }
-  var wk = getWeekStr();
-  if (weeklyMissions.wm1 && !stats['wm1_'+wk]) { missionPtsAdded+=100; stats['wm1_'+wk]=true; stats.totalPts+=100; }
-  if (weeklyMissions.wm2 && !stats['wm2_'+wk]) { missionPtsAdded+=150; stats['wm2_'+wk]=true; stats.totalPts+=150; }
-  if (weeklyMissions.wm3 && !stats['wm3_'+wk]) { missionPtsAdded+=200; stats['wm3_'+wk]=true; stats.totalPts+=200; }
-  if (weeklyMissions.wm4 && !stats['wm4_'+wk]) { missionPtsAdded+=120; stats['wm4_'+wk]=true; stats.totalPts+=120; }
-  saveStats(); updateStatUI();
-  // Firebase에 점수 저장
-  if (typeof window.fbSaveScore === 'function') {
-    var t = getTier(stats.totalPts);
-    window.fbSaveScore(MY_NICK, stats.totalPts, stats.total, myRate2, t.name);
-  }
-
-  // 추가 통계 추적
-  var h = new Date().getHours();
-  if (h >= 0 && h < 6) stats.dawnPlay = true;
-  if (h >= 0 && h < 6 || h >= 22) stats.nightPlay = true;
-  if (mode === 'spelling' && score === N) stats.spellPerfect = (stats.spellPerfect||0) + 1;
-  if (mode === 'idiom' && score === N) stats.idiomPerfect = (stats.idiomPerfect||0) + 1;
-  var curRate = score / N * 100;
-  if (curRate >= 90) stats.highRateCount = (stats.highRateCount||0) + 1;
-  if (stats.lastDate === today) stats.todayRetry = (stats.todayRetry||0) + 1;
-  saveStats();
-
-  // 뱃지 체크
-  checkBadges();
-
-  var msgs = [
-    {min:N,emoji:'🏆',title:'완벽한 한국어 고수!',sub:N+'문제 모두 정답! 당신은 진짜 한국어 달인입니다.'},
-    {min:N-1,emoji:'🌟',title:'거의 완벽해요!',sub:(N-1)+'문제 정답! 조금만 더하면 완벽합니다.'},
-    {min:Math.ceil(N*0.6),emoji:'👍',title:'꽤 잘하셨어요!',sub:score+'문제 정답! 오늘도 한 발 성장했습니다.'},
-    {min:2,emoji:'📚',title:'조금 더 공부해봐요',sub:score+'문제 정답. 내일 다시 도전해보세요!'},
-    {min:0,emoji:'💪',title:'포기하지 마세요!',sub:'내일 다시 도전! 연습이 실력을 만듭니다.'},
-  ];
-  var msg = msgs.find(function(m){ return score>=m.min; });
-
-  var gridH = '<div class="res-grid">'+answers.map(function(a){return '<div class="r-dot '+(a?'r-ok':'r-ng')+'">'+(a?'✅':'❌')+'</div>';}).join('')+'</div>';
-
-  var badgeH = newBadges.map(function(b){
-    return '<div class="badge-alert"><div class="badge-alert-icon">'+b.emoji+'</div><div class="badge-alert-txt"><div class="badge-alert-title">🎉 새 뱃지 획득!</div><div class="badge-alert-name">'+b.name+'</div></div></div>';
-  }).join('');
-
-  var missionPtsH = missionPtsAdded > 0 ?
-    '<div style="font-size:13px;color:var(--green);font-weight:700;margin:4px 0">🎯 미션 보너스 +'+missionPtsAdded+'pts!</div>' : '';
-
-  var rc = document.getElementById('res-card');
-  rc.innerHTML =
-    '<span class="res-emoji">'+msg.emoji+'</span>' +
-    '<div class="res-title">'+msg.title+'</div>' +
-    '<div class="res-sub"><span class="score-big">'+score+'<small style="font-size:24px">/'+N+'</small></span>'+msg.sub+'</div>' +
-    gridH +
-    '<div class="pts-pop">+'+earnedPts+' pts 획득! 🎉</div>' +
-    missionPtsH +
-    badgeH +
-    '<div class="cd-lbl">내일 새 문제 출시</div>' +
-    '<div class="countdown" id="cd">--:--:--</div>' +
-    '<div style="font-size:11px;color:var(--muted);margin-bottom:12px">매일 오전 0시 업데이트</div>' +
-    '<div class="btn-row">' +
-    '<button class="sh-btn" onclick="doShare()">💬 카카오 공유</button>' +
-    '<button class="cp-btn" onclick="doCopy()">📋 결과 복사</button>' +
-    '</div>' +
-    '<div class="btn-row" style="margin-top:8px">' +
-    '<button class="cp-btn" style="background:var(--gold);border-color:var(--gold)" onclick="showPage(\'rank\')">🏆 내 랭킹 보기</button>' +
-    '<button class="cp-btn" style="background:var(--green);border-color:var(--green)" onclick="showPage(\'mission\')">🎯 미션 확인</button>' +
-    '</div>' +
-    '<button class="re-btn" onclick="initGame()">다시 풀기 (연습)</button>';
-  rc.classList.add('show');
-
-  (function tick(){
-    var n=new Date(), t=new Date(n.getFullYear(),n.getMonth(),n.getDate()+1);
-    var d=Math.max(0,Math.floor((t-n)/1000));
-    var el=document.getElementById('cd');
-    if(el){el.textContent=String(Math.floor(d/3600)).padStart(2,'0')+':'+String(Math.floor((d%3600)/60)).padStart(2,'0')+':'+String(d%60).padStart(2,'0');setTimeout(tick,1000);}
-  })();
-
-  // 미션 탭 빨간 점
-  var undoneMission = !missions.dm1 || !missions.dm2 || !missions.dm3 || !missions.dm4;
-  document.getElementById('mission-dot').classList.toggle('show', newBadges.length > 0 || missions.dm1);
-}
-
-// ═══════════════════════════════════════════════════
-// 랭킹 렌더
-// ═══════════════════════════════════════════════════
-var FAKE_PLAYERS = [];
-
-var RANK_TAB = 'all';
-function switchRankTab(tab) {
-  RANK_TAB = tab;
-  var allBtn = document.getElementById('rank-tab-all');
-  var weekBtn = document.getElementById('rank-tab-week');
-  if (allBtn) { allBtn.style.background = tab==='all' ? 'var(--ink)' : 'var(--paper)'; allBtn.style.color = tab==='all' ? 'var(--paper)' : 'var(--muted)'; }
-  if (weekBtn) { weekBtn.style.background = tab==='week' ? 'var(--ink)' : 'var(--paper)'; weekBtn.style.color = tab==='week' ? 'var(--paper)' : 'var(--muted)'; }
-  renderRank();
-}
-
-function renderRank() {
-  var myPts = stats.totalPts;
-  var myPlay = stats.total;
-  var myRate = myPlay > 0 ? Math.min(Math.round(stats.correct/(myPlay*N)*100),100) : 0;
-  var tier = getTier(myPts);
-
-  var nameEl = document.getElementById('my-rank-name');
-  var ptsEl = document.getElementById('my-rank-pts');
-  var playEl = document.getElementById('my-rank-play');
-  var rateEl = document.getElementById('my-rank-rate');
-  var tbEl = document.getElementById('my-tier-badge');
-  var numEl = document.getElementById('my-rank-num');
-  var listEl = document.getElementById('rank-list');
-
-  if (nameEl) nameEl.textContent = '나 ('+MY_NICK+')';
-  if (ptsEl) ptsEl.innerHTML = myPts+' <span style="font-size:14px;color:var(--muted)">pts</span>';
-  if (playEl) playEl.textContent = myPlay;
-  if (rateEl) rateEl.textContent = myRate;
-  if (tbEl) { tbEl.textContent = (tier.icon||'')+' '+tier.name; tbEl.className = 'tier-badge '+tier.cls; }
-  if (listEl) listEl.innerHTML = '<div style="padding:20px;text-align:center;font-size:12px;color:var(--muted)">⏳ 랭킹 불러오는 중...</div>';
-  if (numEl) numEl.textContent = '...';
-
-  if (typeof window.fbLoadRanking !== 'function') {
-    if (listEl) listEl.innerHTML = '<div class="empty">랭킹 서비스 연결 중입니다. 잠시 후 다시 시도해주세요.</div>';
-    return;
-  }
-
-  var loadPromise;
-  if (RANK_TAB === 'week') {
-    loadPromise = window.fbLoadRankingWeek ? window.fbLoadRankingWeek() : window.fbLoadRanking();
-  } else {
-    loadPromise = window.fbLoadRanking();
-  }
-  loadPromise.then(function(rows) {
-    if (!listEl) return;
-    if (!rows || !rows.length) {
-      listEl.innerHTML = '<div class="empty">아직 랭킹 데이터가 없습니다!</div>';
-      if (numEl) numEl.textContent = '1';
-      return;
-    }
-
-    var myEntry = {nick:MY_NICK, pts:myPts, play:myPlay, rate:myRate, tier:tier.name, isMe:true};
-    var all = rows.slice();
-    all.push(myEntry);
-    all.sort(function(a,b){ return b.pts - a.pts; });
-
-    // 중복 닉네임 제거 (isMe 항목 우선 유지)
-    var seen = {};
-    all = all.filter(function(p){
-      var k = p.nick;
-      if (p.isMe) { seen[k] = true; return true; }
-      if (seen[k]) return false;
-      seen[k] = true; return true;
-    });
-
-    var myIdx = -1;
-    for (var i=0; i<all.length; i++) { if (all[i].isMe) { myIdx=i; break; } }
-    if (numEl) {
-      numEl.textContent = myIdx >= 0 ? (myIdx+1) : '?';
-      var bgColors = {master:'#c84b2f',diamond:'#5555cc',platinum:'#2d7a4f',gold:'#d4a017',silver:'#9e9e9e',bronze:'#cd7f32'};
-      var tierKey = tier.cls.replace('tier-','');
-      numEl.style.background = bgColors[tierKey] || 'var(--gold)';
-    }
-
-    var emojis = ['🧑','👩','🧓','👦','👧','🧔','👨','🧕','👱','🧑'];
-    var medals = ['🥇','🥈','🥉'];
-    var html2 = '';
-    for (var j=0; j<Math.min(all.length,20); j++) {
-      var p = all[j];
-      var t = getTier(p.pts);
-      var pname = p.isMe ? ('나 ('+MY_NICK+')') : (p.nick||'익명');
-      var emoji = p.isMe ? '😊' : emojis[j%emojis.length];
-      var rankNum = j<3 ? medals[j] : (j+1);
-      var rankCls = j===0?'gold':j===1?'silver':j===2?'bronze':'';
-      html2 += '<div class="rank-row'+(p.isMe?' rank-me':'')+'">';
-      html2 += '<div class="rk-num '+rankCls+'">'+rankNum+'</div>';
-      html2 += '<div class="rk-avatar">'+emoji+'</div>';
-      html2 += '<div class="rk-info"><div class="rk-name">'+pname+(p.isMe?' 👈':'')+'</div>';
-      html2 += '<div class="rk-sub">'+(p.play||0)+'회 · 정답률 '+(p.rate||0)+'%</div></div>';
-      html2 += '<div class="rk-tier"><span class="tier-badge '+t.cls+'">'+t.name+'</span></div>';
-      html2 += '<div class="rk-pts">'+p.pts+'</div></div>';
-    }
-    listEl.innerHTML = html2;
-  }).catch(function(err) {
-    console.log('랭킹 오류:', err);
-    if (listEl) listEl.innerHTML = '<div class="empty">랭킹을 불러올 수 없습니다.</div>';
-  });
-}
-
-// ═══════════════════════════════════════════════════
-// 미션 렌더
-// ═══════════════════════════════════════════════════
-function renderMission() {
   var today = todayStr();
-  if (missions.date !== today) missions = {date:today,dm1:false,dm2:false,dm3:false,dm4:false};
-
-  // 주간 미션 리셋 체크
-  var wk = getWeekStr();
-  if (weeklyMissions.week !== wk) {
-    weeklyMissions = {week:wk,wm1:0,wm2:0,wm3:0,wm4:0,spellCount:0,idiomCount:0,perfectCount:0,totalScore:0,totalQ:0,daySet:[]};
-    saveWeekly();
+  stats.total += TOTAL;
+  stats.correct += correctCount;
+  if(correctCount === TOTAL){
+    if(stats.streakDate === today){ /* 오늘 이미 함 */ }
+    else {
+      var yesterday = new Date(); yesterday.setDate(yesterday.getDate()-1);
+      var yStr = yesterday.getFullYear()+'-'+(yesterday.getMonth()+1)+'-'+yesterday.getDate();
+      if(stats.streakDate === yStr){ stats.streak++; }
+      else if(stats.streakDate !== today){ stats.streak = 1; }
+      stats.streakDate = today;
+    }
   }
+  stats.lastDate = today;
+  saveStats();
+  updateStatsUI();
 
-  function setCheck(id, done, pct) {
-    var el = document.getElementById(id+'-check');
-    var fill = document.getElementById(id+'-fill');
-    if (el) { el.textContent = done ? '✅' : ''; el.classList.toggle('done', done); }
-    if (fill) fill.style.width = (pct !== undefined ? pct : (done?100:0)) + '%';
-  }
+  document.getElementById('prog-fill').style.width = '100%';
+  document.getElementById('prog-text').textContent = '완료!';
+  document.getElementById('quiz-area').innerHTML = '';
 
-  // 일일 미션
-  setCheck('dm1', missions.dm1);
-  setCheck('dm2', missions.dm2);
-  setCheck('dm3', missions.dm3);
-  setCheck('dm4', missions.dm4);
+  var emoji = correctCount===TOTAL ? '🏆' : correctCount>=8 ? '🌟' : correctCount>=5 ? '👍' : '💪';
+  var msg = correctCount===TOTAL ? '완벽해요! 만점 달성!' : correctCount>=8 ? '훌륭합니다!' : correctCount>=5 ? '잘 하셨어요!' : '다음엔 더 잘 할 수 있어요!';
+  var modeName = mode==='spelling' ? '맞춤법' : mode==='idiom' ? '사자성어' : '속담';
 
-  // 주간 미션
-  setCheck('wm1', weeklyMissions.wm1, Math.min(weeklyMissions.daySet.length/5*100,100));
-  setCheck('wm2', weeklyMissions.wm2, Math.min(weeklyMissions.perfectCount/3*100,100));
-  setCheck('wm3', weeklyMissions.wm3, Math.min(((weeklyMissions.spellCount>=3?1:0)+(weeklyMissions.idiomCount>=3?1:0))/2*100,100));
-  setCheck('wm4', weeklyMissions.wm4, weeklyMissions.totalQ>0?Math.min(weeklyMissions.totalScore/weeklyMissions.totalQ*100,100):0);
-
-  // 주간 리셋 카운트다운 (다음 월요일까지)
-  var now2 = new Date();
-  var daysUntilMon = (8 - now2.getDay()) % 7 || 7;
-  var nextMon = new Date(now2.getFullYear(),now2.getMonth(),now2.getDate()+daysUntilMon);
-  var wDiff = Math.max(0,Math.floor((nextMon-now2)/1000));
-  var wEl = document.getElementById('weekly-reset-time');
-  if (wEl) wEl.textContent = Math.floor(wDiff/86400)+'일 '+String(Math.floor((wDiff%86400)/3600)).padStart(2,'0')+'시간 후 리셋';
-
-  // 일일 카운트다운
-  var n = new Date(), t = new Date(n.getFullYear(),n.getMonth(),n.getDate()+1);
-  var d = Math.max(0,Math.floor((t-n)/1000));
-  var el = document.getElementById('mission-reset-time');
-  if (el) el.textContent = String(Math.floor(d/3600)).padStart(2,'0')+':'+String(Math.floor((d%3600)/60)).padStart(2,'0')+' 후 리셋';
-
-  // 업적 뱃지
-  var unlockedCnt = 0;
-  var grid = document.getElementById('badge-grid');
-  if (grid) {
-    grid.innerHTML = BADGE_DEFS.map(function(b){
-      var unlocked = !!badges[b.id];
-      if (unlocked) unlockedCnt++;
-      var isNew = newBadges.some(function(nb){ return nb.id===b.id; });
-      return '<div class="badge-item '+(unlocked?'unlocked':'locked')+'">'+(isNew?'<div class="badge-new">NEW</div>':'')+
-        '<span class="badge-emoji">'+b.emoji+'</span>'+
-        '<div class="badge-name">'+b.name+'</div>'+
-        '<div class="badge-cond">'+b.cond+'</div>'+
-        '</div>';
-    }).join('');
-  }
-  var cntLbl = document.getElementById('badge-cnt-lbl');
-  if (cntLbl) cntLbl.textContent = unlockedCnt+' / '+BADGE_DEFS.length+' 획득';
+  document.getElementById('res-card').style.display = 'block';
+  document.getElementById('res-card').innerHTML =
+    '<div class="res-emoji">'+emoji+'</div>'+
+    '<div class="res-score">'+score+'점</div>'+
+    '<div class="res-sub">'+msg+'</div>'+
+    '<div class="res-breakdown">'+
+    '<div class="res-item"><div class="res-item-n">'+correctCount+'/'+TOTAL+'</div><div class="res-item-l">정답</div></div>'+
+    '<div class="res-item"><div class="res-item-n">'+rate+'%</div><div class="res-item-l">정답률</div></div>'+
+    '<div class="res-item"><div class="res-item-n">'+stats.streak+'일</div><div class="res-item-l">연속 정복</div></div>'+
+    '<div class="res-item"><div class="res-item-n">'+score+'pt</div><div class="res-item-l">총 점수</div></div>'+
+    '</div>'+
+    '<div class="btn-row">'+
+    '<button class="btn-share" onclick="shareResult()">📤 결과 공유</button>'+
+    '<button class="btn-retry" onclick="startGame()">🔄 다시 도전</button>'+
+    '</div>';
 }
 
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════════
 // 공유
-// ═══════════════════════════════════════════════════
-function shareText() {
-  var ml = mode==='spelling'?'맞춤법':'사자성어';
-  var d = new Date();
-  var ds = d.getFullYear()+'.'+(d.getMonth()+1)+'.'+d.getDate();
-  var g = answers.map(function(a){return a?'✅':'❌';}).join(' ');
-  var tier = getTier(stats.totalPts);
-  return '오늘의 한국어 — '+ml+'\n'+ds+' | '+score+'/'+N+'점 | '+tier.name+'\n'+g+'\n나도 도전하기 → https://hangul-quiz-sepia.vercel.app';
-}
-function doCopy() {
-  var t = shareText();
-  if (navigator.clipboard) { navigator.clipboard.writeText(t).then(function(){ toast('클립보드에 복사됐습니다! 🎉'); }); }
-  else { var el=document.createElement('textarea');el.value=t;document.body.appendChild(el);el.select();document.execCommand('copy');document.body.removeChild(el);toast('복사 완료!'); }
-}
-function doShare() {
-  if (navigator.share) { navigator.share({title:'오늘의 한국어',text:shareText()}); }
-  else { doCopy(); toast('결과가 복사됐습니다! 카카오에 붙여넣기 해서 공유하세요 📤'); }
-}
-function toast(msg) {
-  var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
-  setTimeout(function(){t.classList.remove('show');},2400);
+// ════════════════════════════════════════════
+function shareResult(){
+  var modeName = mode==='spelling' ? '맞춤법' : mode==='idiom' ? '사자성어' : '속담';
+  var rate = Math.round(correctCount/TOTAL*100);
+  var txt = '오늘의 한국어 ['+modeName+']\n'+correctCount+'/'+TOTAL+' 정답 ('+rate+'%)\n'+score+'점 획득!\nhttps://hangul-quiz-sepia.vercel.app';
+  if(navigator.share){
+    navigator.share({text:txt}).catch(function(){});
+  } else {
+    navigator.clipboard.writeText(txt).then(function(){ showToast('결과가 복사됐습니다!'); }).catch(function(){ showToast('공유하기: '+txt); });
+  }
 }
 
-// ═══════════════════════════════════════════════════
-// 닉네임
-// ═══════════════════════════════════════════════════
-var MY_NICK = localStorage.getItem('kq_nick') || (function(){
-  var adj=['날카로운','신중한','대담한','현명한','꼼꼼한','빠른'];
-  var noun=['학습자','도전자','고수','달인','탐구자','학자'];
-  var n=adj[Math.floor(Math.random()*adj.length)]+noun[Math.floor(Math.random()*noun.length)];
-  localStorage.setItem('kq_nick',n);return n;
-})();
+// ════════════════════════════════════════════
+// 토스트
+// ════════════════════════════════════════════
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 1800);
+}
 
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════════
 // 초기화
-// ═══════════════════════════════════════════════════
-(function(){
-  var d=new Date(),days=['일','월','화','수','목','금','토'];
-  document.getElementById('today-date').textContent=d.getFullYear()+'.'+(d.getMonth()+1)+'.'+d.getDate()+'('+days[d.getDay()]+')';
-  // 미션 날짜 리셋 확인
-  if (missions.date !== todayStr()) missions={date:todayStr(),dm1:false,dm2:false,dm3:false,dm4:false};
-  updateStatUI();
-  initGame();
-  // 초기 페이지 표시
-  document.getElementById('page-rank').style.display='none';
-  document.getElementById('page-mission').style.display='none';
-})();
+// ════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', function(){
+  var d=new Date();
+  var months=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+  var days=['일','월','화','수','목','금','토'];
+  document.getElementById('today-date').textContent = d.getFullYear()+'년 '+months[d.getMonth()]+' '+d.getDate()+'일 ('+days[d.getDay()]+')';
+  updateStatsUI();
+  startGame();
+});
 </script>
 </body>
 </html>
