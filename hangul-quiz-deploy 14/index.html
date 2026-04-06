@@ -8,6 +8,31 @@
 <meta name="google-site-verification" content="0ldHLLWTQZU_skjDMDa1hleyu0AsgbHjLi5IOB6R30U" />
 <meta name="google-site-verification" content="ZzowaUmC-KBxIkhRe_Rg0wsxM7j28O5L3pvTAnIfEp0" />
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7764966046793364" crossorigin="anonymous"></script>
+
+<!-- OneSignal 웹 푸시 -->
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "813f5150-b096-4b1a-875c-55357c2a05a9",
+      notifyButton: { enable: false },
+      promptOptions: {
+        slidedown: {
+          prompts: [{
+            type: "push",
+            autoPrompt: false,
+            text: {
+              actionMessage: "매일 새로운 한국어 퀴즈 알림을 받아보세요! 🔔",
+              acceptButton: "알림 받기",
+              cancelButton: "괜찮아요"
+            }
+          }]
+        }
+      }
+    });
+  });
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -20,6 +45,45 @@
 html{scroll-behavior:smooth}
 body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(circle at 20% 20%,rgba(200,75,47,.04) 0%,transparent 50%),radial-gradient(circle at 80% 80%,rgba(212,160,23,.06) 0%,transparent 50%);pointer-events:none;z-index:0}
+
+/* ── 결과 화면 알림 카드 ── */
+.push-result-card{
+  margin-top:16px;
+  background:linear-gradient(135deg,var(--ink),#2a1a0a);
+  border-radius:10px;padding:20px;text-align:center;
+  color:var(--paper);
+}
+.push-result-icon{font-size:28px;margin-bottom:8px}
+.push-result-title{font-size:15px;font-weight:700;margin-bottom:4px}
+.push-result-sub{font-size:12px;color:rgba(250,246,239,.6);margin-bottom:14px;line-height:1.5}
+.push-result-btn{
+  background:var(--accent);color:#fff;
+  border:none;border-radius:6px;
+  padding:10px 24px;font-size:14px;font-weight:700;
+  cursor:pointer;font-family:'Noto Sans KR',sans-serif;
+  transition:opacity .2s;
+}
+.push-result-btn:hover{opacity:.85}
+
+/* ── 푸시 알림 배너 ── */
+.push-banner{
+  display:flex;align-items:center;gap:10px;
+  background:var(--ink);color:var(--paper);
+  padding:12px 16px;border-radius:10px;
+  margin-bottom:20px;
+}
+.push-banner-txt{flex:1;font-size:13px;font-weight:600}
+.push-banner-btn{
+  background:var(--accent);color:#fff;
+  border:none;border-radius:6px;
+  padding:7px 14px;font-size:12px;font-weight:700;
+  cursor:pointer;font-family:'Noto Sans KR',sans-serif;
+  white-space:nowrap;
+}
+.push-banner-close{
+  background:none;border:none;color:rgba(255,255,255,.5);
+  font-size:16px;cursor:pointer;padding:0 4px;
+}
 
 /* ── 홈 페이지 ── */
 .home-section{margin-bottom:24px}
@@ -433,6 +497,15 @@ footer{position:relative;z-index:5;border-top:2px solid var(--ink);padding:13px 
   </div>
 </div>
 <div style="max-width:700px;margin:0 auto;padding:32px 20px">
+  <!-- 알림 신청 배너 -->
+  <div class="push-banner" id="push-banner">
+    <div class="push-banner-txt">
+      🔔 매일 오전 9시, 오늘의 퀴즈 알림 받기
+    </div>
+    <button class="push-banner-btn" onclick="requestPushPermission()">알림 신청</button>
+    <button class="push-banner-close" onclick="document.getElementById('push-banner').style.display='none'">✕</button>
+  </div>
+
   <!-- 오늘의 미리보기 카드 -->
   <div class="home-section">
     <div class="home-section-title">🎯 오늘 도전할 수 있는 것</div>
@@ -960,9 +1033,39 @@ function showPage(p) {
   });
   if (p === 'rank') setTimeout(renderRank, 300);
   if (p === 'mission') renderMission();
-  if (p === 'home') updateHomeStats();
+  if (p === 'home') { updateHomeStats(); checkPushBanner(); }
   window.scrollTo(0, 0);
 }
+function getPushCardHTML() {
+  // 이미 허용했거나 물어봤으면 표시 안 함
+  if (localStorage.getItem('push_asked') || (typeof Notification !== 'undefined' && Notification.permission === 'granted')) return '';
+  return '<div class="push-result-card">' +
+    '<div class="push-result-icon">🔔</div>' +
+    '<div class="push-result-title">내일도 도전하고 싶다면</div>' +
+    '<div class="push-result-sub">매일 오전 9시, 새 퀴즈 알림을 받아보세요</div>' +
+    '<button class="push-result-btn" onclick="requestPushPermission()">알림 받기</button>' +
+    '</div>';
+}
+
+function requestPushPermission() {
+  if (window.OneSignalDeferred) {
+    OneSignalDeferred.push(function(OneSignal) {
+      OneSignal.Slidedown.promptPush();
+    });
+    document.getElementById('push-banner').style.display = 'none';
+    localStorage.setItem('push_asked', '1');
+  }
+}
+function checkPushBanner() {
+  // 이미 알림 허용했거나 물어봤으면 배너 숨김
+  var asked = localStorage.getItem('push_asked');
+  var banner = document.getElementById('push-banner');
+  if (!banner) return;
+  if (asked || Notification.permission === 'granted') {
+    banner.style.display = 'none';
+  }
+}
+
 function updateHomeStats() {
   var tier = getTier(stats.totalPts);
   var el1 = document.getElementById('hs-streak');
@@ -1192,7 +1295,8 @@ function showResult() {
     '</div>' +
     reviewH +
     '<button class="re-btn" onclick="initGame()">🔄 다시 풀기 (연습)</button>' +
-    '<button class="re-btn" style="margin-top:6px" onclick="showPage(\'home\')">🏠 홈으로</button>';
+    '<button class="re-btn" style="margin-top:6px" onclick="showPage(\'home\')">🏠 홈으로</button>' +
+    getPushCardHTML();
   rc.classList.add('show');
 
   (function tick(){
