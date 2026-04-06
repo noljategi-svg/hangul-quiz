@@ -124,6 +124,20 @@ main{flex:1;max-width:700px;width:100%;margin:0 auto;padding:24px 20px 60px;posi
 .re-btn{width:100%;padding:10px;background:transparent;border:2px solid var(--border);border-radius:6px;font-family:'Noto Sans KR',sans-serif;font-size:13px;cursor:pointer;color:var(--muted);margin-top:8px;transition:all .15s}
 .re-btn:hover{border-color:var(--ink);color:var(--ink)}
 
+/* 오답 복습 */
+.review-section{margin-top:16px;border:2px solid var(--border);border-radius:8px;overflow:hidden}
+.review-hd{background:var(--ink);color:var(--paper);padding:10px 16px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px}
+.review-item{padding:14px 16px;border-bottom:1px solid var(--border)}
+.review-item:last-child{border-bottom:none}
+.review-q{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.review-wrong{font-size:12px;color:var(--accent);margin-bottom:3px}
+.review-correct{font-size:12px;color:var(--green);margin-bottom:6px}
+.review-exp{font-size:12px;color:var(--muted);line-height:1.6;padding:8px 10px;background:var(--paper2);border-radius:4px;border-left:3px solid var(--gold)}
+
+/* 카카오 공유 버튼 강화 */
+.sh-btn{flex:1;padding:11px 16px;background:#FEE500;border:2px solid #FEE500;border-radius:6px;font-family:'Noto Sans KR',sans-serif;font-size:14px;font-weight:700;color:#000;cursor:pointer;transition:all .15s}
+.sh-btn:hover{opacity:.85}
+
 /* ══ 랭킹 페이지 ══ */
 #page-rank{display:none}
 .rank-section{margin-bottom:24px}
@@ -375,7 +389,7 @@ footer{position:relative;z-index:5;border-top:2px solid var(--ink);padding:13px 
         <div class="mission-icon">🎯</div>
         <div class="mission-info">
           <div class="mission-name">오늘의 퀴즈 완료</div>
-          <div class="mission-desc">맞춤법 또는 사자성어 퀴즈 1회 완료</div>
+          <div class="mission-desc">맞춤법·사자성어·속담 중 1회 완료</div>
           <div class="mission-prog-bar"><div class="mission-prog-fill" id="dm1-fill" style="width:0%"></div></div>
         </div>
         <div class="mission-reward">+30pts</div>
@@ -385,7 +399,7 @@ footer{position:relative;z-index:5;border-top:2px solid var(--ink);padding:13px 
         <div class="mission-icon">⭐</div>
         <div class="mission-info">
           <div class="mission-name">5문제 이상 정답</div>
-          <div class="mission-desc">한 게임에서 5개 이상 맞추기</div>
+          <div class="mission-desc">한 게임에서 8개 이상 맞추기</div>
           <div class="mission-prog-bar"><div class="mission-prog-fill" id="dm2-fill" style="width:0%"></div></div>
         </div>
         <div class="mission-reward">+20pts</div>
@@ -395,7 +409,7 @@ footer{position:relative;z-index:5;border-top:2px solid var(--ink);padding:13px 
         <div class="mission-icon">🔥</div>
         <div class="mission-info">
           <div class="mission-name">맞춤법 + 사자성어 모두 완료</div>
-          <div class="mission-desc">오늘 두 모드 전부 플레이하기</div>
+          <div class="mission-desc">오늘 세 가지 모드 전부 플레이하기</div>
           <div class="mission-prog-bar"><div class="mission-prog-fill" id="dm3-fill" style="width:0%"></div></div>
         </div>
         <div class="mission-reward">+50pts</div>
@@ -442,8 +456,8 @@ footer{position:relative;z-index:5;border-top:2px solid var(--ink);padding:13px 
       <div class="mission-item">
         <div class="mission-icon">⚡</div>
         <div class="mission-info">
-          <div class="mission-name">두 모드 각 3회 완료</div>
-          <div class="mission-desc">맞춤법 3회 + 사자성어 3회</div>
+          <div class="mission-name">세 모드 각 3회 완료</div>
+          <div class="mission-desc">맞춤법 3회 + 사자성어 3회 + 속담 3회</div>
           <div class="mission-prog-bar"><div class="mission-prog-fill" id="wm3-fill" style="width:0%"></div></div>
         </div>
         <div class="mission-reward">+200pts</div>
@@ -668,7 +682,7 @@ var BADGE_DEFS = [
   // 기본
   {id:'first',emoji:'🎉',name:'첫 도전',cond:'퀴즈 첫 완료',check:function(s){ return s.total >= 1; }},
   {id:'perfect1',emoji:'💯',name:'완벽주의자',cond:'만점 1회 달성',check:function(s){ return s.bestScore >= N; }},
-  {id:'allmode',emoji:'🎯',name:'만능 한국어인',cond:'오늘 두 모드 완료',check:function(){ return missions.dm3; }},
+  {id:'allmode',emoji:'🎯',name:'만능 한국어인',cond:'오늘 세 모드 완료',check:function(){ return missions.dm3; }},
   // 연속 스트릭
   {id:'streak3',emoji:'🔥',name:'꾸준한 학생',cond:'3일 연속 플레이',check:function(s){ return s.streak >= 3; }},
   {id:'streak7',emoji:'🔥🔥',name:'한국어 마니아',cond:'7일 연속 플레이',check:function(s){ return s.streak >= 7; }},
@@ -813,6 +827,7 @@ function selectAns(idx) {
   answered = true;
   var q = qs[qi];
   var ok = idx === q.ans;
+  q._myAns = idx;  // 오답 복습용
   if (ok) score++;
   answers.push(ok);
   document.querySelectorAll('.opt').forEach(function(b,i){
@@ -879,8 +894,8 @@ function showResult() {
 
   // 미션 체크
   missions.dm1 = true;
-  if (score >= 5) missions.dm2 = true;
-  if (todayModes.spelling && todayModes.idiom) missions.dm3 = true;
+  if (score >= 8) missions.dm2 = true;
+  if (todayModes.spelling && todayModes.idiom && todayModes.proverb) missions.dm3 = true;
   if (score === N) missions.dm4 = true;
   saveMissions();
 
@@ -927,6 +942,25 @@ function showResult() {
 
   var gridH = '<div class="res-grid">'+answers.map(function(a){return '<div class="r-dot '+(a?'r-ok':'r-ng')+'">'+(a?'✅':'❌')+'</div>';}).join('')+'</div>';
 
+  // 오답 복습
+  var wrongItems = qs.map(function(q,i){ return {q:q, ok:answers[i]}; }).filter(function(x){ return !x.ok; });
+  var reviewH = '';
+  if (wrongItems.length > 0) {
+    reviewH = '<div class="review-section">' +
+      '<div class="review-hd">📖 오답 복습 — '+wrongItems.length+'문제 틀렸어요</div>' +
+      wrongItems.map(function(x){
+        var q = x.q;
+        return '<div class="review-item">' +
+          '<div class="review-q">Q. '+q.q+'</div>' +
+          (q._myAns !== undefined && q._myAns !== q.ans
+            ? '<div class="review-wrong">❌ 내 답: '+q.opts[q._myAns]+'</div>' : '') +
+          '<div class="review-correct">✅ 정답: '+q.opts[q.ans]+'</div>' +
+          '<div class="review-exp">'+q.exp+'</div>' +
+          '</div>';
+      }).join('') +
+      '</div>';
+  }
+
   var badgeH = newBadges.map(function(b){
     return '<div class="badge-alert"><div class="badge-alert-icon">'+b.emoji+'</div><div class="badge-alert-txt"><div class="badge-alert-title">🎉 새 뱃지 획득!</div><div class="badge-alert-name">'+b.name+'</div></div></div>';
   }).join('');
@@ -954,7 +988,8 @@ function showResult() {
     '<button class="cp-btn" style="background:var(--gold);border-color:var(--gold)" onclick="showPage(\'rank\')">🏆 내 랭킹 보기</button>' +
     '<button class="cp-btn" style="background:var(--green);border-color:var(--green)" onclick="showPage(\'mission\')">🎯 미션 확인</button>' +
     '</div>' +
-    '<button class="re-btn" onclick="initGame()">다시 풀기 (연습)</button>';
+    reviewH +
+    '<button class="re-btn" onclick="initGame()">🔄 다시 풀기 (연습)</button>';
   rc.classList.add('show');
 
   (function tick(){
@@ -1143,12 +1178,13 @@ function renderMission() {
 // 공유
 // ═══════════════════════════════════════════════════
 function shareText() {
-  var ml = mode==='spelling'?'맞춤법':'사자성어';
+  var ml = mode==='spelling'?'맞춤법':mode==='idiom'?'사자성어':'속담';
   var d = new Date();
   var ds = d.getFullYear()+'.'+(d.getMonth()+1)+'.'+d.getDate();
-  var g = answers.map(function(a){return a?'✅':'❌';}).join(' ');
+  var g = answers.map(function(a){return a?'🟩':'🟥';}).join('');
   var tier = getTier(stats.totalPts);
-  return '오늘의 한국어 — '+ml+'\n'+ds+' | '+score+'/'+N+'점 | '+tier.name+'\n'+g+'\n나도 도전하기 → https://hangul-quiz-sepia.vercel.app';
+  var perfect = score===N ? ' 🏆 만점!' : '';
+  return '오늘의 한국어 ['+ml+']'+perfect+'\n'+ds+' · '+score+'/'+N+' · '+tier.name+'\n'+g+'\n\n나도 도전하기 → https://hangul-quiz-sepia.vercel.app';
 }
 function doCopy() {
   var t = shareText();
