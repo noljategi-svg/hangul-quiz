@@ -21,7 +21,42 @@ html{scroll-behavior:smooth}
 body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(circle at 20% 20%,rgba(200,75,47,.04) 0%,transparent 50%),radial-gradient(circle at 80% 80%,rgba(212,160,23,.06) 0%,transparent 50%);pointer-events:none;z-index:0}
 
-/* ── 히어로 ── */
+/* ── 홈 페이지 ── */
+.home-section{margin-bottom:24px}
+.home-section-title{font-size:13px;font-weight:700;color:var(--muted);letter-spacing:1px;margin-bottom:12px;text-transform:uppercase}
+.home-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.home-card{
+  background:#fff;border:2px solid var(--border);border-radius:10px;
+  padding:20px 12px;text-align:center;cursor:pointer;
+  transition:all .18s;
+}
+.home-card:hover{border-color:var(--ink);transform:translateY(-2px);box-shadow:4px 4px 0 var(--ink)}
+.home-card-icon{font-size:28px;margin-bottom:8px}
+.home-card-label{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.home-card-sub{font-size:11px;color:var(--muted)}
+.home-status{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  background:#fff;border:2px solid var(--border);border-radius:10px;
+  overflow:hidden;
+}
+.home-status-item{
+  padding:16px 8px;text-align:center;
+  border-right:1px solid var(--border);
+}
+.home-status-item:last-child{border-right:none}
+.home-status-n{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:900;color:var(--accent)}
+.home-status-l{font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:.5px}
+.hero-streak-msg{
+  margin-top:16px;font-size:13px;color:rgba(255,255,255,.7);
+  background:rgba(255,255,255,.08);border-radius:20px;
+  padding:6px 16px;display:inline-block;
+}
+@media(max-width:480px){
+  .home-cards{gap:8px}
+  .home-card{padding:16px 8px}
+  .home-card-icon{font-size:24px}
+  .home-status-n{font-size:18px}
+}
 .hero{
   background:var(--ink);
   position:relative;overflow:hidden;
@@ -368,7 +403,7 @@ footer{position:relative;z-index:5;border-top:2px solid var(--ink);padding:13px 
 
 <header>
   <div>
-    <div class="logo" onclick="showPage('quiz',document.getElementById('ttab-quiz'))" style="cursor:pointer">오늘의 <span>한국어</span></div>
+    <div class="logo" onclick="showPage('home')" style="cursor:pointer">오늘의 <span>한국어</span></div>
     <div style="font-size:11px;color:var(--muted);margin-top:2px;letter-spacing:.5px">매일 바뀌는 퀴즈</div>
   </div>
   <div class="header-info">
@@ -377,7 +412,8 @@ footer{position:relative;z-index:5;border-top:2px solid var(--ink);padding:13px 
   </div>
 </header>
 
-<!-- 히어로 섹션 -->
+<!-- 히어로 홈 페이지 -->
+<div id="page-home">
 <div class="hero">
   <div class="hero-inner">
     <div class="hero-badge">📅 오늘의 도전</div>
@@ -390,10 +426,57 @@ footer{position:relative;z-index:5;border-top:2px solid var(--ink);padding:13px 
       <div class="hero-stat-div"></div>
       <div class="hero-stat"><span class="hero-stat-n">30+</span><span class="hero-stat-l">속담</span></div>
     </div>
-    <button class="hero-cta" onclick="document.querySelector('.mode-tabs').scrollIntoView({behavior:'smooth'})">
+    <button class="hero-cta" onclick="showPage('quiz')">
       지금 바로 도전하기 →
     </button>
+    <div class="hero-streak" id="hero-streak-area"></div>
   </div>
+</div>
+<div style="max-width:700px;margin:0 auto;padding:32px 20px">
+  <!-- 오늘의 미리보기 카드 -->
+  <div class="home-section">
+    <div class="home-section-title">🎯 오늘 도전할 수 있는 것</div>
+    <div class="home-cards">
+      <div class="home-card" onclick="switchMode('spelling');showPage('quiz')">
+        <div class="home-card-icon">✏️</div>
+        <div class="home-card-label">맞춤법</div>
+        <div class="home-card-sub">10문제</div>
+      </div>
+      <div class="home-card" onclick="switchMode('idiom');showPage('quiz')">
+        <div class="home-card-icon">📖</div>
+        <div class="home-card-label">사자성어</div>
+        <div class="home-card-sub">10문제</div>
+      </div>
+      <div class="home-card" onclick="switchMode('proverb');showPage('quiz')">
+        <div class="home-card-icon">🌾</div>
+        <div class="home-card-label">속담</div>
+        <div class="home-card-sub">10문제</div>
+      </div>
+    </div>
+  </div>
+  <!-- 내 현황 -->
+  <div class="home-section">
+    <div class="home-section-title">📊 내 현황</div>
+    <div class="home-status">
+      <div class="home-status-item">
+        <div class="home-status-n" id="hs-streak">0</div>
+        <div class="home-status-l">연속 🔥</div>
+      </div>
+      <div class="home-status-item">
+        <div class="home-status-n" id="hs-total">0</div>
+        <div class="home-status-l">총 플레이</div>
+      </div>
+      <div class="home-status-item">
+        <div class="home-status-n" id="hs-pts">0</div>
+        <div class="home-status-l">누적 점수</div>
+      </div>
+      <div class="home-status-item">
+        <div class="home-status-n" id="hs-tier">—</div>
+        <div class="home-status-l">티어</div>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
 
 <div class="ad-bar">
@@ -401,9 +484,10 @@ footer{position:relative;z-index:5;border-top:2px solid var(--ink);padding:13px 
 </div>
 
 <main>
-  <!-- 상단 탭: 퀴즈 / 랭킹 / 미션 -->
+  <!-- 상단 탭: 홈 / 퀴즈 / 랭킹 / 미션 -->
   <div class="top-tabs">
-    <button class="top-tab active" id="ttab-quiz" onclick="showPage('quiz')">📝 오늘의 퀴즈</button>
+    <button class="top-tab active" id="ttab-home" onclick="showPage('home')">🏠 홈</button>
+    <button class="top-tab" id="ttab-quiz" onclick="showPage('quiz')">📝 퀴즈</button>
     <button class="top-tab" id="ttab-rank" onclick="showPage('rank');setTimeout(renderRank,500)">🏆 랭킹</button>
     <button class="top-tab" id="ttab-mission" onclick="showPage('mission')">🎯 미션
       <span class="new-dot" id="mission-dot"></span>
@@ -868,12 +952,32 @@ function updateStatUI() {
 // 페이지 전환
 // ═══════════════════════════════════════════════════
 function showPage(p) {
-  ['quiz','rank','mission'].forEach(function(id) {
-    document.getElementById('page-'+id).style.display = (id===p) ? 'block' : 'none';
-    document.getElementById('ttab-'+id).classList.toggle('active', id===p);
+  ['home','quiz','rank','mission'].forEach(function(id) {
+    var el = document.getElementById('page-'+id);
+    var tab = document.getElementById('ttab-'+id);
+    if (el) el.style.display = (id===p) ? 'block' : 'none';
+    if (tab) tab.classList.toggle('active', id===p);
   });
   if (p === 'rank') setTimeout(renderRank, 300);
   if (p === 'mission') renderMission();
+  if (p === 'home') updateHomeStats();
+  window.scrollTo(0, 0);
+}
+function updateHomeStats() {
+  var tier = getTier(stats.totalPts);
+  var el1 = document.getElementById('hs-streak');
+  var el2 = document.getElementById('hs-total');
+  var el3 = document.getElementById('hs-pts');
+  var el4 = document.getElementById('hs-tier');
+  if (el1) el1.textContent = stats.streak;
+  if (el2) el2.textContent = stats.total;
+  if (el3) el3.textContent = stats.totalPts;
+  if (el4) { el4.textContent = tier.name; el4.style.color = 'var(--accent)'; }
+  // 연속 스트릭 메시지
+  var sa = document.getElementById('hero-streak-area');
+  if (sa && stats.streak > 0) {
+    sa.innerHTML = '<div class="hero-streak-msg">🔥 '+stats.streak+'일 연속 도전 중! 오늘도 이어가세요</div>';
+  }
 }
 
 // ═══════════════════════════════════════════════════
@@ -1087,7 +1191,8 @@ function showResult() {
     '<button class="cp-btn" style="background:var(--green);border-color:var(--green)" onclick="showPage(\'mission\')">🎯 미션 확인</button>' +
     '</div>' +
     reviewH +
-    '<button class="re-btn" onclick="initGame()">🔄 다시 풀기 (연습)</button>';
+    '<button class="re-btn" onclick="initGame()">🔄 다시 풀기 (연습)</button>' +
+    '<button class="re-btn" style="margin-top:6px" onclick="showPage(\'home\')">🏠 홈으로</button>';
   rc.classList.add('show');
 
   (function tick(){
@@ -1318,9 +1423,8 @@ var MY_NICK = localStorage.getItem('kq_nick') || (function(){
   if (missions.date !== todayStr()) missions={date:todayStr(),dm1:false,dm2:false,dm3:false,dm4:false};
   updateStatUI();
   initGame();
-  // 초기 페이지 표시
-  document.getElementById('page-rank').style.display='none';
-  document.getElementById('page-mission').style.display='none';
+  // 초기 페이지: 홈으로 시작
+  showPage('home');
 })();
 </script>
 </body>
