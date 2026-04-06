@@ -1038,30 +1038,40 @@ function showPage(p) {
 }
 function getPushCardHTML() {
   if (typeof Notification === 'undefined') return '';
-  if (Notification.permission !== 'default') return ''; // 허용 or 차단이면 안 보여줌
+  if (Notification.permission === 'granted') {
+    return '<div class="push-result-card" style="background:linear-gradient(135deg,#1a3a1a,#0a2a0a)">' +
+      '<div class="push-result-icon">✅</div>' +
+      '<div class="push-result-title">알림이 설정되어 있어요!</div>' +
+      '<div class="push-result-sub">매일 오전 9시 새 퀴즈 알림을 받고 있습니다</div>' +
+      '</div>';
+  }
+  if (Notification.permission === 'denied') {
+    return '<div class="push-result-card">' +
+      '<div class="push-result-icon">🔕</div>' +
+      '<div class="push-result-title">알림이 차단되어 있어요</div>' +
+      '<div class="push-result-sub">브라우저 설정에서 알림을 허용하면<br>매일 새 퀴즈 소식을 받을 수 있어요</div>' +
+      '</div>';
+  }
+  // default — 아직 결정 안 한 상태
   return '<div class="push-result-card">' +
     '<div class="push-result-icon">🔔</div>' +
-    '<div class="push-result-title">내일도 도전하고 싶다면</div>' +
+    '<div class="push-result-title">내일도 도전하고 싶다면?</div>' +
     '<div class="push-result-sub">매일 오전 9시, 새 퀴즈 알림을 받아보세요</div>' +
-    '<button class="push-result-btn" onclick="requestPushPermission()">알림 받기</button>' +
+    '<button class="push-result-btn" onclick="requestPushPermission()">🔔 알림 받기</button>' +
     '</div>';
 }
 
 function requestPushPermission() {
   if (typeof Notification === 'undefined') return;
-  localStorage.setItem('push_asked', '1');
-  // 홈 배너 숨김
   var banner = document.getElementById('push-banner');
   if (banner) banner.style.display = 'none';
-
   if (Notification.permission === 'granted') {
-    // 이미 허용 — OneSignal 구독 처리
-    subscribeOneSignal();
-  } else if (Notification.permission !== 'denied') {
-    Notification.requestPermission().then(function(perm) {
-      if (perm === 'granted') subscribeOneSignal();
-    });
+    subscribeOneSignal(); return;
   }
+  if (Notification.permission === 'denied') return;
+  Notification.requestPermission().then(function(perm) {
+    if (perm === 'granted') subscribeOneSignal();
+  });
 }
 
 function subscribeOneSignal() {
@@ -1322,7 +1332,6 @@ function showResult() {
     '<button class="re-btn" style="margin-top:6px" onclick="showPage(\'home\')">🏠 홈으로</button>' +
     getPushCardHTML();
   rc.classList.add('show');
-  autoPromptPush();
 
   (function tick(){
     var n=new Date(), t=new Date(n.getFullYear(),n.getMonth(),n.getDate()+1);
