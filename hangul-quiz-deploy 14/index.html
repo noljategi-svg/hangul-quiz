@@ -21,6 +21,85 @@ html{scroll-behavior:smooth}
 body{font-family:'Noto Sans KR',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(circle at 20% 20%,rgba(200,75,47,.04) 0%,transparent 50%),radial-gradient(circle at 80% 80%,rgba(212,160,23,.06) 0%,transparent 50%);pointer-events:none;z-index:0}
 
+/* ── 히어로 ── */
+.hero{
+  background:var(--ink);
+  position:relative;overflow:hidden;
+  padding:48px 24px 44px;
+  text-align:center;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 10% 50%,rgba(200,75,47,.25) 0%,transparent 60%),
+    radial-gradient(ellipse at 90% 30%,rgba(212,160,23,.2) 0%,transparent 60%);
+  pointer-events:none;
+}
+.hero::after{
+  content:'한국어';
+  position:absolute;right:-20px;bottom:-30px;
+  font-family:'Noto Serif KR',serif;font-size:160px;font-weight:900;
+  color:rgba(255,255,255,.03);line-height:1;pointer-events:none;
+  white-space:nowrap;
+}
+.hero-inner{position:relative;z-index:1;max-width:600px;margin:0 auto}
+.hero-badge{
+  display:inline-block;
+  background:rgba(200,75,47,.2);
+  border:1px solid rgba(200,75,47,.5);
+  color:#f4a58a;
+  font-size:12px;font-weight:700;letter-spacing:1.5px;
+  padding:5px 14px;border-radius:20px;
+  margin-bottom:18px;
+}
+.hero-title{
+  font-family:'Noto Serif KR',serif;
+  font-size:32px;font-weight:900;
+  color:#fff;line-height:1.35;
+  margin-bottom:14px;
+  letter-spacing:-0.5px;
+}
+.hero-title em{
+  color:var(--gold);font-style:normal;
+  border-bottom:2px solid var(--gold);
+}
+.hero-sub{
+  font-size:14px;color:rgba(255,255,255,.6);
+  line-height:1.7;margin-bottom:24px;
+}
+.hero-stats{
+  display:flex;align-items:center;justify-content:center;
+  gap:0;margin-bottom:28px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:10px;padding:14px 0;
+}
+.hero-stat{display:flex;flex-direction:column;align-items:center;flex:1;gap:4px}
+.hero-stat-n{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:900;color:var(--gold)}
+.hero-stat-l{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.5px}
+.hero-stat-div{width:1px;height:32px;background:rgba(255,255,255,.1)}
+.hero-cta{
+  display:inline-block;
+  background:var(--accent);
+  color:#fff;
+  font-family:'Noto Sans KR',sans-serif;
+  font-size:16px;font-weight:700;
+  padding:14px 32px;
+  border:none;border-radius:8px;
+  cursor:pointer;
+  transition:all .2s;
+  letter-spacing:.3px;
+  box-shadow:0 4px 20px rgba(200,75,47,.4);
+}
+.hero-cta:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(200,75,47,.5)}
+.hero-cta:active{transform:translateY(0)}
+
+@media(max-width:480px){
+  .hero{padding:36px 20px 32px}
+  .hero-title{font-size:24px}
+  .hero-cta{font-size:15px;padding:13px 24px}
+}
+
 /* ── 헤더 ── */
 header{position:relative;z-index:10;border-bottom:2px solid var(--ink);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;background:var(--paper)}
 .logo{font-family:'Noto Serif KR',serif;font-weight:900;font-size:22px;color:var(--ink)}
@@ -297,6 +376,25 @@ footer{position:relative;z-index:5;border-top:2px solid var(--ink);padding:13px 
     <div>연속 <span id="streak-display">0</span>일 🔥</div>
   </div>
 </header>
+
+<!-- 히어로 섹션 -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">📅 오늘의 도전</div>
+    <h1 class="hero-title">직장인 10명 중 7명이<br>틀리는 <em>맞춤법</em></h1>
+    <p class="hero-sub">당신의 한국어 실력은 몇 점?<br>매일 10문제 · 맞춤법 · 사자성어 · 속담</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="hero-stat-n">50+</span><span class="hero-stat-l">맞춤법</span></div>
+      <div class="hero-stat-div"></div>
+      <div class="hero-stat"><span class="hero-stat-n">50+</span><span class="hero-stat-l">사자성어</span></div>
+      <div class="hero-stat-div"></div>
+      <div class="hero-stat"><span class="hero-stat-n">30+</span><span class="hero-stat-l">속담</span></div>
+    </div>
+    <button class="hero-cta" onclick="document.querySelector('.mode-tabs').scrollIntoView({behavior:'smooth'})">
+      지금 바로 도전하기 →
+    </button>
+  </div>
+</div>
 
 <div class="ad-bar">
   <div class="ad-ph">📢 광고 영역 (728×90) — 애드센스 승인 후 활성화</div>
