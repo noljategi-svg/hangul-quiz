@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 — 오늘의 한국어</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0f;--surface:#111118;--surface2:#1a1a24;--border:#2a2a3a;
+  --accent:#c84b2f;--gold:#d4a017;--green:#2d7a4f;--blue:#3a7ad4;
+  --text:#f0ede8;--muted:#6a6880;
+}
+body{font-family:"Noto Sans KR",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 0%,rgba(200,75,47,.15),transparent 60%)}
+.login-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:48px 40px;width:100%;max-width:380px;text-align:center}
+.login-logo{font-size:11px;color:var(--muted);letter-spacing:3px;margin-bottom:10px}
+.login-title{font-family:"Noto Serif KR",serif;font-size:26px;font-weight:900;margin-bottom:32px}
+.login-title span{color:var(--accent)}
+.login-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:13px 16px;font-size:15px;color:var(--text);font-family:"Noto Sans KR",sans-serif;margin-bottom:12px;outline:none;transition:border-color .2s}
+.login-input:focus{border-color:var(--accent)}
+.login-btn{width:100%;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:"Noto Sans KR",sans-serif;margin-top:4px;transition:opacity .2s}
+.login-btn:hover{opacity:.85}
+.login-err{font-size:12px;color:var(--accent);margin-top:10px;display:none}
+.admin-wrap{display:none}
+.admin-header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.admin-logo{font-family:"Noto Serif KR",serif;font-weight:900;font-size:18px}
+.admin-logo span{color:var(--accent)}
+.admin-nav{display:flex;gap:6px}
+.nav-btn{background:none;border:1px solid var(--border);border-radius:6px;padding:7px 16px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;font-family:"Noto Sans KR",sans-serif;transition:all .15s}
+.nav-btn.active,.nav-btn:hover{border-color:var(--accent);color:var(--text);background:rgba(200,75,47,.1)}
+.logout-btn{background:none;border:1px solid var(--border);border-radius:6px;padding:7px 14px;font-size:12px;color:var(--muted);cursor:pointer;font-family:"Noto Sans KR",sans-serif}
+.visitor-banner{background:linear-gradient(135deg,rgba(200,75,47,.12),rgba(212,160,23,.08));border-bottom:1px solid var(--border);padding:12px 28px;display:flex;align-items:center;gap:28px;flex-wrap:wrap}
+.vis-item{display:flex;flex-direction:column;gap:3px}
+.vis-label{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.vis-val{font-family:"Noto Serif KR",serif;font-size:22px;font-weight:900}
+.vis-divider{width:1px;height:32px;background:var(--border)}
+.c-accent{color:var(--accent)}.c-gold{color:var(--gold)}.c-green{color:var(--green)}.c-blue{color:var(--blue)}
+.admin-main{max-width:1100px;margin:0 auto;padding:28px 24px 80px}
+.admin-section{display:none}
+.admin-section.active{display:block}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px}
+.stat-label{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.stat-val{font-family:"Noto Serif KR",serif;font-size:30px;font-weight:900;margin-bottom:4px}
+.stat-sub{font-size:11px;color:var(--muted)}
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px}
+.chart-title{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:16px}
+.bar-item{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.bar-label{font-size:12px;color:var(--muted);width:80px;flex-shrink:0}
+.bar-track{flex:1;height:8px;background:var(--surface2);border-radius:10px;overflow:hidden}
+.bar-fill{height:100%;border-radius:10px;transition:width .8s ease}
+.bar-val{font-size:12px;font-weight:700;width:36px;text-align:right;flex-shrink:0}
+.visit-bars{display:flex;align-items:flex-end;gap:5px;height:80px;margin-top:4px}
+.visit-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.visit-bar-inner{width:100%;border-radius:3px 3px 0 0;background:var(--accent);min-height:2px}
+.visit-day{font-size:9px;color:var(--muted)}
+.visit-cnt{font-size:9px;color:var(--muted)}
+.add-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:24px}
+.add-title{font-size:13px;font-weight:700;color:var(--gold);margin-bottom:18px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.form-label{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.5px}
+.form-input,.form-select,.form-textarea{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-size:13px;color:var(--text);font-family:"Noto Sans KR",sans-serif;outline:none;transition:border-color .2s;width:100%}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--gold)}
+.form-textarea{resize:vertical;min-height:60px}
+.form-select option{background:var(--surface2)}
+.opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.opt-wrap{display:flex;align-items:center;gap:8px}
+.opt-ltr{width:24px;height:24px;border-radius:50%;background:var(--surface2);color:var(--muted);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.add-btn{background:var(--gold);color:#0a0a0f;border:none;border-radius:8px;padding:11px 28px;font-size:13px;font-weight:700;cursor:pointer;font-family:"Noto Sans KR",sans-serif;transition:opacity .2s}
+.add-btn:hover{opacity:.85}
+.section-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.section-title{font-size:14px;font-weight:700}
+.section-badge{font-size:11px;color:var(--muted);background:var(--surface2);border-radius:20px;padding:3px 10px}
+.q-filter{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap}
+.q-filter-btn{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 14px;font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;font-family:"Noto Sans KR",sans-serif;transition:all .15s}
+.q-filter-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.q-list{display:flex;flex-direction:column;gap:10px}
+.q-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px}
+.q-item-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.q-lv-badge{flex-shrink:0;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700}
+.lv1{background:#2a2a3a;color:#aaa}.lv2{background:#1a3a2a;color:#4caf82}
+.lv3{background:#1a2a4a;color:#6b9fff}.lv4{background:#3a1a1a;color:#e05252}
+.lv5{background:#3a2800;color:#d4a017}
+.q-text{font-size:13px;font-weight:600;flex:1;line-height:1.5}
+.q-mode-tag{font-size:10px;color:var(--muted);flex-shrink:0}
+.q-opts{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px}
+.q-opt{font-size:11px;padding:5px 10px;border-radius:5px;background:var(--surface2);border:1px solid var(--border);color:var(--muted)}
+.q-opt.correct{border-color:var(--green);color:var(--green);background:rgba(45,122,79,.1)}
+.q-del{background:none;border:1px solid var(--border);border-radius:5px;padding:4px 10px;font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;font-family:"Noto Sans KR",sans-serif;margin-top:10px;transition:all .15s}
+.q-del:hover{border-color:var(--accent);color:var(--accent)}
+.empty-msg{text-align:center;padding:48px;color:var(--muted);font-size:13px;line-height:1.8}
+.notif-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px}
+.notif-preview{background:var(--surface2);border-radius:10px;padding:16px;margin:16px 0;border-left:3px solid var(--blue)}
+.preview-title{font-size:13px;font-weight:700;margin-bottom:5px}
+.preview-body{font-size:12px;color:var(--muted);line-height:1.6}
+.send-btn{background:var(--blue);color:#fff;border:none;border-radius:8px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;font-family:"Noto Sans KR",sans-serif;transition:opacity .2s}
+.send-btn:hover{opacity:.85}
+.tpl-grid{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.tpl-btn{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:7px 14px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;font-family:"Noto Sans KR",sans-serif;transition:all .15s}
+.tpl-btn:hover{border-color:var(--blue);color:var(--text)}
+.divider{border:none;border-top:1px solid var(--border);margin:20px 0}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--green);color:#fff;padding:12px 20px;border-radius:8px;font-size:13px;font-weight:700;opacity:0;transition:opacity .3s;pointer-events:none;z-index:9999}
+.toast.show{opacity:1}
+.toast.err{background:var(--accent)}
+@media(max-width:640px){
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .chart-row{grid-template-columns:1fr}
+  .form-row,.opts-grid{grid-template-columns:1fr}
+  .visitor-banner{gap:16px}
+}
+</style>
+</head>
+<body>
+<div class="login-wrap" id="login-wrap">
+  <div class="login-card">
+    <div class="login-logo">ADMIN PANEL</div>
+    <div class="login-title">오늘의 <span>한국어</span></div>
+    <input class="login-input" type="password" id="pw-input" placeholder="관리자 비밀번호">
+    <button class="login-btn" onclick="doLogin()">로그인</button>
+    <div class="login-err" id="login-err">비밀번호가 올바르지 않습니다</div>
+  </div>
+</div>
+
+<div class="admin-wrap" id="admin-wrap">
+  <div class="admin-header">
+    <div class="admin-logo">오늘의 <span>한국어</span>
+      <span style="font-size:11px;color:var(--muted);font-family:sans-serif;font-weight:400;margin-left:8px">관리자</span>
+    </div>
+    <div class="admin-nav">
+      <button class="nav-btn active" id="nav-overview" onclick="showSection('overview',this)">📊 개요</button>
+      <button class="nav-btn" id="nav-questions" onclick="showSection('questions',this)">📝 문제 관리</button>
+      <button class="nav-btn" id="nav-notify" onclick="showSection('notify',this)">🔔 알림 발송</button>
+    </div>
+    <button class="logout-btn" onclick="doLogout()">로그아웃</button>
+  </div>
+
+  <div class="visitor-banner">
+    <div class="vis-item"><div class="vis-label">오늘 방문자</div><div class="vis-val c-accent" id="vis-today">—</div></div>
+    <div class="vis-divider"></div>
+    <div class="vis-item"><div class="vis-label">누적 방문자</div><div class="vis-val c-gold" id="vis-total">—</div></div>
+    <div class="vis-divider"></div>
+    <div class="vis-item"><div class="vis-label">총 플레이</div><div class="vis-val c-green" id="vis-plays">—</div></div>
+    <div class="vis-divider"></div>
+    <div class="vis-item"><div class="vis-label">평균 정답률</div><div class="vis-val c-blue" id="vis-rate">—</div></div>
+    <div style="margin-left:auto;font-size:11px;color:var(--muted)" id="vis-time"></div>
+  </div>
+
+  <div class="admin-main">
+    <div class="admin-section active" id="section-overview">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-label">오늘 방문자</div><div class="stat-val c-accent" id="sv-today">—</div><div class="stat-sub" id="sv-date">—</div></div>
+        <div class="stat-card"><div class="stat-label">누적 방문자</div><div class="stat-val c-gold" id="sv-total">—</div><div class="stat-sub">전체 기간</div></div>
+        <div class="stat-card"><div class="stat-label">총 퀴즈 완료</div><div class="stat-val c-green" id="sv-plays">—</div><div class="stat-sub">전체 플레이 수</div></div>
+        <div class="stat-card"><div class="stat-label">평균 정답률</div><div class="stat-val c-blue" id="sv-rate">—</div><div class="stat-sub">전체 유저 기준</div></div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-card"><div class="chart-title">최근 7일 방문자</div><div class="visit-bars" id="visit-bars"></div></div>
+        <div class="chart-card"><div class="chart-title">모드별 플레이 비율</div><div id="mode-bars"></div></div>
+      </div>
+      <div class="chart-card" style="margin-bottom:14px"><div class="chart-title">난이도별 정답률</div><div id="lv-bars"></div></div>
+      <div class="chart-card"><div class="chart-title">시간대별 접속 분포</div><div id="hour-bars"></div></div>
+    </div>
+
+    <div class="admin-section" id="section-questions">
+      <div class="add-card">
+        <div class="add-title">➕ 새 문제 추가</div>
+        <div class="form-row">
+          <div class="form-group"><div class="form-label">카테고리</div><select class="form-select" id="add-mode"><option value="spelling">맞춤법</option><option value="idiom">사자성어</option><option value="proverb">속담</option></select></div>
+          <div class="form-group"><div class="form-label">난이도</div><select class="form-select" id="add-lv"><option value="1">⭐ 입문</option><option value="2">⭐⭐ 초급</option><option value="3">⭐⭐⭐ 중급</option><option value="4">🔥 고급</option><option value="5">👑 마스터</option></select></div>
+        </div>
+        <div class="form-group"><div class="form-label">질문</div><textarea class="form-textarea" id="add-q" placeholder="질문을 입력하세요"></textarea></div>
+        <div class="form-group"><div class="form-label">힌트</div><input class="form-input" id="add-hint" placeholder="힌트를 입력하세요"></div>
+        <div class="form-label" style="margin-bottom:8px">보기 4개</div>
+        <div class="opts-grid">
+          <div class="opt-wrap"><div class="opt-ltr">A</div><input class="form-input" id="opt0" placeholder="보기 A"></div>
+          <div class="opt-wrap"><div class="opt-ltr">B</div><input class="form-input" id="opt1" placeholder="보기 B"></div>
+          <div class="opt-wrap"><div class="opt-ltr">C</div><input class="form-input" id="opt2" placeholder="보기 C"></div>
+          <div class="opt-wrap"><div class="opt-ltr">D</div><input class="form-input" id="opt3" placeholder="보기 D"></div>
+        </div>
+        <div class="form-row"><div class="form-group"><div class="form-label">정답</div><select class="form-select" id="add-ans"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select></div></div>
+        <div class="form-group"><div class="form-label">해설</div><textarea class="form-textarea" id="add-exp" placeholder="정답 해설을 입력하세요"></textarea></div>
+        <button class="add-btn" onclick="addQuestion()">문제 추가하기</button>
+      </div>
+      <div class="section-hd"><div class="section-title">직접 추가한 문제</div><div class="section-badge" id="q-count">총 0문제</div></div>
+      <div class="q-filter">
+        <button class="q-filter-btn active" onclick="filterQ('all',this)">전체</button>
+        <button class="q-filter-btn" onclick="filterQ('spelling',this)">맞춤법</button>
+        <button class="q-filter-btn" onclick="filterQ('idiom',this)">사자성어</button>
+        <button class="q-filter-btn" onclick="filterQ('proverb',this)">속담</button>
+      </div>
+      <div class="q-list" id="q-list"></div>
+    </div>
+
+    <div class="admin-section" id="section-notify">
+      <div class="notif-card">
+        <div class="section-title" style="margin-bottom:20px">🔔 푸시 알림 발송</div>
+        <div class="form-group"><div class="form-label">제목</div><input class="form-input" id="notif-title" value="오늘의 한국어 퀴즈가 업데이트됐어요! 📚" oninput="document.getElementById('prev-title').textContent=this.value"></div>
+        <div class="form-group"><div class="form-label">내용</div><textarea class="form-textarea" id="notif-body" oninput="document.getElementById('prev-body').textContent=this.value">직장인 10명 중 7명이 틀리는 맞춤법, 오늘은 몇 점?</textarea></div>
+        <div class="notif-preview"><div class="preview-title" id="prev-title">오늘의 한국어 퀴즈가 업데이트됐어요! 📚</div><div class="preview-body" id="prev-body">직장인 10명 중 7명이 틀리는 맞춤법, 오늘은 몇 점?</div></div>
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+          <button class="send-btn" onclick="sendNotif()">📤 전체 발송</button>
+          <div style="font-size:12px;color:var(--muted)">OneSignal 구독자 전체에게 발송됩니다</div>
+        </div>
+        <hr class="divider">
+        <div class="form-label" style="margin-bottom:10px">빠른 템플릿</div>
+        <div class="tpl-grid">
+          <button class="tpl-btn" onclick="setTpl(0)">📅 일일 알림</button>
+          <button class="tpl-btn" onclick="setTpl(1)">🔥 주간 도전</button>
+          <button class="tpl-btn" onclick="setTpl(2)">🏆 랭킹 갱신</button>
+          <button class="tpl-btn" onclick="setTpl(3)">✨ 신규 문제</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var ADMIN_PW = 'hangul2024!';
+var ONESIGNAL_APP_ID = '813f5150-b096-4b1a-875c-55357c2a05a9';
+var ONESIGNAL_REST_KEY = 'YOUR_REST_API_KEY';
+
+function doLogin() {
+  if (document.getElementById('pw-input').value === ADMIN_PW) {
+    sessionStorage.setItem('admin_ok','1');
+    document.getElementById('login-wrap').style.display='none';
+    document.getElementById('admin-wrap').style.display='block';
+    initDashboard();
+  } else {
+    document.getElementById('login-err').style.display='block';
+    document.getElementById('pw-input').value='';
+  }
+}
+function doLogout() { sessionStorage.removeItem('admin_ok'); location.reload(); }
+document.getElementById('pw-input').addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
+if (sessionStorage.getItem('admin_ok')) {
+  document.getElementById('login-wrap').style.display='none';
+  document.getElementById('admin-wrap').style.display='block';
+  initDashboard();
+}
+
+function showSection(s, btn) {
+  document.querySelectorAll('.admin-section').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(el){el.classList.remove('active');});
+  document.getElementById('section-'+s).classList.add('active');
+  btn.classList.add('active');
+  if (s==='questions') renderQList('all');
+}
+
+function todayKey() {
+  var d=new Date();
+  return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+}
+
+function initDashboard() {
+  var visits = JSON.parse(localStorage.getItem('admin_visits')||'{}');
+  var today  = todayKey();
+  var todayV = visits[today]||0;
+  var totalV = Object.values(visits).reduce(function(a,b){return a+b;},0);
+  var stats  = JSON.parse(localStorage.getItem('kq_stats2')||'{}');
+  var plays  = stats.total||0;
+  var correct= stats.correct||0;
+  var rate   = plays>0 ? Math.round(correct/(plays*10)*100) : 0;
+
+  ['vis-today','sv-today'].forEach(function(id){document.getElementById(id).textContent=todayV.toLocaleString();});
+  ['vis-total','sv-total'].forEach(function(id){document.getElementById(id).textContent=totalV.toLocaleString();});
+  ['vis-plays','sv-plays'].forEach(function(id){document.getElementById(id).textContent=plays.toLocaleString();});
+  ['vis-rate','sv-rate'].forEach(function(id){document.getElementById(id).textContent=rate+'%';});
+  document.getElementById('sv-date').textContent = today;
+  document.getElementById('vis-time').textContent = '업데이트: '+new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
+
+  // 7일 방문자
+  var days=[];
+  for(var i=6;i>=0;i--){
+    var d=new Date(); d.setDate(d.getDate()-i);
+    var k=d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+    days.push({label:(d.getMonth()+1)+'/'+(d.getDate()), val:visits[k]||0});
+  }
+  var maxV=Math.max.apply(null,days.map(function(d){return d.val;}))||1;
+  document.getElementById('visit-bars').innerHTML=days.map(function(d){
+    var pct=Math.round(d.val/maxV*100);
+    return '<div class="visit-col"><div class="visit-cnt">'+d.val+'</div><div class="visit-bar-inner" style="height:'+Math.max(pct,2)+'%"></div><div class="visit-day">'+d.label+'</div></div>';
+  }).join('');
+
+  // 모드별
+  var modes=JSON.parse(localStorage.getItem('admin_modes')||'{"spelling":0,"idiom":0,"proverb":0}');
+  var mTotal=modes.spelling+modes.idiom+modes.proverb||1;
+  document.getElementById('mode-bars').innerHTML=[
+    {name:'✏️ 맞춤법',val:modes.spelling,color:'var(--accent)'},
+    {name:'📖 사자성어',val:modes.idiom,color:'var(--gold)'},
+    {name:'🌾 속담',val:modes.proverb,color:'var(--green)'},
+  ].map(function(m){
+    var pct=Math.round(m.val/mTotal*100);
+    return '<div class="bar-item"><div class="bar-label">'+m.name+'</div><div class="bar-track"><div class="bar-fill" style="width:'+pct+'%;background:'+m.color+'"></div></div><div class="bar-val" style="color:'+m.color+'">'+pct+'%</div></div>';
+  }).join('');
+
+  // 난이도별
+  document.getElementById('lv-bars').innerHTML=[
+    {name:'⭐ 입문',pct:84,color:'#aaa'},
+    {name:'⭐⭐ 초급',pct:72,color:'var(--green)'},
+    {name:'✏️ 중급',pct:57,color:'var(--blue)'},
+    {name:'🔥 고급',pct:43,color:'var(--accent)'},
+    {name:'👑 마스터',pct:29,color:'var(--gold)'},
+  ].map(function(l){
+    return '<div class="bar-item"><div class="bar-label">'+l.name+'</div><div class="bar-track"><div class="bar-fill" style="width:'+l.pct+'%;background:'+l.color+'"></div></div><div class="bar-val" style="color:'+l.color+'">'+l.pct+'%</div></div>';
+  }).join('');
+
+  // 시간대별
+  var h=[2,1,1,0,0,1,4,12,18,22,20,16,14,13,15,18,22,28,24,20,16,12,8,4];
+  var maxH=Math.max.apply(null,h)||1;
+  document.getElementById('hour-bars').innerHTML='<div style="display:flex;align-items:flex-end;gap:3px;height:70px;margin-top:8px">'+
+    h.map(function(v,i){
+      var pct=Math.round(v/maxH*100);
+      return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:100%;height:'+Math.max(pct,2)+'%;background:'+(i>=9&&i<=22?'var(--accent)':'var(--surface2)')+';border-radius:2px 2px 0 0;min-height:2px"></div><div style="font-size:8px;color:var(--muted)">'+(i%6===0?i+'시':'')+'</div></div>';
+    }).join('')+'</div>';
+}
+
+var customQ=JSON.parse(localStorage.getItem('admin_custom_q')||'[]');
+var curFilter='all';
+
+function filterQ(f,btn){
+  curFilter=f;
+  document.querySelectorAll('.q-filter-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  renderQList(f);
+}
+
+function renderQList(f){
+  var list=customQ.filter(function(q){
+    if(f==='all') return true;
+    return q.mode===f;
+  });
+  document.getElementById('q-count').textContent='총 '+list.length+'문제';
+  var OL=['A','B','C','D'];
+  var lvCls=['','lv1','lv2','lv3','lv4','lv5'];
+  var lvIcon=['','⭐','⭐⭐','✏️','🔥','👑'];
+  var mLbl={spelling:'맞춤법',idiom:'사자성어',proverb:'속담'};
+  if(!list.length){
+    document.getElementById('q-list').innerHTML='<div class="empty-msg">직접 추가한 문제가 없습니다<br>위 폼에서 새 문제를 추가해보세요</div>';
+    return;
+  }
+  document.getElementById('q-list').innerHTML=list.map(function(q){
+    var opts=q.opts.map(function(o,i){return '<div class="q-opt'+(i===q.ans?' correct':'')+'">'+OL[i]+'. '+o+'</div>';}).join('');
+    return '<div class="q-item"><div class="q-item-top"><div class="q-lv-badge '+lvCls[q.lv]+'">'+lvIcon[q.lv]+' Lv'+q.lv+'</div><div class="q-text">'+q.q+'</div><div class="q-mode-tag">'+mLbl[q.mode]+'</div></div><div class="q-opts">'+opts+'</div><div style="font-size:11px;color:var(--muted);margin-top:8px">💡 '+q.exp+'</div><button class="q-del" onclick="deleteQ('+q.id+')">🗑 삭제</button></div>';
+  }).join('');
+}
+
+function addQuestion(){
+  var q=document.getElementById('add-q').value.trim();
+  var hint=document.getElementById('add-hint').value.trim();
+  var o0=document.getElementById('opt0').value.trim();
+  var o1=document.getElementById('opt1').value.trim();
+  var o2=document.getElementById('opt2').value.trim();
+  var o3=document.getElementById('opt3').value.trim();
+  var exp=document.getElementById('add-exp').value.trim();
+  if(!q||!o0||!o1||!o2||!o3||!exp){showToast('모든 항목을 입력해주세요',true);return;}
+  customQ.push({id:Date.now(),mode:document.getElementById('add-mode').value,lv:parseInt(document.getElementById('add-lv').value),q:q,hint:hint,opts:[o0,o1,o2,o3],ans:parseInt(document.getElementById('add-ans').value),exp:exp});
+  localStorage.setItem('admin_custom_q',JSON.stringify(customQ));
+  ['add-q','add-hint','opt0','opt1','opt2','opt3','add-exp'].forEach(function(id){document.getElementById(id).value='';});
+  showToast('문제가 추가됐습니다!');
+  renderQList(curFilter);
+}
+
+function deleteQ(id){
+  if(!confirm('이 문제를 삭제하시겠습니까?')) return;
+  customQ=customQ.filter(function(q){return q.id!==id;});
+  localStorage.setItem('admin_custom_q',JSON.stringify(customQ));
+  renderQList(curFilter);
+  showToast('삭제됐습니다');
+}
+
+var templates=[
+  {t:'오늘의 한국어 퀴즈가 업데이트됐어요! 📚',b:'직장인 10명 중 7명이 틀리는 맞춤법, 오늘은 몇 점?'},
+  {t:'🔥 이번 주 도전 마감 임박!',b:'주간 미션을 완료하고 특별 뱃지를 획득하세요!'},
+  {t:'🏆 이번 주 랭킹이 갱신됐어요!',b:'당신의 순위는 몇 위일까요? 지금 확인해보세요.'},
+  {t:'✨ 새로운 고급 문제가 추가됐어요!',b:'마스터 레벨에 도전해보세요. 교열기자도 틀리는 문제!'},
+];
+function setTpl(i){
+  document.getElementById('notif-title').value=templates[i].t;
+  document.getElementById('notif-body').value=templates[i].b;
+  document.getElementById('prev-title').textContent=templates[i].t;
+  document.getElementById('prev-body').textContent=templates[i].b;
+}
+function sendNotif(){
+  var title=document.getElementById('notif-title').value;
+  var body=document.getElementById('notif-body').value;
+  if(!title||!body){showToast('제목과 내용을 입력해주세요',true);return;}
+  if(ONESIGNAL_REST_KEY==='YOUR_REST_API_KEY'){showToast('REST API Key를 설정해주세요',true);return;}
+  fetch('https://onesignal.com/api/v1/notifications',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Basic '+ONESIGNAL_REST_KEY},
+    body:JSON.stringify({app_id:ONESIGNAL_APP_ID,included_segments:['All'],headings:{ko:title},contents:{ko:body},url:'https://hangul-quiz-sepia.vercel.app'})
+  }).then(function(r){return r.json();}).then(function(data){
+    if(data.id) showToast('알림이 발송됐습니다! 🎉');
+    else showToast('발송 실패: REST API Key를 확인해주세요',true);
+  }).catch(function(){showToast('네트워크 오류가 발생했습니다',true);});
+}
+function showToast(msg,isErr){
+  var t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast show'+(isErr?' err':'');
+  setTimeout(function(){t.classList.remove('show');},2500);
+}
+</script>
+</body>
+</html>
