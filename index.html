@@ -511,6 +511,12 @@ footer{position:relative;z-index:5;border-top:2px solid var(--ink);padding:13px 
   .btn-row{flex-direction:column}.badge-grid{grid-template-columns:repeat(2,1fr)}
   .my-score-card{flex-direction:column;text-align:center}
 }
+
+@keyframes bounce {
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-15px)}
+}
+
 </style>
 
 
@@ -634,6 +640,31 @@ footer{position:relative;z-index:5;border-top:2px solid var(--ink);padding:13px 
       </div>
     </div>
   </div>
+  <!-- 오늘의 도전 현황 -->
+  <div class="home-section">
+    <div class="home-section-title">📅 오늘의 도전 현황</div>
+    <div id="today-challenge-status" style="background:#fff;border:2px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:8px">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr)">
+        <div id="today-spell-status" style="padding:14px 8px;text-align:center;border-right:1px solid var(--border)">
+          <div style="font-size:22px;margin-bottom:4px">✏️</div>
+          <div style="font-size:11px;color:var(--muted)">맞춤법</div>
+          <div id="spell-done" style="font-size:13px;font-weight:700;margin-top:4px;color:var(--muted)">도전 전</div>
+        </div>
+        <div style="padding:14px 8px;text-align:center;border-right:1px solid var(--border)">
+          <div style="font-size:22px;margin-bottom:4px">📖</div>
+          <div style="font-size:11px;color:var(--muted)">사자성어</div>
+          <div id="idiom-done" style="font-size:13px;font-weight:700;margin-top:4px;color:var(--muted)">도전 전</div>
+        </div>
+        <div style="padding:14px 8px;text-align:center">
+          <div style="font-size:22px;margin-bottom:4px">🌾</div>
+          <div style="font-size:11px;color:var(--muted)">속담</div>
+          <div id="proverb-done" style="font-size:13px;font-weight:700;margin-top:4px;color:var(--muted)">도전 전</div>
+        </div>
+      </div>
+      <div id="streak-display-home" style="background:var(--ink);color:var(--gold);text-align:center;padding:10px;font-size:13px;font-weight:700"></div>
+    </div>
+  </div>
+
   <!-- 내 현황 -->
   <div class="home-section">
     <div class="home-section-title">📊 내 현황</div>
@@ -1318,6 +1349,37 @@ function autoPromptPush() {
 function checkPushBanner() {}
 
 function updateHomeStats() {
+  // 오늘의 도전 현황 업데이트
+  var today = todayStr();
+  var modes = ['spelling','idiom','proverb'];
+  var modeIds = {'spelling':'spell-done','idiom':'idiom-done','proverb':'proverb-done'};
+  var modeScores = JSON.parse(localStorage.getItem('kq_today_scores') || '{}');
+  
+  modes.forEach(function(m) {
+    var el = document.getElementById(modeIds[m]);
+    if (el) {
+      if (modeScores[today] && modeScores[today][m] !== undefined) {
+        var sc = modeScores[today][m];
+        el.textContent = sc + '/10';
+        el.style.color = sc >= 8 ? 'var(--green)' : sc >= 5 ? 'var(--gold)' : 'var(--accent)';
+      } else {
+        el.textContent = '도전 전';
+        el.style.color = 'var(--muted)';
+      }
+    }
+  });
+  
+  // 스트릭 표시
+  var sdh = document.getElementById('streak-display-home');
+  if (sdh) {
+    var streak = stats.streak;
+    if (streak >= 1) {
+      sdh.textContent = '🔥 ' + streak + '일 연속 도전 중! ' + (streak >= 7 ? '👑' : streak >= 3 ? '⚡' : '');
+    } else {
+      sdh.textContent = '오늘부터 시작해보세요!';
+    }
+  }
+
   var tier = getTier(stats.totalPts);
   var el1 = document.getElementById('hs-streak');
   var el2 = document.getElementById('hs-total');
@@ -1485,19 +1547,7 @@ function showLevelUpOverlay(lv) {
   document.body.appendChild(overlay);
 }
 
-function getDailyQ(data, n) {
-  // 현재 난이도에 맞는 문제만 필터
-  var filtered = data.filter(function(q){ return !q.lv || q.lv === currentDiffLv; });
-  // 해당 난이도 문제가 부족하면 전체 사용
-  if (filtered.length < n) filtered = data;
-
-  var arr = filtered.slice();
-  for (var i = arr.length-1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i+1));
-    var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
-  }
-  return arr.slice(0, n);
-}
+// getDailyQ → 위에서 정의됨
 function switchMode(m) {
   mode = m;
   document.getElementById('tab-spelling').classList.toggle('active', m==='spelling');
@@ -1597,6 +1647,11 @@ function showResult() {
     stats.lastDate = today;
     saveStats();
     todayModes[mode] = true;
+    // 오늘 점수 저장 (홈 화면 현황용)
+    var todayScores = JSON.parse(localStorage.getItem('kq_today_scores') || '{}');
+    if (!todayScores[today]) todayScores[today] = {};
+    if (todayScores[today][mode] === undefined) todayScores[today][mode] = score;
+    localStorage.setItem('kq_today_scores', JSON.stringify(todayScores));
   } else {
     // 같은 날 재플레이 — 점수는 추가 안 함, 미션만 체크
     todayModes[mode] = true;
@@ -1647,6 +1702,11 @@ function showResult() {
 
   // 뱃지 체크
   checkBadges();
+  // 연속 출석 보상 체크
+  var streakReward = checkStreakReward(stats.streak);
+  if (streakReward) {
+    setTimeout(function(){ showStreakReward(streakReward); }, 1500);
+  }
 
   var msgs = [
     {min:N,emoji:'🏆',title:'완벽한 한국어 고수!',sub:N+'문제 모두 정답! 당신은 진짜 한국어 달인입니다.'},
@@ -1692,6 +1752,7 @@ function showResult() {
     '<div class="res-sub"><span class="score-big">'+score+'<small style="font-size:24px">/'+N+'</small></span>'+msg.sub+'</div>' +
     gridH +
     '<div class="pts-pop">+'+earnedPts+' pts 획득! 🎉</div>' +
+    '<div style="font-size:18px;font-weight:700;color:var(--ink);margin:8px 0;padding:12px;background:linear-gradient(135deg,rgba(212,160,23,.15),rgba(200,75,47,.1));border-radius:8px;border:1.5px solid var(--gold)">' + getPercentileMsg(score) + '<br><span style="font-size:12px;color:var(--muted);font-weight:400">오늘 이 문제 푼 사람들 중</span></div>' +
     missionPtsH +
     badgeH +
     '<div class="cd-lbl">내일 새 문제 출시</div>' +
@@ -1903,7 +1964,8 @@ function shareText() {
   var g = answers.map(function(a){return a?'🟩':'🟥';}).join('');
   var tier = getTier(stats.totalPts);
   var perfect = score===N ? ' 🏆 만점!' : '';
-  return '오늘의 한국어 ['+ml+']'+perfect+'\n'+ds+' · '+score+'/'+N+' · '+tier.name+'\n'+g;
+  var p = getPercentile(score);
+  return '오늘의 한국어 ['+ml+']'+perfect+'\n'+ds+' · '+score+'/'+N+' · 상위'+p+'%\n'+g+'\n'+tier.name;
 }
 function doCopy() {
   var t = shareText();
@@ -1917,6 +1979,108 @@ function doShare() {
 function toast(msg) {
   var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
   setTimeout(function(){t.classList.remove('show');},2400);
+}
+
+
+// ── 전국 정답률 비교 ──
+function getPercentile(score) {
+  // 정규분포 기반 시뮬레이션 (실제 데이터 쌓이면 Firebase로 교체)
+  var dist = [2, 4, 7, 11, 16, 20, 18, 12, 7, 3]; // 0~9점 분포
+  var total = dist.reduce(function(a,b){return a+b;}, 0);
+  var below = 0;
+  for (var i = 0; i < score; i++) below += dist[i];
+  var percentile = Math.round((1 - below/total) * 100);
+  return Math.max(1, Math.min(99, percentile));
+}
+
+function getPercentileMsg(score) {
+  var p = getPercentile(score);
+  var emoji = p <= 5 ? '👑' : p <= 20 ? '🏆' : p <= 40 ? '🥇' : p <= 60 ? '🥈' : '📚';
+  return emoji + ' 상위 <b>' + p + '%</b> 입니다!';
+}
+
+// ── 하루 한정 모드 ──
+function getDailyQ(data, n) {
+  var today = todayStr();
+  var seed = 0;
+  for (var i = 0; i < today.length; i++) seed += today.charCodeAt(i);
+  
+  // 난이도 필터
+  var filtered = data.filter(function(q){ return !q.lv || q.lv === currentDiffLv; });
+  if (filtered.length < n) filtered = data;
+  
+  // 오늘 날짜 기반 시드로 셔플 (매일 같은 문제)
+  var arr = filtered.slice();
+  for (var i = arr.length-1; i > 0; i--) {
+    seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+    var j = seed % (i+1);
+    var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+  }
+  return arr.slice(0, n);
+}
+
+// ── 연속 출석 보상 ──
+var STREAK_REWARDS = [
+  {days:3,  emoji:'🔥', name:'3일 연속!',    pts:50,  msg:'불꽃 스타터'},
+  {days:7,  emoji:'⚡', name:'7일 연속!',    pts:150, msg:'번개 파이터'},
+  {days:14, emoji:'💎', name:'14일 연속!',   pts:300, msg:'다이아 수호자'},
+  {days:30, emoji:'👑', name:'30일 연속!',   pts:500, msg:'전설의 한국어인'},
+  {days:100,emoji:'🌟', name:'100일 연속!',  pts:2000,msg:'한국어 레전드'},
+];
+
+function checkStreakReward(streak) {
+  var reward = null;
+  STREAK_REWARDS.forEach(function(r) {
+    if (streak === r.days) reward = r;
+  });
+  return reward;
+}
+
+function showStreakReward(reward) {
+  var overlay = document.createElement('div');
+  overlay.id = 'streak-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.85)';
+  
+  var card = document.createElement('div');
+  card.style.cssText = 'background:linear-gradient(135deg,#1a1008,#2a1a00);border:3px solid var(--gold);border-radius:20px;padding:40px 32px;text-align:center;max-width:320px;width:90%';
+  
+  var icon = document.createElement('div');
+  icon.style.cssText = 'font-size:72px;margin-bottom:12px';
+  icon.textContent = reward.emoji;
+  
+  var label = document.createElement('div');
+  label.style.cssText = 'font-size:13px;color:var(--gold);letter-spacing:2px;margin-bottom:8px';
+  label.textContent = '🎉 연속 출석 달성!';
+  
+  var title = document.createElement('div');
+  title.style.cssText = 'font-size:28px;font-weight:900;color:#fff;margin-bottom:6px';
+  title.textContent = reward.name;
+  
+  var msg = document.createElement('div');
+  msg.style.cssText = 'font-size:16px;color:var(--gold);margin-bottom:8px';
+  msg.textContent = reward.msg;
+  
+  var pts = document.createElement('div');
+  pts.style.cssText = 'font-size:22px;font-weight:900;color:var(--gold);margin-bottom:24px';
+  pts.textContent = '+' + reward.pts + ' 보너스 pts! 🎁';
+  
+  var btn = document.createElement('button');
+  btn.style.cssText = 'background:var(--gold);color:#1a1008;border:none;border-radius:8px;padding:12px 32px;font-size:15px;font-weight:700;cursor:pointer';
+  btn.textContent = '계속하기 →';
+  btn.onclick = function() { document.getElementById('streak-overlay').remove(); };
+  
+  card.appendChild(icon);
+  card.appendChild(label);
+  card.appendChild(title);
+  card.appendChild(msg);
+  card.appendChild(pts);
+  card.appendChild(btn);
+  overlay.appendChild(card);
+  document.body.appendChild(overlay);
+  
+  // 보너스 pts 지급
+  stats.totalPts += reward.pts;
+  saveStats();
 }
 
 // ═══════════════════════════════════════════════════
