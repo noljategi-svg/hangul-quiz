@@ -1,4 +1,6 @@
 // 오늘의 한국어 — Service Worker
+importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js');
+
 var CACHE_NAME = 'hangul-quiz-v3';
 var STATIC_CACHE = 'hangul-quiz-static-v3';
 
