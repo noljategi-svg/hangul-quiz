@@ -1944,17 +1944,17 @@ var PROVERB = [
       <div class="home-card" onclick="switchMode('spelling');showPage('quiz')">
         <div class="home-card-icon">✏️</div>
         <div class="home-card-label">맞춤법</div>
-        <div class="home-card-sub">10문제</div>
+        <div class="home-card-sub" id="home-lv-spelling">10문제</div>
       </div>
       <div class="home-card" onclick="switchMode('idiom');showPage('quiz')">
         <div class="home-card-icon">📖</div>
         <div class="home-card-label">사자성어</div>
-        <div class="home-card-sub">10문제</div>
+        <div class="home-card-sub" id="home-lv-idiom">10문제</div>
       </div>
       <div class="home-card" onclick="switchMode('proverb');showPage('quiz')">
         <div class="home-card-icon">🌾</div>
         <div class="home-card-label">속담</div>
-        <div class="home-card-sub">10문제</div>
+        <div class="home-card-sub" id="home-lv-proverb">10문제</div>
       </div>
     </div>
   </div>
@@ -2237,6 +2237,9 @@ function getLevel(xp) {
   return LEVELS[0];
 }
 function getXPFromStats() {
+  return getModeXP(mode);  // 카테고리별 독립 XP
+}
+function getGlobalXP() {
   return stats.totalPts || 0;
 }
 function getLevelProgress(xp) {
@@ -2250,6 +2253,11 @@ var qs = [], qi = 0, score = 0, answers = [], answered = false;
 var todayModes = { spelling: false, idiom: false, proverb: false }; // 오늘 완료한 모드
 
 var stats = JSON.parse(localStorage.getItem('kq_stats2') || '{"streak":0,"lastDate":"","total":0,"correct":0,"totalPts":0,"bestScore":0}');
+// 카테고리별 독립 XP
+var modeXP = JSON.parse(localStorage.getItem('kq_mode_xp') || '{"spelling":0,"idiom":0,"proverb":0}');
+function getModeXP(m) { return modeXP[m] || 0; }
+function getModeLevel(m) { return getLevel(getModeXP(m)); }
+function saveModeXP() { localStorage.setItem('kq_mode_xp', JSON.stringify(modeXP)); }
 var missions = JSON.parse(localStorage.getItem('kq_missions') || '{"date":"","dm1":false,"dm2":false,"dm3":false,"dm4":false}');
 var weeklyMissions = JSON.parse(localStorage.getItem('kq_weekly') || '{"week":"","wm1":0,"wm2":0,"wm3":0,"wm4":0,"spellCount":0,"idiomCount":0,"perfectCount":0,"totalScore":0,"totalQ":0,"daySet":[]}');
 var badges = JSON.parse(localStorage.getItem('kq_badges') || '{}');
@@ -2541,6 +2549,14 @@ function updateHomeStats() {
   } else {
     alertArea.innerHTML = '';
   }
+
+  // 홈 카드 카테고리별 등급 표시
+  ['spelling','idiom','proverb'].forEach(function(m) {
+    var el = document.getElementById('home-lv-' + m);
+    if (!el) return;
+    var lv = getModeLevel(m);
+    el.innerHTML = '<span style="color:' + lv.color + ';font-weight:700">' + lv.icon + ' ' + lv.name + '</span>';
+  });
 }
 
 // ═══════════════════════════════════════════════════
@@ -2557,6 +2573,8 @@ function renderLevelBar() {
   var progress = getLevelProgress(xp);
   var nextLv = LEVELS.find(function(l){ return l.minXP > xp; });
   var xpToNext = nextLv ? (nextLv.minXP - xp) : 0;
+  var modeNames = {spelling:'맞춤법', idiom:'사자성어', proverb:'속담'};
+  var modeName = modeNames[mode] || '';
 
   var area = document.getElementById('level-bar-area');
   if (!area) return;
@@ -2564,8 +2582,8 @@ function renderLevelBar() {
     '<div class="level-bar-top">' +
     '<div class="level-badge">' +
     '<div class="level-icon">'+lv.icon+'</div>' +
-    '<div><div class="level-name">Lv.'+lv.lv+' '+lv.name+'</div>' +
-    '<div class="level-xp">'+xp+' XP'+( nextLv ? ' · 다음 레벨까지 '+xpToNext+' XP' : ' · 최고 레벨!')+'</div></div>' +
+    '<div><div class="level-name">Lv.'+lv.lv+' '+lv.name+' <span style="font-size:11px;color:var(--muted);font-weight:400">['+modeName+']</span></div>' +
+    '<div class="level-xp">'+xp+' XP'+( nextLv ? ' · 다음까지 '+xpToNext+' XP' : ' · 최고 레벨!')+'</div></div>' +
     '</div></div>' +
     '<div class="level-track"><div class="level-fill" style="width:'+progress+'%;background:'+lv.color+'"></div></div>';
 }
@@ -2628,6 +2646,28 @@ function checkLevelUp(oldXP, newXP) {
     showLevelUpOverlay(newLv);
   }
 }
+function checkModeLevelUp(m, oldXP, newXP) {
+  var oldLv = getLevel(oldXP);
+  var newLv = getLevel(newXP);
+  if (newLv.lv > oldLv.lv) {
+    var modeNames = {spelling:'맞춤법', idiom:'사자성어', proverb:'속담'};
+    showModeLevelUpOverlay(newLv, modeNames[m] || m);
+  }
+}
+function showModeLevelUpOverlay(lv, modeName) {
+  var overlay = document.createElement('div');
+  overlay.className = 'levelup-overlay';
+  overlay.innerHTML =
+    '<div class="levelup-card">' +
+    '<span class="levelup-emoji">'+lv.icon+'</span>' +
+    '<div class="levelup-title">'+modeName+' 레벨 업!</div>' +
+    '<div class="levelup-new">'+lv.name+' 달성!</div>' +
+    '<div style="font-size:13px;color:var(--muted);margin-top:6px">'+modeName+' 고급 문제가 해금됩니다!</div>' +
+    '<button class="levelup-btn" onclick="this.parentElement.parentElement.remove()">계속하기</button>' +
+    '</div>';
+  document.body.appendChild(overlay);
+  setTimeout(function(){ overlay.classList.add('show'); }, 50);
+}
 
 function showLevelUpOverlay(lv) {
   var overlay = document.createElement('div');
@@ -2655,6 +2695,10 @@ function switchMode(m) {
   document.getElementById('tab-spelling').classList.toggle('active', m==='spelling');
   document.getElementById('tab-idiom').classList.toggle('active', m==='idiom');
   document.getElementById('tab-proverb').classList.toggle('active', m==='proverb');
+  // 카테고리별 독립 등급으로 자동 전환
+  var modeXPVal = getModeXP(m);
+  var modeLv = getLevel(modeXPVal);
+  currentDiffLv = modeLv.lv;
   initGame();
 }
 function initGame() {
@@ -2738,7 +2782,12 @@ function showResult() {
     stats.correct += score;
     var oldXP = stats.totalPts;
     stats.totalPts += earnedPts;
+    // 카테고리별 XP도 독립 누적
+    var oldModeXP = getModeXP(mode);
+    modeXP[mode] = (modeXP[mode] || 0) + earnedPts;
+    saveModeXP();
     checkLevelUp(oldXP, stats.totalPts);
+    checkModeLevelUp(mode, oldModeXP, getModeXP(mode));
     if (score > stats.bestScore) stats.bestScore = score;
     if (score >= Math.ceil(N*0.4)) {
       if (stats.lastDate) {
