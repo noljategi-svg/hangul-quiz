@@ -1,24 +1,52 @@
 {
   "name": "오늘의 한국어",
   "short_name": "한국어퀴즈",
-  "description": "매일 바뀌는 맞춤법 사자성어 속담 퀴즈",
+  "description": "매일 바뀌는 맞춤법 · 사자성어 · 속담 퀴즈. 오늘의 한국어 실력을 확인하세요!",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#1a1008",
+  "background_color": "#faf6ef",
   "theme_color": "#c84b2f",
-  "orientation": "portrait",
+  "orientation": "portrait-primary",
   "icons": [
     {
       "src": "/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
   "categories": ["education", "games"],
-  "lang": "ko"
+  "lang": "ko",
+  "dir": "ltr",
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "맞춤법 퀴즈",
+      "short_name": "맞춤법",
+      "description": "오늘의 맞춤법 퀴즈 바로 시작",
+      "url": "/?mode=spelling",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "사자성어 퀴즈",
+      "short_name": "사자성어",
+      "description": "오늘의 사자성어 퀴즈 바로 시작",
+      "url": "/?mode=idiom",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "속담 퀴즈",
+      "short_name": "속담",
+      "description": "오늘의 속담 퀴즈 바로 시작",
+      "url": "/?mode=proverb",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
 }
