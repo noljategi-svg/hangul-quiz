@@ -1879,7 +1879,7 @@ function shareText() {
   var g = answers.map(function(a){return a?'🟩':'🟥';}).join('');
   var tier = getTier(stats.totalPts);
   var perfect = score===N ? ' 🏆 만점!' : '';
-  return '오늘의 한국어 ['+ml+']'+perfect+'\n'+ds+' · '+score+'/'+N+' · '+tier.name+'\n'+g+';  // 외부 URL 제거
+  return '오늘의 한국어 ['+ml+']'+perfect+'\n'+ds+' · '+score+'/'+N+' · '+tier.name+'\n'+g;
 }
 function doCopy() {
   var t = shareText();
