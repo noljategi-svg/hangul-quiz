@@ -3272,19 +3272,14 @@ function getPercentileMsg(score) {
 
 // ── 하루 한정 모드 ──
 function getDailyQ(data, n) {
-  var today = todayStr();
-  var seed = 0;
-  for (var i = 0; i < today.length; i++) seed += today.charCodeAt(i);
-  
   // 난이도 필터
   var filtered = data.filter(function(q){ return !q.lv || q.lv === currentDiffLv; });
   if (filtered.length < n) filtered = data;
   
-  // 오늘 날짜 기반 시드로 셔플 (매일 같은 문제)
+  // 완전 랜덤 셔플
   var arr = filtered.slice();
   for (var i = arr.length-1; i > 0; i--) {
-    seed = (seed * 1103515245 + 12345) & 0x7fffffff;
-    var j = seed % (i+1);
+    var j = Math.floor(Math.random() * (i+1));
     var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
   }
   return arr.slice(0, n);
