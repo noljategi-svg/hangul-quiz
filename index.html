@@ -2768,7 +2768,17 @@ function showResult() {
   document.getElementById('score-text').textContent='최종: '+score+'/'+N;
 
   var today = todayStr();
-  var earnedPts = calcPts(score, stats.streak);
+  // streak 먼저 계산 (오늘 포함)
+  var newStreak = stats.streak;
+  if (stats.lastDate !== today) {
+    if (score >= Math.ceil(N*0.4)) {
+      if (stats.lastDate) {
+        var lastTmp = new Date(stats.lastDate), nowTmp = new Date(today);
+        newStreak = ((nowTmp-lastTmp)/86400000) <= 1 ? stats.streak+1 : 1;
+      } else { newStreak = 1; }
+    } else { newStreak = 0; }
+  }
+  var earnedPts = calcPts(score, newStreak); // 오늘 streak 반영
   var myRate2 = stats.total > 0 ? Math.min(Math.round(stats.correct/(stats.total*N)*100),100) : 0;
 
   // 미션 리셋 (날짜 바뀌면)
@@ -2790,11 +2800,9 @@ function showResult() {
     checkModeLevelUp(mode, oldModeXP, getModeXP(mode));
     if (score > stats.bestScore) stats.bestScore = score;
     if (score >= Math.ceil(N*0.4)) {
-      if (stats.lastDate) {
-        var last = new Date(stats.lastDate), now = new Date(today);
-        stats.streak = ((now-last)/86400000) <= 1 ? stats.streak+1 : 1;
-      } else { stats.streak = 1; }
-    } else { stats.streak = 0; }
+      // streak는 위에서 이미 계산됨
+      stats.streak = newStreak;
+    } else { stats.streak = newStreak; }
     stats.lastDate = today;
     saveStats();
     todayModes[mode] = true;
