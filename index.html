@@ -548,7 +548,16 @@ footer{position:relative;z-index:5;border-top:2px solid var(--ink);padding:13px 
         firebase.initializeApp(cfg);
         var db = firebase.firestore();
         window._fbReady = true;
-        window.fbSaveScore = function(nick, pts, play, rate, tier) {
+        window.fbSaveScore = function(nick, pts, play, rate, tier, modeScores) {
+          db.collection("rankings").add({
+            nick: nick, pts: pts, play: play, rate: rate, tier: tier,
+            spelling: (modeScores && modeScores.spelling) || 0,
+            idiom: (modeScores && modeScores.idiom) || 0,
+            proverb: (modeScores && modeScores.proverb) || 0,
+            ts: firebase.firestore.FieldValue.serverTimestamp()
+          }).catch(function(e){ console.log("저장오류:", e); });
+        };
+        window.fbSaveScoreOLD = function(nick, pts, play, rate, tier) {
           db.collection("rankings").add({
             nick: nick, pts: pts, play: play, rate: rate, tier: tier,
             ts: firebase.firestore.FieldValue.serverTimestamp()
@@ -1663,6 +1672,10 @@ function showResult() {
   var adminModes = JSON.parse(localStorage.getItem('admin_modes') || '{"spelling":0,"idiom":0,"proverb":0}');
   adminModes[mode] = (adminModes[mode] || 0) + 1;
   localStorage.setItem('admin_modes', JSON.stringify(adminModes));
+  // 모드별 누적 점수 저장 (랭킹용)
+  var modeScores2 = JSON.parse(localStorage.getItem('kq_mode_scores') || '{}');
+  modeScores2[mode] = (modeScores2[mode] || 0) + score;
+  localStorage.setItem('kq_mode_scores', JSON.stringify(modeScores2));
 
   // 미션 체크
   missions.dm1 = true;
@@ -1686,7 +1699,8 @@ function showResult() {
   // Firebase에 점수 저장
   if (typeof window.fbSaveScore === 'function') {
     var t = getTier(stats.totalPts);
-    window.fbSaveScore(MY_NICK, stats.totalPts, stats.total, myRate2, t.name);
+    var modeScores2 = JSON.parse(localStorage.getItem('kq_mode_scores') || '{}');
+    window.fbSaveScore(MY_NICK, stats.totalPts, stats.total, myRate2, t.name, modeScores2);
   }
 
   // 추가 통계 추적
