@@ -514,19 +514,19 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
           <div>
             <div class="preview-sidebar-title" style="margin-bottom:6px">페이지</div>
             <div class="preview-nav-list" id="preview-nav-list">
-              <div class="preview-nav-item active" onclick="loadPreview('https://hangul-quiz-sepia.vercel.app/',this)">
+              <div class="preview-nav-item active" onclick="loadPreview('https://hangul-quiz-sepia.vercel.app/?admin=hangul2024',this)">
                 <div class="preview-nav-item-title">🏠 메인 홈</div>
                 <div class="preview-nav-item-url">hangul-quiz-sepia.vercel.app/</div>
               </div>
-              <div class="preview-nav-item" onclick="loadPreview('https://hangul-quiz-sepia.vercel.app/?mode=spelling',this)">
+              <div class="preview-nav-item" onclick="loadPreview('https://hangul-quiz-sepia.vercel.app/?mode=spelling&admin=hangul2024',this)">
                 <div class="preview-nav-item-title">✏️ 맞춤법 퀴즈</div>
                 <div class="preview-nav-item-url">?mode=spelling</div>
               </div>
-              <div class="preview-nav-item" onclick="loadPreview('https://hangul-quiz-sepia.vercel.app/?mode=idiom',this)">
+              <div class="preview-nav-item" onclick="loadPreview('https://hangul-quiz-sepia.vercel.app/?mode=idiom&admin=hangul2024',this)">
                 <div class="preview-nav-item-title">📜 사자성어 퀴즈</div>
                 <div class="preview-nav-item-url">?mode=idiom</div>
               </div>
-              <div class="preview-nav-item" onclick="loadPreview('https://hangul-quiz-sepia.vercel.app/?mode=proverb',this)">
+              <div class="preview-nav-item" onclick="loadPreview('https://hangul-quiz-sepia.vercel.app/?mode=proverb&admin=hangul2024',this)">
                 <div class="preview-nav-item-title">📖 속담 퀴즈</div>
                 <div class="preview-nav-item-url">?mode=proverb</div>
               </div>
@@ -540,7 +540,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
           <div>
             <div class="preview-sidebar-title" style="margin-bottom:6px">직접 입력</div>
             <div style="display:flex;gap:6px">
-              <input id="custom-url-input" class="form-input" style="font-size:11px;padding:7px 10px;flex:1" placeholder="URL 입력..." value="https://hangul-quiz-sepia.vercel.app/">
+              <input id="custom-url-input" class="form-input" style="font-size:11px;padding:7px 10px;flex:1" placeholder="URL 입력..." value="https://hangul-quiz-sepia.vercel.app/?admin=hangul2024">
             </div>
             <button onclick="loadPreviewCustom()" class="preview-reload-btn" style="margin-top:6px">이동</button>
           </div>

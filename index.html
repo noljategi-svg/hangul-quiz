@@ -2391,6 +2391,7 @@ var LEVELS = [
   {lv:5, name:'마스터',  icon:'👑', minXP:1500, maxXP:9999, color:'#d4a017', unlockedLv:5},
 ];
 var USER_MAX_FREE_LV = 2; // 무료 사용자 최대 난이도 (1~2단계만 무료)
+var IS_ADMIN_MODE = (new URLSearchParams(location.search)).get('admin') === 'hangul2024'; // 관리자 모드
 
 function getLevel(xp) {
   for (var i = LEVELS.length-1; i >= 0; i--) {
@@ -2739,7 +2740,7 @@ function renderLevelTabs() {
   if (!area) return;
 
   area.innerHTML = LEVELS.map(function(lv) {
-    var unlocked = curLv.lv >= lv.lv;
+    var unlocked = IS_ADMIN_MODE || curLv.lv >= lv.lv;
     var active = currentDiffLv === lv.lv;
     var cls = 'level-tab' + (active ? ' active' : '') + (!unlocked ? ' locked' : '');
     return '<button class="'+cls+'" onclick="selectDiffLv('+lv.lv+')" '+(unlocked?'':'disabled')+'>'+
@@ -2749,6 +2750,12 @@ function renderLevelTabs() {
 }
 
 function selectDiffLv(lv) {
+  if (IS_ADMIN_MODE) {
+    currentDiffLv = lv;
+    renderLevelTabs();
+    initGame();
+    return;
+  }
   var xp = getXPFromStats();
   var curLv = getLevel(xp);
   if (curLv.lv < lv) {
