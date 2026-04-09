@@ -7,7 +7,6 @@
 <meta name="description" content="매일 바뀌는 맞춤법과 사자성어 퀴즈. 오늘의 한국어 실력을 확인하세요.">
 <meta name="google-site-verification" content="0ldHLLWTQZU_skjDMDa1hleyu0AsgbHjLi5IOB6R30U" />
 <meta name="google-site-verification" content="ZzowaUmC-KBxIkhRe_Rg0wsxM7j28O5L3pvTAnIfEp0" />
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7764966046793364" crossorigin="anonymous"></script>
 
 <!-- OneSignal 웹 푸시 -->
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
@@ -187,7 +186,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(circle
   padding:12px 16px;border-radius:10px;
   margin-bottom:20px;
 }
-.push-banner-txt{flex:1;font-size:13px;font-weight:600}
+
 .push-banner-btn{
   background:var(--accent);color:#fff;
   border:none;border-radius:6px;
@@ -321,8 +320,8 @@ header{position:relative;z-index:10;border-bottom:2px solid var(--ink);padding:1
 .header-info{font-size:12px;color:var(--muted);text-align:right;line-height:1.6}
 .header-date{font-weight:700;color:var(--ink);font-size:13px}
 
-.ad-bar{background:var(--paper2);border-bottom:1px solid var(--border);padding:8px;text-align:center;min-height:64px;display:flex;align-items:center;justify-content:center;position:relative;z-index:5}
-.ad-ph{border:1.5px dashed var(--border);border-radius:4px;padding:12px 28px;color:var(--muted);font-size:11px;letter-spacing:1px}
+
+
 
 main{flex:1;max-width:700px;width:100%;margin:0 auto;padding:24px 20px 60px;position:relative;z-index:5}
 
@@ -427,7 +426,6 @@ main{flex:1;max-width:700px;width:100%;margin:0 auto;padding:24px 20px 60px;posi
 .review-correct{font-size:12px;color:var(--green);margin-bottom:6px}
 .review-exp{font-size:12px;color:var(--muted);line-height:1.6;padding:8px 10px;background:var(--paper2);border-radius:4px;border-left:3px solid var(--gold)}
 
-/* 카카오 공유 버튼 강화 */
 .sh-btn{flex:1;padding:11px 16px;background:#FEE500;border:2px solid #FEE500;border-radius:6px;font-family:'Noto Sans KR',sans-serif;font-size:14px;font-weight:700;color:#000;cursor:pointer;transition:all .15s}
 .sh-btn:hover{opacity:.85}
 
@@ -502,9 +500,7 @@ main{flex:1;max-width:700px;width:100%;margin:0 auto;padding:24px 20px 60px;posi
 .badge-cond{font-size:10px;color:var(--muted);line-height:1.3}
 .badge-new{position:absolute;top:-6px;right:-6px;background:var(--accent);color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;letter-spacing:.5px}
 
-/* 하단 광고 */
-.ad-bottom{text-align:center;padding:14px 0;margin-top:8px}
-.ad-ph2{border:1.5px dashed var(--border);border-radius:4px;padding:16px 24px;color:var(--muted);font-size:11px;letter-spacing:1px;max-width:360px;margin:0 auto}
+
 
 footer{position:relative;z-index:5;border-top:2px solid var(--ink);padding:13px 24px;text-align:center;font-size:11px;color:var(--muted);letter-spacing:.5px;background:var(--paper)}
 .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:var(--paper);padding:10px 22px;border-radius:30px;font-size:14px;font-weight:600;transition:transform .3s ease;z-index:1000;white-space:nowrap}
@@ -615,14 +611,7 @@ footer{position:relative;z-index:5;border-top:2px solid var(--ink);padding:13px 
   <!-- 스트릭 경고 영역 -->
   <div id="streak-alert-area"></div>
 
-  <!-- 알림 신청 배너 -->
-  <div class="push-banner" id="push-banner">
-    <div class="push-banner-txt">
-      🔔 매일 오전 9시, 오늘의 퀴즈 알림 받기
-    </div>
-    <button class="push-banner-btn" onclick="requestPushPermission()">알림 신청</button>
-    <button class="push-banner-close" onclick="document.getElementById('push-banner').style.display='none'">✕</button>
-  </div>
+
 
   <!-- 오늘의 미리보기 카드 -->
   <div class="home-section">
@@ -670,9 +659,7 @@ footer{position:relative;z-index:5;border-top:2px solid var(--ink);padding:13px 
 </div>
 </div>
 
-<div class="ad-bar">
-  <div class="ad-ph">📢 광고 영역 (728×90) — 애드센스 승인 후 활성화</div>
-</div>
+
 
 <main>
   <!-- 상단 탭: 홈 / 퀴즈 / 랭킹 / 미션 -->
@@ -714,12 +701,12 @@ footer{position:relative;z-index:5;border-top:2px solid var(--ink);padding:13px 
       <div class="s-item"><div class="s-num" id="st-pts" style="color:var(--gold)">0</div><div class="s-lbl">총점수</div></div>
     </div>
     <div class="prog-wrap">
-      <div class="prog-lbl"><span id="prog-text">문제 1 / 7</span><span id="score-text">점수: 0</span></div>
+      <div class="prog-lbl"><span id="prog-text">문제 1 / 10</span><span id="score-text">점수: 0</span></div>
       <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
     </div>
     <div id="quiz-area"></div>
     <div class="res-card" id="res-card"></div>
-    <div class="ad-bottom"><div class="ad-ph2">📢 광고 영역 (336×280) — 애드센스 승인 후 활성화</div></div>
+    
   </div>
 
   <!-- ═══ 랭킹 페이지 ═══ -->
@@ -869,16 +856,6 @@ footer{position:relative;z-index:5;border-top:2px solid var(--ink);padding:13px 
 
 <footer>오늘의 한국어 · 매일 오전 0시 새 문제 · <a href="/privacy.html" style="color:var(--muted);text-decoration:underline">개인정보처리방침</a></footer>
 
-<!-- PWA 설치 배너 -->
-<div id="pwa-install-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1a1008;color:#faf6ef;padding:14px 20px;z-index:9999;align-items:center;gap:12px;border-top:2px solid #c84b2f;">
-  <div style="font-size:28px">📱</div>
-  <div style="flex:1">
-    <div style="font-size:13px;font-weight:700">앱으로 설치하기</div>
-    <div style="font-size:11px;color:#8a7a6a">홈화면에 추가하면 앱처럼 사용 가능해요!</div>
-  </div>
-  <button onclick="installPWA()" style="background:#c84b2f;color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">설치</button>
-  <button onclick="document.getElementById('pwa-install-banner').style.display='none'" style="background:none;border:none;color:#8a7a6a;font-size:18px;cursor:pointer;padding:0 4px;">✕</button>
-</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1314,12 +1291,7 @@ function autoPromptPush() {
     requestPushPermission();
   }, 1000);
 }
-function checkPushBanner() {
-  var banner = document.getElementById('push-banner');
-  if (!banner) return;
-  if (typeof Notification === 'undefined' || Notification.permission !== 'default') {
-    banner.style.display = 'none';
-  }
+function checkPushBanner() {}
 }
 
 function updateHomeStats() {
@@ -1703,7 +1675,7 @@ function showResult() {
     '<div class="countdown" id="cd">--:--:--</div>' +
     '<div style="font-size:11px;color:var(--muted);margin-bottom:12px">매일 오전 0시 업데이트</div>' +
     '<div class="btn-row">' +
-    '<button class="sh-btn" onclick="doShare()">💬 카카오 공유</button>' +
+    '<button class="sh-btn" onclick="doShare()">🔗 결과 공유</button>' +
     '<button class="cp-btn" onclick="doCopy()">📋 결과 복사</button>' +
     '</div>' +
     '<div class="btn-row" style="margin-top:8px">' +
@@ -1908,7 +1880,7 @@ function shareText() {
   var g = answers.map(function(a){return a?'🟩':'🟥';}).join('');
   var tier = getTier(stats.totalPts);
   var perfect = score===N ? ' 🏆 만점!' : '';
-  return '오늘의 한국어 ['+ml+']'+perfect+'\n'+ds+' · '+score+'/'+N+' · '+tier.name+'\n'+g+'\n\n나도 도전하기 → https://hangul-quiz-sepia.vercel.app';
+  return '오늘의 한국어 ['+ml+']'+perfect+'\n'+ds+' · '+score+'/'+N+' · '+tier.name+'\n'+g+';  // 외부 URL 제거
 }
 function doCopy() {
   var t = shareText();
@@ -1916,8 +1888,8 @@ function doCopy() {
   else { var el=document.createElement('textarea');el.value=t;document.body.appendChild(el);el.select();document.execCommand('copy');document.body.removeChild(el);toast('복사 완료!'); }
 }
 function doShare() {
-  if (navigator.share) { navigator.share({title:'오늘의 한국어',text:shareText()}); }
-  else { doCopy(); toast('결과가 복사됐습니다! 카카오에 붙여넣기 해서 공유하세요 📤'); }
+  doCopy();
+  toast('결과가 복사됐습니다! 📋');
 }
 function toast(msg) {
   var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
@@ -1971,29 +1943,7 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// PWA 설치 배너
-var deferredPrompt;
-window.addEventListener('beforeinstallprompt', function(e) {
-  e.preventDefault();
-  deferredPrompt = e;
-  var banner = document.getElementById('pwa-install-banner');
-  if (banner) banner.style.display = 'flex';
-});
-window.addEventListener('appinstalled', function() {
-  var banner = document.getElementById('pwa-install-banner');
-  if (banner) banner.style.display = 'none';
-  deferredPrompt = null;
-});
-function installPWA() {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(function(result) {
-      deferredPrompt = null;
-      var banner = document.getElementById('pwa-install-banner');
-      if (banner) banner.style.display = 'none';
-    });
-  }
-}
+// PWA 설치 유도 제거
 </script>
 </body>
 </html>
