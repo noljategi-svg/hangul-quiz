@@ -3805,5 +3805,24 @@ if ('serviceWorker' in navigator) {
 
 // PWA 설치 유도 제거
 </script>
+
+<!-- 오류 신고 모달 -->
+<div class="report-modal" id="report-modal">
+  <div class="report-card">
+    <div class="report-card-title">⚠️ 문제 오류 신고</div>
+    <div id="report-q-preview" style="font-size:12px;color:var(--muted);margin-bottom:12px;padding:8px;background:var(--paper2);border-radius:6px;line-height:1.5"></div>
+    <div class="report-options" id="report-options">
+      <button class="report-option" onclick="selectReportType(this,'정답이 틀렸어요')">❌ 정답이 틀렸어요</button>
+      <button class="report-option" onclick="selectReportType(this,'보기가 이상해요')">🔤 보기가 이상해요</button>
+      <button class="report-option" onclick="selectReportType(this,'해설이 잘못됐어요')">📝 해설이 잘못됐어요</button>
+      <button class="report-option" onclick="selectReportType(this,'문제가 중복돼요')">🔁 문제가 중복돼요</button>
+      <button class="report-option" onclick="selectReportType(this,'기타 오류')">💬 기타 오류</button>
+    </div>
+    <div class="report-btns">
+      <button class="report-cancel" onclick="closeReportModal()">취소</button>
+      <button class="report-submit" onclick="submitReport()">신고하기</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
