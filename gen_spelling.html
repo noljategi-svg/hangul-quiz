@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>맞춤법 문제 생성기</title>
+<style>
+body { font-family: 'Noto Sans KR', sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; background: #faf6ef; }
+h2 { color: #c84b2f; }
+button { background: #c84b2f; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 15px; font-weight: 700; margin: 8px 4px; }
+button:disabled { opacity: 0.5; }
+#log { background: #1a1008; color: #e8d5b0; padding: 16px; border-radius: 8px; font-size: 12px; height: 300px; overflow-y: auto; font-family: monospace; white-space: pre-wrap; }
+#result { background: white; border: 2px solid #ddd; border-radius: 8px; padding: 16px; margin-top: 16px; }
+textarea { width: 100%; height: 200px; font-family: monospace; font-size: 11px; border: 1px solid #ddd; border-radius: 6px; padding: 10px; }
+.progress { background: #eee; border-radius: 4px; height: 20px; margin: 8px 0; }
+.progress-bar { background: #c84b2f; height: 100%; border-radius: 4px; transition: width 0.3s; display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 700; }
+</style>
+</head>
+<body>
+<h2>🔧 맞춤법 문제 자동 생성기</h2>
+<p>현재 101개 → 목표 500개 (399개 추가 생성)</p>
+<div class="progress"><div class="progress-bar" id="prog-bar" style="width:0%">0%</div></div>
+<p id="status">준비 완료</p>
+<button onclick="startGenerate()" id="btn-start">🚀 생성 시작</button>
+<button onclick="downloadResult()" id="btn-dl" disabled>💾 결과 다운로드</button>
+
+<div id="log">로그...\n</div>
+
+<script>
+const BATCH_SIZE = 40; // 한 번에 생성할 문제 수
+const TARGET = 399;
+const TOTAL_BATCHES = Math.ceil(TARGET / BATCH_SIZE);
+
+// 이미 있는 문제 키워드 (중복 방지)
+const EXISTING_TOPICS = [
+  '결재/결제','바라다/바래다','이따가/있다가','틀리다/다르다','왠지/웬지',
+  '금세/금새','병이 낫다','며칠/몇일','로서/로써','던/든','데/대',
+  '안/않','되/돼','맞추다/맞히다','넘어/너머','부치다/붙이다','걷잡다',
+  '역할','웬만하면','새초롬','호젓','사랑니','뒤처지다'
+];
+
+const TOPIC_GROUPS = [
+  '헷갈리는 동사 (예: 가르치다/가르키다, 다치다/닫히다, 맞추다/맞히다)',
+  '헷갈리는 명사 표기 (예: 개수/갯수, 통째/통채, 귀띔/귀뜸)',
+  '조사/어미 (예: -로서/-로써, -던/-든, -데/-대)',
+  '된소리/거센소리 표기 (예: 깨끗이/깨끗히, 반드시/반듯이)',
+  '띄어쓰기 (예: 만큼/만큼, 뿐/뿐, 밖에/밖에)',
+  '외래어 표기 (예: 카페/커피숍, 피자/핏자, 초콜릿/초코릿)',
+  '순우리말 맞춤법 (예: 아름답다, 부드럽다, 사뿐히)',
+  '한자어 맞춤법 (예: 출석/출석, 발전/발달, 훼손/훼손)',
+  '준말/본말 (예: 그래서/그러어서, 뭐/무엇, 어때/어떠해)',
+  '혼동하기 쉬운 형용사 (예: 낫다/낮다, 굵다/굵따, 넓다/넓따)',
+  '부사 표기 (예: 결코/결코, 전혀/전혀, 이미/이미)',
+  '접두사/접미사 표기 (예: 웃-/윗-, 수-/숫-, -장이/-쟁이)',
+];
+
+let allGenerated = [];
+let batchNum = 0;
+let running = false;
+
+function log(msg) {
+  const el = document.getElementById('log');
+  el.textContent += msg + '\n';
+  el.scrollTop = el.scrollHeight;
+}
+
+async function callClaude(prompt) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  const data = await res.json();
+  return data.content[0].text;
+}
+
+async function generateBatch(batchIdx) {
+  const topicGroup = TOPIC_GROUPS[batchIdx % TOPIC_GROUPS.length];
+  const lv = (batchIdx % 5) + 1;
+
+  const prompt = `한국어 맞춤법 퀴즈 문제를 ${BATCH_SIZE}개 만들어줘.
+
+주제: ${topicGroup}
+난이도: lv${lv} (1=입문, 2=초급, 3=중급, 4=고급, 5=마스터)
+
+규칙:
+- 아래 기존 주제와 완전히 다른 새로운 단어/표현만 사용
+- 기존 주제: ${EXISTING_TOPICS.slice(0,15).join(', ')}
+- 보기 4개, 정답 위치(ans)는 0~3 랜덤하게 분산 (B만 정답이 되면 안 됨)
+- exp에 정답 이유 간결하게 설명
+- opts 안에 "(맞음)" "(틀림)" "(표준어)" 같은 힌트 절대 금지
+
+JSON 배열만 출력 (다른 텍스트 없이):
+[
+  {"lv":${lv},"q":"문제","hint":"힌트","opts":["보기A","보기B","보기C","보기D"],"ans":정답인덱스,"exp":"<b>정답</b> — 이유"},
+  ...
+]`;
+
+  const text = await callClaude(prompt);
+  
+  // JSON 파싱
+  const jsonMatch = text.match(/\[[\s\S]*\]/);
+  if (!jsonMatch) throw new Error('JSON 파싱 실패: ' + text.substring(0, 100));
+  
+  const items = JSON.parse(jsonMatch[0]);
+  
+  // 유효성 검사
+  const valid = items.filter(q => 
+    q.q && q.opts && q.opts.length === 4 && 
+    q.ans >= 0 && q.ans <= 3 &&
+    !q.opts.some((o,i) => q.opts.indexOf(o) !== i) // 중복 보기 없음
+  );
+  
+  return valid;
+}
+
+async function startGenerate() {
+  if (running) return;
+  running = true;
+  document.getElementById('btn-start').disabled = true;
+  allGenerated = [];
+  batchNum = 0;
+
+  log(`목표: ${TARGET}개 생성 시작 (${TOTAL_BATCHES}배치)`);
+
+  while (allGenerated.length < TARGET && batchNum < TOTAL_BATCHES + 5) {
+    batchNum++;
+    log(`\n[배치 ${batchNum}] 생성 중...`);
+    
+    try {
+      const items = await generateBatch(batchNum - 1);
+      allGenerated = allGenerated.concat(items);
+      log(`  → ${items.length}개 생성 (누적: ${allGenerated.length}개)`);
+      
+      const pct = Math.min(Math.round(allGenerated.length / TARGET * 100), 100);
+      document.getElementById('prog-bar').style.width = pct + '%';
+      document.getElementById('prog-bar').textContent = pct + '%';
+      document.getElementById('status').textContent = `진행: ${allGenerated.length}/${TARGET}개`;
+      
+      if (allGenerated.length >= TARGET) break;
+      
+      // API 속도 제한 방지
+      await new Promise(r => setTimeout(r, 1000));
+    } catch(e) {
+      log(`  ❌ 오류: ${e.message}`);
+      await new Promise(r => setTimeout(r, 2000));
+    }
+  }
+
+  const final = allGenerated.slice(0, TARGET);
+  log(`\n✅ 완료! ${final.length}개 생성됨`);
+  log(`\n아래 내용을 복사해서 저장하세요:`);
+  
+  // JS 형식으로 출력
+  const jsOutput = final.map(q => JSON.stringify(q)).join(',\n  ');
+  document.getElementById('result').innerHTML = `
+    <h3>생성된 문제 (${final.length}개) - 복사해서 저장하세요</h3>
+    <textarea id="output-text">[\n  ${jsOutput}\n]</textarea>
+  `;
+  
+  document.getElementById('btn-dl').disabled = false;
+  running = false;
+
+  // window에 저장
+  window._generated = final;
+}
+
+function downloadResult() {
+  if (!window._generated) return;
+  const jsOutput = window._generated.map(q => JSON.stringify(q)).join(',\n  ');
+  const content = `[\n  ${jsOutput}\n]`;
+  const blob = new Blob([content], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'new_spelling_questions.json';
+  a.click();
+}
+</script>
+
+<div id="result"></div>
+</body>
+</html>
