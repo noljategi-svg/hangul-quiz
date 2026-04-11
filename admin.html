@@ -604,13 +604,8 @@ function loadReports() {
   list.innerHTML = '';
 
   try {
-    var cfg = {
-      apiKey: "AIzaSyCqPc-buNdXyP0soREc9EpHrZcDKGg2Bio",
-      authDomain: "hangul-quiz-978f5.firebaseapp.com",
-      projectId: "hangul-quiz-978f5"
-    };
-    if (!firebase.apps.length) firebase.initializeApp(cfg);
-    var db = firebase.firestore();
+    var db = getAdminDb();
+    if (!db) throw new Error('Firebase 연결 실패');
     db.collection('reports').orderBy('ts','desc').limit(100).get().then(function(snap) {
       if (loading) loading.style.display = 'none';
       if (snap.empty) { list.innerHTML = '<p style="color:var(--muted)">신고된 오류가 없습니다.</p>'; return; }
@@ -653,9 +648,8 @@ function handleReportBtn(btn) {
 }
 function updateReportStatus(docId, status, btn) {
   try {
-    var cfg = {apiKey:"AIzaSyCqPc-buNdXyP0soREc9EpHrZcDKGg2Bio",authDomain:"hangul-quiz-978f5.firebaseapp.com",projectId:"hangul-quiz-978f5"};
-    if (!firebase.apps.length) firebase.initializeApp(cfg);
-    var db = firebase.firestore();
+    var db = getAdminDb();
+    if (!db) { alert('Firebase 연결 실패'); return; }
     db.collection('reports').doc(docId).update({status: status}).then(function() {
       btn.parentElement.parentElement.style.opacity = '0.5';
       btn.textContent = status === '완료' ? '✅ 완료됨' : '🚫 무시됨';
@@ -664,6 +658,27 @@ function updateReportStatus(docId, status, btn) {
 }
 
 var ADMIN_PW = 'hangul2024!';
+
+// Firebase 전역 초기화
+var _adminDb = null;
+function getAdminDb() {
+  if (_adminDb) return _adminDb;
+  try {
+    var cfg = {
+      apiKey: "AIzaSyCqPc-buNdXyP0soREc9EpHrZcDKGg2Bio",
+      authDomain: "hangul-quiz-978f5.firebaseapp.com",
+      projectId: "hangul-quiz-978f5"
+    };
+    if (!firebase.apps.length) {
+      firebase.initializeApp(cfg);
+    }
+    _adminDb = firebase.firestore();
+    return _adminDb;
+  } catch(e) {
+    console.log('Firebase 초기화 오류:', e);
+    return null;
+  }
+}
 
 // ── 로그인 ──
 function doLogin() {
