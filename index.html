@@ -384,6 +384,18 @@ main{flex:1;max-width:700px;width:100%;margin:0 auto;padding:24px 20px 60px;posi
 .next-btn{display:none;width:100%;margin-top:12px;padding:12px;background:var(--ink);color:var(--paper);border:2px solid var(--ink);border-radius:6px;font-family:'Noto Sans KR',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .15s}
 .next-btn:hover{background:var(--accent);border-color:var(--accent)}
 .next-btn.show{display:block}
+.report-btn{display:inline-flex;align-items:center;gap:4px;margin-top:8px;padding:5px 10px;background:none;border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--muted);cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all .2s}
+.report-btn:hover{border-color:var(--accent);color:var(--accent)}
+.report-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center}
+.report-modal.show{display:flex}
+.report-card{background:#fff;border:2px solid var(--ink);border-radius:10px;padding:20px;width:90%;max-width:340px;box-shadow:4px 4px 0 var(--ink)}
+.report-card-title{font-weight:900;font-size:15px;margin-bottom:12px}
+.report-options{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.report-option{padding:8px 12px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;cursor:pointer;background:#fff;text-align:left;font-family:'Noto Sans KR',sans-serif;transition:all .15s}
+.report-option:hover,.report-option.selected{border-color:var(--accent);background:rgba(200,75,47,.06);color:var(--accent);font-weight:700}
+.report-btns{display:flex;gap:8px}
+.report-submit{flex:1;padding:10px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif}
+.report-cancel{flex:1;padding:10px;background:#fff;color:var(--ink);border:1.5px solid var(--border);border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif}
 
 /* ── 결과 카드 ── */
 .res-card{display:none;background:#fff;border:2px solid var(--ink);border-radius:8px;box-shadow:4px 4px 0 var(--ink);padding:28px 22px;text-align:center;animation:up .35s ease}
@@ -579,6 +591,11 @@ footer{position:relative;z-index:5;border-top:2px solid var(--ink);padding:13px 
               }); return r;
             });
         };
+        window.fbSaveReport = function(reportData) {
+          return db.collection('reports').add(Object.assign(reportData, {
+            ts: firebase.firestore.FieldValue.serverTimestamp()
+          })).catch(function(e){ console.log('신고저장오류:', e); });
+        };
         window.fbLoadRankingByMode = function(mode) {
           return db.collection("rankings").orderBy(mode,"desc").limit(50).get()
             .then(function(snap){ var r=[]; snap.forEach(function(d){ r.push(d.data()); }); return r; });
@@ -591,6 +608,7 @@ footer{position:relative;z-index:5;border-top:2px solid var(--ink);padding:13px 
     window.fbLoadRanking = function(){ return Promise.resolve([]); };
     window.fbLoadRankingWeek = function(){ return Promise.resolve([]); };
     window.fbLoadRankingByMode = function(){ return Promise.resolve([]); };
+    window.fbSaveReport = function(){ return Promise.resolve(); };
   }
 })();
 </script>
@@ -3149,7 +3167,8 @@ function selectAns(idx) {
   });
   var exp = document.getElementById('exp-box');
   exp.className = 'exp-box show '+(ok?'cok':'cwrong');
-  exp.innerHTML = '<div class="exp-title">'+(ok?'✅ 정답!':'❌ 오답')+'</div>'+q.exp;
+  exp.innerHTML = '<div class="exp-title">'+(ok?'✅ 정답!':'❌ 오답')+'</div>'+q.exp+
+    '<div style="margin-top:8px"><button class="report-btn" onclick="openReportModal()">⚠️ 오류 신고</button></div>';
   document.getElementById('next-btn').classList.add('show');
 }
 function nextQ() {
@@ -3354,6 +3373,72 @@ function showResult() {
 }
 
 // ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+// 오류 신고
+// ═══════════════════════════════════════════════════
+var _reportType = null;
+
+function openReportModal() {
+  var q = qs[qi];
+  if (!q) return;
+  var modeNames = {spelling:'맞춤법', idiom:'사자성어', proverb:'속담'};
+  var preview = document.getElementById('report-q-preview');
+  if (preview) preview.textContent = '[' + (modeNames[mode]||mode) + '] ' + q.q;
+  _reportType = null;
+  document.querySelectorAll('.report-option').forEach(function(el){ el.classList.remove('selected'); });
+  document.getElementById('report-modal').classList.add('show');
+}
+
+function closeReportModal() {
+  document.getElementById('report-modal').classList.remove('show');
+  _reportType = null;
+}
+
+function selectReportType(el, type) {
+  _reportType = type;
+  document.querySelectorAll('.report-option').forEach(function(b){ b.classList.remove('selected'); });
+  el.classList.add('selected');
+}
+
+function submitReport() {
+  if (!_reportType) {
+    alert('신고 유형을 선택해주세요.');
+    return;
+  }
+  var q = qs[qi];
+  if (!q) return;
+  var modeNames = {spelling:'맞춤법', idiom:'사자성어', proverb:'속담'};
+  var reportData = {
+    type: _reportType,
+    mode: modeNames[mode] || mode,
+    lv: currentDiffLv,
+    q: q.q,
+    opts: q.opts,
+    ans: q.ans,
+    exp: q.exp,
+    nick: MY_NICK,
+    status: '검토중'
+  };
+  if (window.fbSaveReport) {
+    window.fbSaveReport(reportData).then(function() {
+      closeReportModal();
+      alert('신고가 접수됐어요! 검토 후 수정하겠습니다. 감사합니다 🙏');
+    }).catch(function() {
+      closeReportModal();
+      alert('신고가 접수됐어요! 감사합니다 🙏');
+    });
+  } else {
+    closeReportModal();
+    alert('신고가 접수됐어요! 감사합니다 🙏');
+  }
+}
+
+// 모달 외부 클릭 시 닫기
+document.addEventListener('click', function(e) {
+  var modal = document.getElementById('report-modal');
+  if (modal && e.target === modal) closeReportModal();
+});
+
 // 랭킹 렌더
 // ═══════════════════════════════════════════════════
 var FAKE_PLAYERS = [];

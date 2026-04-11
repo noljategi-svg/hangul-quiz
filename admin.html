@@ -495,6 +495,12 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 
 
     <!-- 사이트 미리보기 섹션 -->
+    <div class="admin-section" id="section-reports">
+      <div class="section-title" style="font-size:18px;font-weight:900;margin-bottom:20px">⚠️ 오류 신고 목록</div>
+      <div id="reports-loading" style="color:var(--muted);font-size:13px">불러오는 중...</div>
+      <div id="reports-list"></div>
+    </div>
+
     <div class="admin-section" id="section-preview" style="padding:0;margin:-28px -24px -80px;">
       <div class="preview-wrap">
 
@@ -588,6 +594,74 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 
 <script>
 // ── 비밀번호 (변경 가능) ──
+// 신고 목록 로드
+function loadReports() {
+  var loading = document.getElementById('reports-loading');
+  var list = document.getElementById('reports-list');
+  if (!list) return;
+  if (loading) loading.style.display = 'block';
+  list.innerHTML = '';
+
+  try {
+    var cfg = {
+      apiKey: "AIzaSyCqPc-buNdXyP0soREc9EpHrZcDKGg2Bio",
+      authDomain: "hangul-quiz-978f5.firebaseapp.com",
+      projectId: "hangul-quiz-978f5"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(cfg);
+    var db = firebase.firestore();
+    db.collection('reports').orderBy('ts','desc').limit(100).get().then(function(snap) {
+      if (loading) loading.style.display = 'none';
+      if (snap.empty) { list.innerHTML = '<p style="color:var(--muted)">신고된 오류가 없습니다.</p>'; return; }
+      var html = '';
+      snap.forEach(function(doc) {
+        var d = doc.data();
+        var ts = d.ts ? new Date(d.ts.toDate()).toLocaleString('ko-KR') : '시간 미상';
+        var statusColor = d.status==='완료' ? '#2d7a4f' : d.status==='무시' ? '#999' : '#c84b2f';
+                html += '<div style="border:1.5px solid var(--border);border-radius:8px;padding:14px;margin-bottom:10px;background:#fff" id="rep-'+doc.id+'">' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' +
+          '<span style="font-weight:700;font-size:13px">' + d.type + '</span>' +
+          '<span style="font-size:11px;color:'+statusColor+';border:1px solid '+statusColor+';border-radius:10px;padding:2px 8px">' + d.status + '</span></div>' +
+          '<div style="font-size:12px;color:var(--muted);margin-bottom:6px">[' + d.mode + ' lv' + d.lv + '] · ' + ts + ' · ' + d.nick + '</div>' +
+          '<div style="font-size:13px;margin-bottom:6px;font-weight:600">' + d.q + '</div>' +
+          '<div style="font-size:11px;color:var(--muted)">보기: ' + (d.opts||[]).join(' / ') + '</div>' +
+          '<div style="font-size:11px;color:var(--muted)">정답: ' + (d.opts&&d.opts[d.ans]||'') + '</div>' +
+          '<div style="display:flex;gap:6px;margin-top:10px">' +
+          '<button data-docid="' + doc.id + '" data-s="완료" onclick="this.disabled=true;handleRep(this)" style="padding:4px 10px;font-size:11px;border:1px solid #2d7a4f;border-radius:4px;color:#2d7a4f;background:#fff;cursor:pointer">✅ 완료</button>' +
+          '<button data-docid="' + doc.id + '" data-s="무시" onclick="this.disabled=true;handleRep(this)" style="padding:4px 10px;font-size:11px;border:1px solid #999;border-radius:4px;color:#999;background:#fff;cursor:pointer">🚫 무시</button>' +
+          '</div></div>';
+      });
+      list.innerHTML = html;
+    }).catch(function(e) {
+      if (loading) loading.style.display = 'none';
+      list.innerHTML = '<p style="color:red">불러오기 실패: ' + e.message + '</p>';
+    });
+  } catch(e) {
+    if (loading) loading.style.display = 'none';
+    list.innerHTML = '<p style="color:red">Firebase 연결 실패</p>';
+  }
+}
+
+function handleRep(btn) {
+  var id = btn.getAttribute('data-docid');
+  var s = btn.getAttribute('data-s');
+  updateReportStatus(id, s, btn);
+}
+function handleReportBtn(btn) {
+  updateReportStatus(btn.getAttribute('data-id'), btn.getAttribute('data-status'), btn);
+}
+function updateReportStatus(docId, status, btn) {
+  try {
+    var cfg = {apiKey:"AIzaSyCqPc-buNdXyP0soREc9EpHrZcDKGg2Bio",authDomain:"hangul-quiz-978f5.firebaseapp.com",projectId:"hangul-quiz-978f5"};
+    if (!firebase.apps.length) firebase.initializeApp(cfg);
+    var db = firebase.firestore();
+    db.collection('reports').doc(docId).update({status: status}).then(function() {
+      btn.parentElement.parentElement.style.opacity = '0.5';
+      btn.textContent = status === '완료' ? '✅ 완료됨' : '🚫 무시됨';
+    });
+  } catch(e) { alert('업데이트 실패'); }
+}
+
 var ADMIN_PW = 'hangul2024!';
 
 // ── 로그인 ──
